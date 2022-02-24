@@ -1,4 +1,4 @@
-package com.example.sahhareactnative;
+package example.sahha.reactnative;
 
 import com.facebook.react.ReactActivity;
 

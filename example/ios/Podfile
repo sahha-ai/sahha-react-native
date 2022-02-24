@@ -1,7 +1,7 @@
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
-platform :ios, '10.0'
+platform :ios, '14.0'
 
 target 'SahhaReactNativeExample' do
   config = use_native_modules!
@@ -9,6 +9,7 @@ target 'SahhaReactNativeExample' do
   use_react_native!(:path => config["reactNativePath"])
 
   pod 'sahha-react-native', :path => '../..'
+  pod 'Sahha', :path => '../../../sahha-swift'
 
   # Enables Flipper.
   #

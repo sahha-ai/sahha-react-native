@@ -1,18 +1,29 @@
 import * as React from 'react';
 
 import { StyleSheet, View, Text } from 'react-native';
-import { multiply } from 'sahha-react-native';
+import SahhaReactNative from 'sahha-react-native';
+const { message } = SahhaReactNative.getConstants();
 
 export default function App() {
   const [result, setResult] = React.useState<number | undefined>();
+  const [addedResult, setAddedResult] = React.useState<number | undefined>();
+  const [squaredResult, setSquaredResult] = React.useState<number | undefined>();
+  const [speech, setSpeech] = React.useState<string | undefined>();
 
   React.useEffect(() => {
-    multiply(3, 7).then(setResult);
+    SahhaReactNative.multiply(3, 7).then(setResult);
+    SahhaReactNative.add().then(setAddedResult);
+    SahhaReactNative.squareUp(5).then(setSquaredResult);
+    SahhaReactNative.speak().then(setSpeech);
   }, []);
 
   return (
     <View style={styles.container}>
-      <Text>Result: {result}</Text>
+      <Text>Results: {result}</Text>
+      <Text>Added Result: {addedResult}</Text>
+      <Text>Squared Result: {squaredResult}</Text>
+      <Text>{message}</Text>
+      <Text>{speech}</Text>
     </View>
   );
 }

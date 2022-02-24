@@ -1,5 +1,6 @@
 import { NativeModules, Platform } from 'react-native';
 
+/*
 const LINKING_ERROR =
   `The package 'sahha-react-native' doesn't seem to be linked. Make sure: \n\n` +
   Platform.select({ ios: "- You have run 'pod install'\n", default: '' }) +
@@ -20,3 +21,8 @@ const SahhaReactNative = NativeModules.SahhaReactNative
 export function multiply(a: number, b: number): Promise<number> {
   return SahhaReactNative.multiply(a, b);
 }
+*/
+
+const { SahhaReactNative } = NativeModules;
+
+export default SahhaReactNative;
