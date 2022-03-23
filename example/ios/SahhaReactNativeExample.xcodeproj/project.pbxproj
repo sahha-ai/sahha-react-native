@@ -11,7 +11,7 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		34097B3427B22A0900C89810 /* MySwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34097B3327B22A0900C89810 /* MySwift.swift */; };
+		3489CD2F27EAB01D004A91D0 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3489CD2E27EAB01D004A91D0 /* HealthKit.framework */; };
 		4C39C56BAD484C67AA576FFA /* libPods-SahhaReactNativeExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CA3E69C5B9553B26FBA2DF04 /* libPods-SahhaReactNativeExample.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
@@ -38,7 +38,10 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = SahhaReactNativeExample/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = SahhaReactNativeExample/main.m; sourceTree = "<group>"; };
 		34097B3227B22A0800C89810 /* SahhaReactNativeExample-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SahhaReactNativeExample-Bridging-Header.h"; sourceTree = "<group>"; };
-		34097B3327B22A0900C89810 /* MySwift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MySwift.swift; sourceTree = "<group>"; };
+		3409D69927E4003E00F05FDA /* libSahha.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libSahha.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		3409D6A027E40AC000F05FDA /* libSahha.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libSahha.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		3489CD2D27EAB01D004A91D0 /* SahhaReactNativeExample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = SahhaReactNativeExample.entitlements; path = SahhaReactNativeExample/SahhaReactNativeExample.entitlements; sourceTree = "<group>"; };
+		3489CD2E27EAB01D004A91D0 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		34DFCF5D27C71A860067769C /* libSahha.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libSahha.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		34DFCF5F27C73D0F0067769C /* OpenSSL.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = OpenSSL.xcframework; path = "Pods/OpenSSL-Universal/Frameworks/OpenSSL.xcframework"; sourceTree = "<group>"; };
 		47F7ED3B7971BE374F7B8635 /* Pods-SahhaReactNativeExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SahhaReactNativeExample.debug.xcconfig"; path = "Target Support Files/Pods-SahhaReactNativeExample/Pods-SahhaReactNativeExample.debug.xcconfig"; sourceTree = "<group>"; };
@@ -61,6 +64,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C39C56BAD484C67AA576FFA /* libPods-SahhaReactNativeExample.a in Frameworks */,
+				3489CD2F27EAB01D004A91D0 /* HealthKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -87,6 +91,7 @@
 		13B07FAE1A68108700A75B9A /* SahhaReactNativeExample */ = {
 			isa = PBXGroup;
 			children = (
+				3489CD2D27EAB01D004A91D0 /* SahhaReactNativeExample.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -94,7 +99,6 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
-				34097B3327B22A0900C89810 /* MySwift.swift */,
 				34097B3227B22A0800C89810 /* SahhaReactNativeExample-Bridging-Header.h */,
 			);
 			name = SahhaReactNativeExample;
@@ -103,6 +107,9 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3489CD2E27EAB01D004A91D0 /* HealthKit.framework */,
+				3409D6A027E40AC000F05FDA /* libSahha.a */,
+				3409D69927E4003E00F05FDA /* libSahha.a */,
 				34DFCF5F27C73D0F0067769C /* OpenSSL.xcframework */,
 				34DFCF5D27C71A860067769C /* libSahha.a */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
@@ -364,7 +371,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
-				34097B3427B22A0900C89810 /* MySwift.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -383,7 +389,6 @@
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -406,7 +411,6 @@
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = SahhaReactNativeExampleTests/Info.plist;
@@ -429,6 +433,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = SahhaReactNativeExample/SahhaReactNativeExample.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = DFT926V374;
 				ENABLE_BITCODE = NO;
@@ -440,7 +445,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = example.sahha.reactnative;
+				PRODUCT_BUNDLE_IDENTIFIER = demo.sahha.reactnative;
 				PRODUCT_NAME = SahhaReactNativeExample;
 				SWIFT_OBJC_BRIDGING_HEADER = "SahhaReactNativeExample-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -455,6 +460,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = SahhaReactNativeExample/SahhaReactNativeExample.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = DFT926V374;
 				INFOPLIST_FILE = SahhaReactNativeExample/Info.plist;
@@ -465,7 +471,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = example.sahha.reactnative;
+				PRODUCT_BUNDLE_IDENTIFIER = demo.sahha.reactnative;
 				PRODUCT_NAME = SahhaReactNativeExample;
 				SWIFT_OBJC_BRIDGING_HEADER = "SahhaReactNativeExample-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;

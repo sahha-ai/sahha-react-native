@@ -3,11 +3,10 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 46;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3460980A27B2372500A09294 /* Sahha in Frameworks */ = {isa = PBXBuildFile; productRef = 3460980927B2372500A09294 /* Sahha */; };
 		F4FF95D7245B92E800C19C63 /* SahhaReactNative.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4FF95D6245B92E800C19C63 /* SahhaReactNative.swift */; };
 /* End PBXBuildFile section */
 
@@ -25,7 +24,6 @@
 
 /* Begin PBXFileReference section */
 		134814201AA4EA6300B7C361 /* libSahhaReactNative.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSahhaReactNative.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		3462421427B232A50034945F /* sahha-sdk-ios */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "sahha-sdk-ios"; path = "../../sahha-sdk-ios"; sourceTree = "<group>"; };
 		B3E7B5891CC2AC0600A0062D /* SahhaReactNative.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SahhaReactNative.m; sourceTree = "<group>"; };
 		F4FF95D5245B92E700C19C63 /* SahhaReactNative-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SahhaReactNative-Bridging-Header.h"; sourceTree = "<group>"; };
 		F4FF95D6245B92E800C19C63 /* SahhaReactNative.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SahhaReactNative.swift; sourceTree = "<group>"; };
@@ -36,7 +34,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3460980A27B2372500A09294 /* Sahha in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -51,14 +48,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		34097B3A27B22E0C00C89810 /* Packages */ = {
-			isa = PBXGroup;
-			children = (
-				3462421427B232A50034945F /* sahha-sdk-ios */,
-			);
-			name = Packages;
-			sourceTree = "<group>";
-		};
 		3442681927AE31060029CE0F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -69,7 +58,6 @@
 		58B511D21A9E6C8500147676 = {
 			isa = PBXGroup;
 			children = (
-				34097B3A27B22E0C00C89810 /* Packages */,
 				F4FF95D6245B92E800C19C63 /* SahhaReactNative.swift */,
 				B3E7B5891CC2AC0600A0062D /* SahhaReactNative.m */,
 				F4FF95D5245B92E700C19C63 /* SahhaReactNative-Bridging-Header.h */,
@@ -95,7 +83,6 @@
 			);
 			name = SahhaReactNative;
 			packageProductDependencies = (
-				3460980927B2372500A09294 /* Sahha */,
 			);
 			productName = RCTDataManager;
 			productReference = 134814201AA4EA6300B7C361 /* libSahhaReactNative.a */;
@@ -307,13 +294,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		3460980927B2372500A09294 /* Sahha */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Sahha;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 58B511D31A9E6C8500147676 /* Project object */;
 }

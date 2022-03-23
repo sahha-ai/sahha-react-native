@@ -23,6 +23,18 @@ export function multiply(a: number, b: number): Promise<number> {
 }
 */
 
-const { SahhaReactNative } = NativeModules;
+const Sahha = NativeModules.SahhaReactNative;
 
-export default SahhaReactNative;
+export default Sahha;
+
+export enum SahhaActivity {
+  MOTION = 'motion',
+  HEALTH = 'health',
+}
+
+export enum SahhaActivityStatus {
+  PENDING = 0, /// Activity support is pending User permission
+  UNAVAILABLE = 1, /// Activity is not supported by the User's device
+  DISABLED = 2, /// Activity has been disabled by the User
+  ENABLED = 3, /// Activity has been enabled by the User
+}
