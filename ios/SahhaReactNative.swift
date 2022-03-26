@@ -23,12 +23,15 @@ class SahhaReactNative: NSObject {
     }
     
     @objc func constantsToExport() -> [AnyHashable : Any]! {
-        return ["message": Sahha.text]
+        return ["message": "how are you?"]
     }
     
     @objc(configure)
     func configure() {
         Sahha.configure()
+        
+        // Needed for React Native since native iOS lifecycle is delayed at launch
+        Sahha.onAppOpen()
     }
     
     @objc(activate:)
@@ -89,27 +92,9 @@ class SahhaReactNative: NSObject {
         }
     }
     
-    @objc(squareUp:onSuccess:onFailure:)
-    func squareUp(value: Int, onSuccess:RCTPromiseResolveBlock, onFailure:RCTPromiseRejectBlock) -> Void {
-        //let newValue = Sahha.shared.squareUp(value: value)
-        let newValue = 10
-        onSuccess(newValue)
-    }
-
-    @objc(multiply:b:onSuccess:onFailure:)
-    func multiply(a: Float, b: Float, onSuccess:RCTPromiseResolveBlock,onFailure:RCTPromiseRejectBlock) -> Void {
-        onSuccess(a*b)
-    }
-    
-    @objc(add:onFailure:)
-    func add(onSuccess: RCTPromiseResolveBlock, onFailure: RCTPromiseRejectBlock) -> Void {
-        onSuccess(storedValue+storedValue+storedValue)
-        //onFailure("Nope!", "Try again!", SahhaError.woops)
-    }
-    
     @objc(speak:onFailure:)
     func speak(onSuccess: RCTPromiseResolveBlock, onFailure: RCTPromiseRejectBlock) -> Void {
-        onSuccess(Sahha.bundleId)
+        onSuccess("hello")
         //onFailure("Nope!", "Try again!", SahhaError.woops)
     }
 }
