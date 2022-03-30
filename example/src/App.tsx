@@ -1,15 +1,8 @@
 import React, { useState } from 'react';
-import {
-  StyleSheet,
-  View,
-  Text,
-  ScrollView,
-  Button,
-  Image,
-} from 'react-native';
+import { StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Sahha from 'sahha-react-native';
+import Sahha, { SahhaEnvironment, SahhaSensor } from 'sahha-react-native';
 import HomeView from './HomeView';
 import AuthenticationView from './AuthenticationView';
 import ProfileView from './ProfileView';
@@ -29,7 +22,23 @@ export enum PageTitle {
 }
 
 export default function App() {
-  Sahha.configure();
+  /*
+  Sahha.configure(
+    SahhaEnvironment.development,
+    [SahhaSensor.sleep, SahhaSensor.pedometer],
+    false
+  );
+*/
+
+  const settings = { environment: SahhaEnvironment.production };
+
+  Sahha.configure(settings, (error, success) => {
+    if (error) {
+      console.error(`Error: ${error}`);
+    } else if (success) {
+      console.log(`Success: ${success}`);
+    }
+  });
 
   return (
     <NavigationContainer>

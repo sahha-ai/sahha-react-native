@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, ScrollView, Button } from 'react-native';
-import SahhaReactNative from 'sahha-react-native';
+import Sahha, { SahhaActivity } from 'sahha-react-native';
 
 export default function ProfileView() {
   var sampleString = `id : kYJk8CCasUeHTz5rvSc9Yw
@@ -27,6 +27,18 @@ phenotypes : [
       ) : (
         <Text>{jsonString}</Text>
       )}
+      <Button
+        title="POST"
+        onPress={() => {
+          Sahha.postActivity(SahhaActivity.motion, (error, value) => {
+            if (error) {
+              console.error(`Error: ${error}`);
+            } else if (value) {
+              console.log(`Success: ${value}`);
+            }
+          });
+        }}
+      />
     </ScrollView>
   );
 }

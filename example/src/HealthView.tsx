@@ -5,15 +5,15 @@ import Sahha, { SahhaActivity, SahhaActivityStatus } from 'sahha-react-native';
 
 export default function HealthView() {
   const [activityStatus, setActivityStatus] = useState<SahhaActivityStatus>(
-    SahhaActivityStatus.PENDING
+    SahhaActivityStatus.pending
   );
   let canEnable =
-    activityStatus === SahhaActivityStatus.PENDING ||
-    activityStatus === SahhaActivityStatus.DISABLED;
+    activityStatus === SahhaActivityStatus.pending ||
+    activityStatus === SahhaActivityStatus.disabled;
 
   useEffect(() => {
     console.log('health');
-    Sahha.activityStatus(SahhaActivity.HEALTH, (error, value) => {
+    Sahha.activityStatus(SahhaActivity.health, (error, value) => {
       if (error) {
         console.error(`Error: ${error}`);
       } else if (value) {
@@ -32,7 +32,7 @@ export default function HealthView() {
             title="ENABLE"
             onPress={() => {
               console.log('press');
-              Sahha.activate(SahhaActivity.HEALTH, (error, value) => {
+              Sahha.activate(SahhaActivity.health, (error, value) => {
                 if (error) {
                   console.error(`Error: ${error}`);
                 } else if (value) {

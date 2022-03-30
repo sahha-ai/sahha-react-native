@@ -1,12 +1,5 @@
 import React, { useState } from 'react';
-import {
-  Modal,
-  StyleSheet,
-  View,
-  Text,
-  ScrollView,
-  Button,
-} from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import SahhaReactNative from 'sahha-react-native';
 
 export default function ProfileView() {
@@ -19,6 +12,7 @@ export default function ProfileView() {
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: 'white',
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',

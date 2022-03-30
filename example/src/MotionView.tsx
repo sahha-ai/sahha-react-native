@@ -5,15 +5,15 @@ import Sahha, { SahhaActivity, SahhaActivityStatus } from 'sahha-react-native';
 
 export default function MotionView() {
   const [activityStatus, setActivityStatus] = useState<SahhaActivityStatus>(
-    SahhaActivityStatus.PENDING
+    SahhaActivityStatus.pending
   );
   let canEnable =
-    activityStatus === SahhaActivityStatus.PENDING ||
-    activityStatus === SahhaActivityStatus.DISABLED;
+    activityStatus === SahhaActivityStatus.pending ||
+    activityStatus === SahhaActivityStatus.disabled;
 
   useEffect(() => {
     console.log('motion');
-    Sahha.activityStatus(SahhaActivity.MOTION, (error, value) => {
+    Sahha.activityStatus(SahhaActivity.motion, (error, value) => {
       if (error) {
         console.error(`Error: ${error}`);
       } else if (value) {
@@ -32,9 +32,9 @@ export default function MotionView() {
             title="ENABLE"
             onPress={() => {
               console.log('press');
-              if (activityStatus === SahhaActivityStatus.DISABLED) {
+              if (activityStatus === SahhaActivityStatus.disabled) {
                 Sahha.promptUserToActivate(
-                  SahhaActivity.MOTION,
+                  SahhaActivity.motion,
                   (error, value) => {
                     if (error) {
                       console.error(`Error: ${error}`);
@@ -45,7 +45,7 @@ export default function MotionView() {
                   }
                 );
               } else {
-                Sahha.activate(SahhaActivity.MOTION, (error, value) => {
+                Sahha.activate(SahhaActivity.motion, (error, value) => {
                   if (error) {
                     console.error(`Error: ${error}`);
                   } else if (value) {
