@@ -30,7 +30,9 @@ export default function App() {
   );
 */
 
-  const settings = { environment: SahhaEnvironment.production };
+  const settings = {
+    environment: SahhaEnvironment.development,
+  };
 
   Sahha.configure(settings, (error, success) => {
     if (error) {
