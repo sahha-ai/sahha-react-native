@@ -54,6 +54,44 @@ class SahhaReactNative: NSObject {
         }
     }
     
+    @objc(postDemographic:callback:)
+    func postDemographic(_ demographic: NSDictionary, callback: @escaping RCTResponseSenderBlock) {
+        
+                
+        if let configDemographic = demographic as? [String: Any] {
+            
+            var requestDemographic = SahhaDemographic()
+            
+            if let ageString = configDemographic["age"] as? NSString {
+                let age = ageString.integerValue
+                print("age ", age)
+                requestDemographic.age = age
+            }
+            
+            if let gender = configDemographic["gender"] as? String {
+                print("gender ", gender)
+                requestDemographic.gender = gender
+            }
+            
+            if let country = configDemographic["country"] as? String {
+                print("country ", country)
+                requestDemographic.country = country
+            }
+            
+            if let birthCountry = configDemographic["birthCountry"] as? String {
+                print("birthCountry ", birthCountry)
+                requestDemographic.birthCountry = birthCountry
+            }
+            
+            Sahha.postDemographic(requestDemographic) { error, success in
+                callback([error ?? NSNull(), success])
+            }
+            
+        } else {
+            callback(["Sahha demographic not valid", false])
+        }
+    }
+    
     @objc(activate:)
     func activate(_ callback: @escaping RCTResponseSenderBlock) {
         Sahha.motion.activate { newStatus in

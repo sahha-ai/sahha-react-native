@@ -4,6 +4,8 @@
 
 RCT_EXTERN_METHOD(configure:(NSDictionary *)settings callback:(RCTResponseSenderBlock)callback)
 
+RCT_EXTERN_METHOD(postDemographic:(NSDictionary *)demographic callback:(RCTResponseSenderBlock)callback)
+
 RCT_EXTERN_METHOD(activate:(RCTResponseSenderBlock)callback)
 
 RCT_EXTERN_METHOD(authenticate:(NSString *)customerId profileId:(NSString *)profileId callback:(RCTResponseSenderBlock)callback)
