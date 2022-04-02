@@ -13,14 +13,17 @@ export default function HealthView() {
 
   useEffect(() => {
     console.log('health');
-    Sahha.activityStatus(SahhaActivity.health, (error, value) => {
-      if (error) {
-        console.error(`Error: ${error}`);
-      } else if (value) {
-        console.log(`Activity Status: ${value}`);
-        setActivityStatus(value);
+    Sahha.activityStatus(
+      SahhaActivity.health,
+      (error: string, value: SahhaActivityStatus) => {
+        if (error) {
+          console.error(`Error: ${error}`);
+        } else if (value) {
+          console.log(`Activity Status: ${value}`);
+          setActivityStatus(value);
+        }
       }
-    });
+    );
   }, []);
 
   const EnableButton = () => {
@@ -32,14 +35,17 @@ export default function HealthView() {
             title="ENABLE"
             onPress={() => {
               console.log('press');
-              Sahha.activate(SahhaActivity.health, (error, value) => {
-                if (error) {
-                  console.error(`Error: ${error}`);
-                } else if (value) {
-                  console.log(`Activity: ${value}`);
-                  setActivityStatus(value);
+              Sahha.activate(
+                SahhaActivity.health,
+                (error: string, value: SahhaActivityStatus) => {
+                  if (error) {
+                    console.error(`Error: ${error}`);
+                  } else if (value) {
+                    console.log(`Activity Status: ${value}`);
+                    setActivityStatus(value);
+                  }
                 }
-              });
+              );
             }}
           />
         </>

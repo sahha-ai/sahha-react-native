@@ -13,14 +13,17 @@ export default function MotionView() {
 
   useEffect(() => {
     console.log('motion');
-    Sahha.activityStatus(SahhaActivity.motion, (error, value) => {
-      if (error) {
-        console.error(`Error: ${error}`);
-      } else if (value) {
-        console.log(`Activity Status: ${value}`);
-        setActivityStatus(value);
+    Sahha.activityStatus(
+      SahhaActivity.motion,
+      (error: string, value: SahhaActivityStatus) => {
+        if (error) {
+          console.error(`Error: ${error}`);
+        } else if (value) {
+          console.log(`Activity Status: ${value}`);
+          setActivityStatus(value);
+        }
       }
-    });
+    );
   }, []);
 
   const EnableButton = () => {
@@ -48,14 +51,17 @@ export default function MotionView() {
           );
         */
               } else {
-                Sahha.activate(SahhaActivity.motion, (error, value) => {
-                  if (error) {
-                    console.error(`Error: ${error}`);
-                  } else if (value) {
-                    console.log(`Activity: ${value}`);
-                    setActivityStatus(value);
+                Sahha.activate(
+                  SahhaActivity.motion,
+                  (error: string, value: SahhaActivityStatus) => {
+                    if (error) {
+                      console.error(`Error: ${error}`);
+                    } else if (value) {
+                      console.log(`Activity Status: ${value}`);
+                      setActivityStatus(value);
+                    }
                   }
-                });
+                );
               }
             }}
           />

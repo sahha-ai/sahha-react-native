@@ -45,7 +45,7 @@ export default function ProfileView() {
       gender: gender,
     };
 
-    Sahha.postDemographic(demographic, (error, success) => {
+    Sahha.postDemographic(demographic, (error: string, success: boolean) => {
       if (error) {
         console.error(`Error: ${error}`);
       } else if (success) {
