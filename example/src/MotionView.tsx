@@ -33,6 +33,8 @@ export default function MotionView() {
             onPress={() => {
               console.log('press');
               if (activityStatus === SahhaActivityStatus.disabled) {
+                Sahha.openAppSettings();
+                /*
                 Sahha.promptUserToActivate(
                   SahhaActivity.motion,
                   (error, value) => {
@@ -43,7 +45,8 @@ export default function MotionView() {
                       setActivityStatus(value);
                     }
                   }
-                );
+          );
+        */
               } else {
                 Sahha.activate(SahhaActivity.motion, (error, value) => {
                   if (error) {

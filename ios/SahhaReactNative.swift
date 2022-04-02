@@ -88,7 +88,7 @@ class SahhaReactNative: NSObject {
     func promptUserToActivate(_ activity: String, callback: @escaping RCTResponseSenderBlock) -> Void {
         switch SahhaActivity(rawValue: activity) {
         case .motion:
-            Sahha.motion.promptUserToActivate { value in
+            Sahha.motion.activate { value in
                 callback([NSNull(),value.rawValue])
             }
         case .health:
@@ -126,6 +126,11 @@ class SahhaReactNative: NSObject {
         default:
             callback(["\(activity) is not a valid Sahha activity", false])
         }
+    }
+    
+    @objc(openAppSettings)
+    func openAppSettings() -> Void {
+        Sahha.openAppSettings()
     }
     
     @objc(speak:onFailure:)
