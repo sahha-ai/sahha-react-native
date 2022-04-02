@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { StyleSheet } from 'react-native';
+import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Sahha, { SahhaEnvironment, SahhaSensor } from 'sahha-react-native';
@@ -34,7 +33,7 @@ export default function App() {
     environment: SahhaEnvironment.development,
   };
 
-  Sahha.configure(settings, (error, success) => {
+  Sahha.configure(settings, (error: string, success: boolean) => {
     if (error) {
       console.error(`Error: ${error}`);
     } else if (success) {
@@ -81,11 +80,3 @@ export default function App() {
     </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
