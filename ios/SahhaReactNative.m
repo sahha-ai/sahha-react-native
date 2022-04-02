@@ -18,6 +18,8 @@ RCT_EXTERN_METHOD(activityStatus:(NSString *)activity callback:(RCTResponseSende
 
 RCT_EXTERN_METHOD(postActivity:(NSString *)activity callback:(RCTResponseSenderBlock)callback)
 
+RCT_EXTERN_METHOD(analyze:(RCTResponseSenderBlock)callback)
+
 RCT_EXTERN_METHOD(openAppSettings)
 
 RCT_EXTERN_METHOD(speak:(RCTPromiseResolveBlock)resolve

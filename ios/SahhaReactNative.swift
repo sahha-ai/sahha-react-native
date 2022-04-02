@@ -166,6 +166,13 @@ class SahhaReactNative: NSObject {
         }
     }
     
+    @objc(analyze:)
+    func analyze(_ callback: @escaping RCTResponseSenderBlock) -> Void {
+        Sahha.analyze { error, value in
+            callback([error ?? NSNull(), value ?? NSNull()])
+        }
+    }
+    
     @objc(openAppSettings)
     func openAppSettings() -> Void {
         Sahha.openAppSettings()
