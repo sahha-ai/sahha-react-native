@@ -1,4 +1,12 @@
 PODS:
+  - AppCenter (4.4.2):
+    - AppCenter/Analytics (= 4.4.2)
+    - AppCenter/Crashes (= 4.4.2)
+  - AppCenter/Analytics (4.4.2):
+    - AppCenter/Core
+  - AppCenter/Core (4.4.2)
+  - AppCenter/Crashes (4.4.2):
+    - AppCenter/Core
   - boost-for-react-native (1.63.0)
   - CocoaAsyncSocket (7.6.5)
   - DoubleConversion (1.1.6)
@@ -310,7 +318,8 @@ PODS:
   - RNScreens (3.13.1):
     - React-Core
     - React-RCTImage
-  - Sahha (0.0.0)
+  - Sahha (0.0.0):
+    - AppCenter
   - sahha-react-native (0.1.0):
     - React-Core
     - Sahha
@@ -375,6 +384,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - AppCenter
     - boost-for-react-native
     - CocoaAsyncSocket
     - Flipper
@@ -457,6 +467,7 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
+  AppCenter: b0eca112a27b71e97488ffa1949ee38c7abd4b79
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: cde416483dac037923206447da6e1454df403714
@@ -499,7 +510,7 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: 005c0e2f09575360f142d0d1f1f15e4ec575b1af
   RNCPicker: 6d5d64e7b90c240c779ee0938ec433c11e2dd758
   RNScreens: 40a2cb40a02a609938137a1e0acfbf8fc9eebf19
-  Sahha: 551a5b9d31f685c5d274294db51c80b57ae82fa0
+  Sahha: 8417145b62c7ff0f3ec8a26844547081036a0804
   sahha-react-native: fe765f08cce6c998c94e565feff1cf35873f9124
   Yoga: 4bd86afe9883422a7c4028c00e34790f560923d6
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a

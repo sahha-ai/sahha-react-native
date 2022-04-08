@@ -41,7 +41,8 @@ class SahhaReactNative: NSObject {
             
             let postActivityManually: Bool? = configSettings[SahhaSettingsIdentifier.postActivityManually.rawValue] as? Bool
             
-            let settings = SahhaSettings(environment: configEnvironment, sensors: configSensors, postActivityManually: postActivityManually)
+            var settings = SahhaSettings(environment: configEnvironment, sensors: configSensors, postActivityManually: postActivityManually)
+            settings.framework = .react_native
             
             Sahha.configure(settings)
             
