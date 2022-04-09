@@ -8,7 +8,7 @@ RCT_EXTERN_METHOD(postDemographic:(NSDictionary *)demographic callback:(RCTRespo
 
 RCT_EXTERN_METHOD(activate:(RCTResponseSenderBlock)callback)
 
-RCT_EXTERN_METHOD(authenticate:(NSString *)customerId profileId:(NSString *)profileId callback:(RCTResponseSenderBlock)callback)
+RCT_EXTERN_METHOD(authenticate:(NSString *)token refreshToken:(NSString *)refreshToken callback:(RCTResponseSenderBlock)callback)
 
 RCT_EXTERN_METHOD(activate:(NSString *)activity callback:(RCTResponseSenderBlock)callback)
 

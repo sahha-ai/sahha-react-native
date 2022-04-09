@@ -100,11 +100,10 @@ class SahhaReactNative: NSObject {
         }
     }
     
-    @objc(authenticate:profileId:callback:)
-    func authenticate(_ customerId: String, profileId: String, callback: @escaping RCTResponseSenderBlock) -> Void {
-        Sahha.authenticate(customerId: customerId, profileId: profileId) { error, value in
-            callback([error ?? NSNull(), value ?? NSNull()])
-        }
+    @objc(authenticate:refreshToken:callback:)
+    func authenticate(_ token: String, refreshToken: String, callback: @escaping RCTResponseSenderBlock) -> Void {
+        let success = Sahha.authenticate(token: token, refreshToken: refreshToken)
+        callback([success ? NSNull() : "Sahha credentials not valid", success])
     }
     
     @objc(activate:callback:)

@@ -12,9 +12,9 @@ import SahhaReactNative from 'sahha-react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function AuthenticationView() {
-  const [customerId, setCustomerId] = useState<string>('');
-  const [profileId, setProfileId] = useState<string>('');
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [token, setToken] = useState<string>('');
+  const [refreshToken, setRefreshToken] = useState<string>('');
+  const [isAuth, setIsAuth] = useState<boolean>(false);
   const isFirstRender = useRef(true);
 
   useEffect(() => {
@@ -30,78 +30,83 @@ export default function AuthenticationView() {
 
     const setPrefs = async () => {
       try {
-        await AsyncStorage.setItem('@customerId', customerId);
-        await AsyncStorage.setItem('@profileId', profileId);
-        const jsonValue = JSON.stringify(isLoggedIn);
-        await AsyncStorage.setItem('@isLoggedIn', jsonValue);
+        await AsyncStorage.setItem('@token', token);
+        await AsyncStorage.setItem('@refreshToken', refreshToken);
+        const jsonValue = JSON.stringify(isAuth);
+        await AsyncStorage.setItem('@isAuth', jsonValue);
       } catch (error) {
         console.error(error);
       }
     };
     setPrefs();
-  }, [isLoggedIn]);
+  }, [isAuth]);
 
   const getPrefs = async () => {
     try {
-      const _customerId = await AsyncStorage.getItem('@customerId');
-      if (_customerId !== null) {
-        setCustomerId(_customerId);
+      const _token = await AsyncStorage.getItem('@token');
+      if (_token !== null) {
+        setToken(_token);
       }
-      const _profileId = await AsyncStorage.getItem('@profileId');
-      if (_profileId !== null) {
-        setProfileId(_profileId);
+      const _refreshToken = await AsyncStorage.getItem('@refreshToken');
+      if (_refreshToken !== null) {
+        setRefreshToken(_refreshToken);
       }
-      const jsonValue = await AsyncStorage.getItem('@isLoggedIn');
+      const jsonValue = await AsyncStorage.getItem('@isAuth');
       if (jsonValue !== null) {
         const boolValue = JSON.parse(jsonValue);
-        setIsLoggedIn(boolValue);
+        setIsAuth(boolValue);
       }
     } catch (error) {
       console.error(error);
     }
   };
 
-  function onPressLogin() {
-    if (!!customerId === false) {
-      Alert.alert('Missing Customer ID');
-    } else if (!!profileId === false) {
-      Alert.alert('Missing Profile ID');
+  function onPressAuthenticate() {
+    if (!!token === false) {
+      Alert.alert('Missing TOKEN');
+    } else if (!!refreshToken === false) {
+      Alert.alert('Missing REFRESH TOKEN');
     } else {
-      SahhaReactNative.authenticate(customerId, profileId, (error, value) => {
+      SahhaReactNative.authenticate(token, refreshToken, (error, success) => {
+        console.log(`Success: ${success}`);
+        setIsAuth(success);
         if (error) {
           console.error(`Error: ${error}`);
-        } else if (value) {
-          console.log(value);
-          setIsLoggedIn(true);
         }
       });
     }
   }
 
-  function onPressLogout() {
-    setIsLoggedIn(false);
+  function onPressDelete() {
+    setToken('');
+    setRefreshToken('');
+    setIsAuth(false);
   }
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text>{isLoggedIn ? 'You are logged in' : 'You are not logged in'}</Text>
+      <Text>
+        {isAuth ? 'You are authenticated' : 'You are not authenticated'}
+      </Text>
       <View style={styles.divider} />
-      <Text>Customer ID</Text>
+      <Text>Token</Text>
       <TextInput
         style={styles.input}
-        onChangeText={setCustomerId}
-        value={customerId}
+        onChangeText={setToken}
+        value={token}
         placeholder="ABC123"
       />
-      <Text>Profile ID</Text>
+      <Text>Refresh Token</Text>
       <TextInput
         style={styles.input}
-        onChangeText={setProfileId}
-        value={profileId}
+        onChangeText={setRefreshToken}
+        value={refreshToken}
         placeholder="ABC123"
       />
-      {isLoggedIn === false && <Button title="LOGIN" onPress={onPressLogin} />}
-      {isLoggedIn === true && <Button title="LOGOUT" onPress={onPressLogout} />}
+      <View style={styles.divider} />
+      <Button title="AUTHENTICATE" onPress={onPressAuthenticate} />
+      <View style={styles.divider} />
+      <Button title="DELETE" onPress={onPressDelete} />
     </ScrollView>
   );
 }
