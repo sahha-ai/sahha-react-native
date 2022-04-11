@@ -1,6 +1,6 @@
-# Sahha SDK
+# Sahha SDK for React Native Apps
 
-The Sahha SDK provides a convenient way to connect to the Sahha API.
+The Sahha SDK provides a convenient way for React Native apps to connect to the Sahha API.
 
 [Sahha API](https://sandbox-api.sahha.ai/index.html)
 
