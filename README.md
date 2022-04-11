@@ -1,27 +1,25 @@
-# sahha-react-native
+# Sahha SDK
 
-Integrate Sahha sdk your React Native app
+The Sahha SDK provides a convenient way to connect to the Sahha API.
 
-## Installation
+[Sahha API](https://sandbox-api.sahha.ai/index.html)
 
-```sh
-npm install sahha-react-native
-```
+---
 
-## Usage
+## Docs
 
-```js
-import { multiply } from "sahha-react-native";
+The Sahha Docs provide detailed instructions for installation and usage of the Sahha SDK.
 
-// ...
+[Sahha Docs](https://developer.sahha.ai/docs/react-native.html)
 
-const result = await multiply(3, 7);
-```
+---
 
-## Contributing
+## Example
 
-See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
+The Sahha Demo App provides a convenient way to try the features of the Sahha SDK.
 
-## License
+[Sahha Demo App](https://github.com/sahha-ai/sahha-react-native/tree/master/example)
 
-MIT
+---
+
+Copyright © 2022 Sahha. All rights reserved.

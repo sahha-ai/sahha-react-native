@@ -31,19 +31,19 @@
       "size" : "40x40"
     },
     {
-      "filename" : "React-icon_120.png",
+      "filename" : "App-Icon-Dev_120.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "60x60"
     },
     {
-      "filename" : "React-icon_180.png",
+      "filename" : "App-Icon-Dev_180.png",
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "60x60"
     },
     {
-      "filename" : "React-icon.png",
+      "filename" : "App-Icon-Dev_1024.png",
       "idiom" : "ios-marketing",
       "scale" : "1x",
       "size" : "1024x1024"
