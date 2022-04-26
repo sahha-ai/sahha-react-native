@@ -8,11 +8,11 @@ import {
   Button,
   TextInput,
 } from 'react-native';
-import SahhaReactNative from 'sahha-react-native';
+import Sahha from 'sahha-react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function AuthenticationView() {
-  const [token, setToken] = useState<string>('');
+  const [profileToken, setProfileToken] = useState<string>('');
   const [refreshToken, setRefreshToken] = useState<string>('');
   const [isAuth, setIsAuth] = useState<boolean>(false);
   const isFirstRender = useRef(true);
@@ -30,7 +30,7 @@ export default function AuthenticationView() {
 
     const setPrefs = async () => {
       try {
-        await AsyncStorage.setItem('@token', token);
+        await AsyncStorage.setItem('@profileToken', profileToken);
         await AsyncStorage.setItem('@refreshToken', refreshToken);
         const jsonValue = JSON.stringify(isAuth);
         await AsyncStorage.setItem('@isAuth', jsonValue);
@@ -43,9 +43,9 @@ export default function AuthenticationView() {
 
   const getPrefs = async () => {
     try {
-      const _token = await AsyncStorage.getItem('@token');
-      if (_token !== null) {
-        setToken(_token);
+      const _profileToken = await AsyncStorage.getItem('@profileToken');
+      if (_profileToken !== null) {
+        setProfileToken(_profileToken);
       }
       const _refreshToken = await AsyncStorage.getItem('@refreshToken');
       if (_refreshToken !== null) {
@@ -62,23 +62,27 @@ export default function AuthenticationView() {
   };
 
   function onPressAuthenticate() {
-    if (!!token === false) {
-      Alert.alert('Missing TOKEN');
+    if (!!profileToken === false) {
+      Alert.alert('Missing PROFILE TOKEN');
     } else if (!!refreshToken === false) {
       Alert.alert('Missing REFRESH TOKEN');
     } else {
-      SahhaReactNative.authenticate(token, refreshToken, (error, success) => {
-        console.log(`Success: ${success}`);
-        setIsAuth(success);
-        if (error) {
-          console.error(`Error: ${error}`);
+      Sahha.authenticate(
+        profileToken,
+        refreshToken,
+        (error: string, success: boolean) => {
+          console.log(`Success: ${success}`);
+          setIsAuth(success);
+          if (error) {
+            console.error(`Error: ${error}`);
+          }
         }
-      });
+      );
     }
   }
 
   function onPressDelete() {
-    setToken('');
+    setProfileToken('');
     setRefreshToken('');
     setIsAuth(false);
   }
@@ -89,11 +93,11 @@ export default function AuthenticationView() {
         {isAuth ? 'You are authenticated' : 'You are not authenticated'}
       </Text>
       <View style={styles.divider} />
-      <Text>Token</Text>
+      <Text>Profile Token</Text>
       <TextInput
         style={styles.input}
-        onChangeText={setToken}
-        value={token}
+        onChangeText={setProfileToken}
+        value={profileToken}
         placeholder="ABC123"
       />
       <Text>Refresh Token</Text>

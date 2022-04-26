@@ -1,6 +1,14 @@
 import React from 'react';
-import { View, StyleSheet, Image, ScrollView, Button } from 'react-native';
+import {
+  Platform,
+  View,
+  StyleSheet,
+  Image,
+  ScrollView,
+  Button,
+} from 'react-native';
 import { PageTitle } from './App';
+import Sahha, { SahhaEnvironment, SahhaSensor } from 'sahha-react-native';
 
 export default function HomeView({ navigation }) {
   return (
@@ -19,13 +27,15 @@ export default function HomeView({ navigation }) {
           navigation.navigate(PageTitle.PROFILE.toString());
         }}
       />
-      <View style={styles.divider} />
-      <Button
-        title={PageTitle.HEALTH.toString()}
-        onPress={() => {
-          navigation.navigate(PageTitle.HEALTH.toString());
-        }}
-      />
+      {Platform.OS === 'ios' && <View style={styles.divider} />}
+      {Platform.OS === 'ios' && (
+        <Button
+          title={PageTitle.HEALTH.toString()}
+          onPress={() => {
+            navigation.navigate(PageTitle.HEALTH.toString());
+          }}
+        />
+      )}
       <View style={styles.divider} />
       <Button
         title={PageTitle.MOTION.toString()}
@@ -38,6 +48,13 @@ export default function HomeView({ navigation }) {
         title={PageTitle.ANALYZATION.toString()}
         onPress={() => {
           navigation.navigate(PageTitle.ANALYZATION.toString());
+        }}
+      />
+      <View style={styles.divider} />
+      <Button
+        title={'OPEN APP SETTINGS'}
+        onPress={() => {
+          Sahha.openAppSettings();
         }}
       />
     </ScrollView>
