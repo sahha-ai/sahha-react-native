@@ -6,7 +6,8 @@ import Sahha from 'sahha-react-native';
 
 export default function ProfileView() {
   const [age, setAge] = useState<string>('');
-  const [gender, setGender] = useState<string>('male');
+  const [ageNumber, setAgeNumber] = useState<number>();
+  const [gender, setGender] = useState<string>('Male');
 
   useEffect(() => {
     console.log('profile');
@@ -18,6 +19,10 @@ export default function ProfileView() {
       const _age = await AsyncStorage.getItem('@age');
       if (_age !== null) {
         setAge(_age);
+        let ageInt = parseInt(_age);
+        if (ageInt) {
+          setAgeNumber(ageInt);
+        }
       }
       const _gender = await AsyncStorage.getItem('@gender');
       if (_gender !== null) {
@@ -41,8 +46,8 @@ export default function ProfileView() {
     setPrefs();
 
     const demographic = {
-      age: age,
-      gender: gender,
+      age: ageNumber, // number
+      gender: gender, // string
     };
 
     Sahha.postDemographic(demographic, (error: string, success: boolean) => {
@@ -66,9 +71,11 @@ export default function ProfileView() {
           if (ageInt) {
             console.log(ageInt.toString());
             setAge(ageInt.toString());
+            setAgeNumber(ageInt);
           } else {
             console.log('bad int');
             setAge('');
+            setAgeNumber(undefined);
           }
         }}
         value={age}
@@ -83,9 +90,9 @@ export default function ProfileView() {
           setGender(itemValue);
         }}
       >
-        <Picker.Item label="Male" value={'male'} />
-        <Picker.Item label="Female" value={'female'} />
-        <Picker.Item label="Gender Diverse" value={'gender diverse'} />
+        <Picker.Item label="Male" value={'Male'} />
+        <Picker.Item label="Female" value={'Female'} />
+        <Picker.Item label="Gender Diverse" value={'Gender Diverse'} />
       </Picker>
       <Button title="SAVE" onPress={savePrefs} />
     </View>

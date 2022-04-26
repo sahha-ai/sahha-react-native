@@ -7,9 +7,10 @@ export default function HealthView() {
   const [activityStatus, setActivityStatus] = useState<SahhaActivityStatus>(
     SahhaActivityStatus.pending
   );
-  let canEnable =
-    activityStatus === SahhaActivityStatus.pending ||
-    activityStatus === SahhaActivityStatus.disabled;
+
+  var isDisabled =
+    activityStatus === SahhaActivityStatus.unavailable ||
+    activityStatus === SahhaActivityStatus.enabled;
 
   useEffect(() => {
     console.log('health');
@@ -26,34 +27,6 @@ export default function HealthView() {
     );
   }, []);
 
-  const EnableButton = () => {
-    if (canEnable) {
-      return (
-        <>
-          <View style={styles.divider} />
-          <Button
-            title="ENABLE"
-            onPress={() => {
-              console.log('press');
-              Sahha.activate(
-                SahhaActivity.health,
-                (error: string, value: SahhaActivityStatus) => {
-                  if (error) {
-                    console.error(`Error: ${error}`);
-                  } else if (value) {
-                    console.log(`Activity Status: ${value}`);
-                    setActivityStatus(value);
-                  }
-                }
-              );
-            }}
-          />
-        </>
-      );
-    }
-    return null;
-  };
-
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={{ fontSize: 18, fontWeight: 'bold' }}>ACTIVITY STATUS</Text>
@@ -67,7 +40,25 @@ export default function HealthView() {
         <Picker.Item label="Disabled" value={2} />
         <Picker.Item label="Enabled" value={3} />
       </Picker>
-      <EnableButton />
+      <View style={styles.divider} />
+      <Button
+        title="ENABLE"
+        disabled={isDisabled}
+        onPress={() => {
+          console.log('press');
+          Sahha.activate(
+            SahhaActivity.health,
+            (error: string, value: SahhaActivityStatus) => {
+              if (error) {
+                console.error(`Error: ${error}`);
+              } else if (value) {
+                console.log(`Activity Status: ${value}`);
+                setActivityStatus(value);
+              }
+            }
+          );
+        }}
+      />
     </ScrollView>
   );
 }

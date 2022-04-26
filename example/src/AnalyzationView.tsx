@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Text, ScrollView, Button } from 'react-native';
-import Sahha, { SahhaActivity } from 'sahha-react-native';
+import Sahha from 'sahha-react-native';
 
 export default function ProfileView() {
   const [jsonString, setJsonString] = useState('');
