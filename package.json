@@ -1,6 +1,6 @@
 {
   "name": "sahha-react-native",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Integrate the Sahha SDK into your React Native app",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -86,7 +86,8 @@
   "release-it": {
     "git": {
       "commitMessage": "chore: release ${version}",
-      "tagName": "v${version}"
+      "tagName": "v${version}",
+      "requireBranch": "master"
     },
     "npm": {
       "publish": true
