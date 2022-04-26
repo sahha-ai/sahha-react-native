@@ -1,9 +1,5 @@
 import { NativeModules } from 'react-native';
 
-const Sahha = NativeModules.SahhaReactNative;
-
-export default Sahha;
-
 export enum SahhaEnvironment {
   development = 'development',
   production = 'production',
@@ -26,3 +22,6 @@ export enum SahhaActivityStatus {
   disabled = 2, /// Activity has been disabled by the User
   enabled = 3, /// Activity has been enabled by the User
 }
+
+const Sahha = NativeModules.SahhaReactNative;
+export default Sahha;

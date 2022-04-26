@@ -7,9 +7,9 @@ export default function MotionView() {
   const [activityStatus, setActivityStatus] = useState<SahhaActivityStatus>(
     SahhaActivityStatus.pending
   );
-  let canEnable =
-    activityStatus === SahhaActivityStatus.pending ||
-    activityStatus === SahhaActivityStatus.disabled;
+  var isDisabled =
+    activityStatus === SahhaActivityStatus.unavailable ||
+    activityStatus === SahhaActivityStatus.enabled;
 
   useEffect(() => {
     console.log('motion');
@@ -26,51 +26,6 @@ export default function MotionView() {
     );
   }, []);
 
-  const EnableButton = () => {
-    if (canEnable) {
-      return (
-        <>
-          <View style={styles.divider} />
-          <Button
-            title="ENABLE"
-            onPress={() => {
-              console.log('press');
-              if (activityStatus === SahhaActivityStatus.disabled) {
-                Sahha.openAppSettings();
-                /*
-                Sahha.promptUserToActivate(
-                  SahhaActivity.motion,
-                  (error, value) => {
-                    if (error) {
-                      console.error(`Error: ${error}`);
-                    } else if (value) {
-                      console.log(`Activity: ${value}`);
-                      setActivityStatus(value);
-                    }
-                  }
-          );
-        */
-              } else {
-                Sahha.activate(
-                  SahhaActivity.motion,
-                  (error: string, value: SahhaActivityStatus) => {
-                    if (error) {
-                      console.error(`Error: ${error}`);
-                    } else if (value) {
-                      console.log(`Activity Status: ${value}`);
-                      setActivityStatus(value);
-                    }
-                  }
-                );
-              }
-            }}
-          />
-        </>
-      );
-    }
-    return null;
-  };
-
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={{ fontSize: 18, fontWeight: 'bold' }}>ACTIVITY STATUS</Text>
@@ -84,7 +39,29 @@ export default function MotionView() {
         <Picker.Item label="Disabled" value={2} />
         <Picker.Item label="Enabled" value={3} />
       </Picker>
-      <EnableButton />
+      <View style={styles.divider} />
+      <Button
+        title="ENABLE"
+        disabled={isDisabled}
+        onPress={() => {
+          console.log('press');
+          if (activityStatus === SahhaActivityStatus.disabled) {
+            Sahha.openAppSettings();
+          } else {
+            Sahha.activate(
+              SahhaActivity.motion,
+              (error: string, value: SahhaActivityStatus) => {
+                if (error) {
+                  console.error(`Error: ${error}`);
+                } else if (value) {
+                  console.log(`Activity Status: ${value}`);
+                  setActivityStatus(value);
+                }
+              }
+            );
+          }
+        }}
+      />
     </ScrollView>
   );
 }
