@@ -22,11 +22,12 @@ export enum PageTitle {
 
 export default function App() {
   /*
-  Sahha.configure(
-    SahhaEnvironment.development,
-    [SahhaSensor.sleep, SahhaSensor.pedometer],
-    false
-  );
+  // Use custom settings
+  const settings = {
+    environment: SahhaEnvironment.production],
+    sensors: [SahhaSensor.sleep, SahhaSensor.pedometer],
+    postSensorDataManually: true,
+  };
 */
 
   const settings = {
