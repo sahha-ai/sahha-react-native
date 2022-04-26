@@ -5,10 +5,14 @@ import SahhaReactNative from 'sahha-react-native';
 const { message } = SahhaReactNative.getConstants();
 
 export default function App() {
-  const [result, setResult] = React.useState<number | undefined>();
-  const [addedResult, setAddedResult] = React.useState<number | undefined>();
-  const [squaredResult, setSquaredResult] = React.useState<number | undefined>();
-  const [speech, setSpeech] = React.useState<string | undefined>();
+  /*
+  // Use custom settings
+  const settings = {
+    environment: SahhaEnvironment.production],
+    sensors: [SahhaSensor.sleep, SahhaSensor.pedometer],
+    postSensorDataManually: true,
+  };
+*/
 
   React.useEffect(() => {
     SahhaReactNative.multiply(3, 7).then(setResult);

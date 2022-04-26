@@ -1,27 +1,17 @@
-# sahha-react-native
+# Sahha Demo App for React Native
 
-Integrate Sahha sdk your React Native app
+The Sahha Demo App provides a convenient way to try the features of the Sahha SDK.
+
+---
 
 ## Installation
 
-```sh
-npm install sahha-react-native
-```
+Run `npm install` inside the `example` project folder.
 
-## Usage
+### iOS
 
-```js
-import { multiply } from "sahha-react-native";
+Run `pod install` inside the `example/ios` project folder.
 
-// ...
+---
 
-const result = await multiply(3, 7);
-```
-
-## Contributing
-
-See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
-
-## License
-
-MIT
+Copyright © 2022 Sahha. All rights reserved.

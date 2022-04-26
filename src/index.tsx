@@ -1,4 +1,4 @@
-import { NativeModules, Platform } from 'react-native';
+import { NativeModules } from 'react-native';
 
 /*
 const LINKING_ERROR =
@@ -20,9 +20,20 @@ const SahhaReactNative = NativeModules.SahhaReactNative
 
 export function multiply(a: number, b: number): Promise<number> {
   return SahhaReactNative.multiply(a, b);
+
+  */
+
+export enum SahhaEnvironment {
+  development = 'development',
+  production = 'production',
 }
-*/
 
-const { SahhaReactNative } = NativeModules;
+export enum SahhaActivityStatus {
+  pending = 0, /// Activity support is pending User permission
+  unavailable = 1, /// Activity is not supported by the User's device
+  disabled = 2, /// Activity has been disabled by the User
+  enabled = 3, /// Activity has been enabled by the User
+}
 
-export default SahhaReactNative;
+const Sahha = NativeModules.SahhaReactNative;
+export default Sahha;
