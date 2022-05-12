@@ -11,16 +11,11 @@ export enum SahhaSensor {
   device = 'device',
 }
 
-export enum SahhaActivity {
-  motion = 'motion',
-  health = 'health',
-}
-
-export enum SahhaActivityStatus {
-  pending = 0, /// Activity support is pending User permission
-  unavailable = 1, /// Activity is not supported by the User's device
-  disabled = 2, /// Activity has been disabled by the User
-  enabled = 3, /// Activity has been enabled by the User
+export enum SahhaSensorStatus {
+  pending = 0, /// Sensor data is pending User permission
+  unavailable = 1, /// Sensor data is not supported by the User's device
+  disabled = 2, /// Sensor data has been disabled by the User
+  enabled = 3, /// Sensor data has been enabled by the User
 }
 
 const Sahha = NativeModules.SahhaReactNative;

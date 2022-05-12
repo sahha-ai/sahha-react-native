@@ -4,10 +4,6 @@ import Sahha
 @objc(SahhaReactNative)
 class SahhaReactNative: NSObject {
 
-    enum SahhaError: Error {
-        case woops
-    }
-
     var storedValue: Int = 0
     override init() {
         super.init()
@@ -152,32 +148,26 @@ class SahhaReactNative: NSObject {
             callback(["Sahha demographic not valid", false])
         }
     }
-
-    @objc(activate:callback:)
-    func activate(_ activity: String, callback: @escaping RCTResponseSenderBlock) -> Void {
-        switch SahhaActivity(rawValue: activity) {
-        case .motion:
-            Sahha.motion.activate { value in
-                callback([NSNull(),value.rawValue])
+    
+    @objc(getSensorStatus:callback:)
+    func getSensorStatus(_ sensor: String, callback: @escaping RCTResponseSenderBlock) -> Void {
+        if let sahhaSensor = SahhaSensor(rawValue: sensor) {
+            Sahha.getSensorStatus(sensor) { sensorStatus in
+                callback([NSNull(),sensorStatus.rawValue])
             }
-        case .health:
-            Sahha.health.activate { value in
-                callback([NSNull(),value.rawValue])
-            }
-        default:
-            callback(["\(activity) is not a valid Sahha activity",NSNull()])
+        } else {
+            callback(["\(sensor) is not a valid Sahha Sensor",NSNull()])
         }
     }
 
-    @objc(activityStatus:callback:)
-    func activityStatus(_ activity: String, callback: @escaping RCTResponseSenderBlock) -> Void {
-        switch SahhaActivity(rawValue: activity) {
-        case .motion:
-            callback([NSNull(), Sahha.motion.activityStatus.rawValue])
-        case .health:
-            callback([NSNull(), Sahha.health.activityStatus.rawValue])
-        default:
-            callback(["\(activity) is not a valid Sahha activity",NSNull()])
+    @objc(enableSensor:callback:)
+    func enableSensor(_ sensor: String, callback: @escaping RCTResponseSenderBlock) -> Void {
+        if let sahhaSensor = SahhaSensor(rawValue: sensor) {
+            Sahha.enableSensor(sensor) { sensorStatus in
+                callback([NSNull(),sensorStatus.rawValue])
+            }
+        } else {
+            callback(["\(sensor) is not a valid Sahha Sensor",NSNull()])
         }
     }
 
