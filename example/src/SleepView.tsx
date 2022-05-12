@@ -1,26 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Text, ScrollView, Button } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import Sahha, { SahhaActivity, SahhaActivityStatus } from 'sahha-react-native';
+import Sahha, { SahhaSensor, SahhaSensorStatus } from 'sahha-react-native';
 
-export default function MotionView() {
-  const [activityStatus, setActivityStatus] = useState<SahhaActivityStatus>(
-    SahhaActivityStatus.pending
+export default function SleepView() {
+  const [sensorStatus, setSensorStatus] = useState<SahhaSensorStatus>(
+    SahhaSensorStatus.pending
   );
+
   var isDisabled =
-    activityStatus === SahhaActivityStatus.unavailable ||
-    activityStatus === SahhaActivityStatus.enabled;
+    sensorStatus === SahhaSensorStatus.unavailable ||
+    sensorStatus === SahhaSensorStatus.enabled;
 
   useEffect(() => {
-    console.log('motion');
-    Sahha.activityStatus(
-      SahhaActivity.motion,
-      (error: string, value: SahhaActivityStatus) => {
+    console.log('sleep');
+    Sahha.getSensorStatus(
+      SahhaSensor.sleep,
+      (error: string, value: SahhaSensorStatus) => {
         if (error) {
           console.error(`Error: ${error}`);
         } else if (value) {
-          console.log(`Activity Status: ${value}`);
-          setActivityStatus(value);
+          console.log(`Sensor Status: ${value}`);
+          setSensorStatus(value);
         }
       }
     );
@@ -28,11 +29,11 @@ export default function MotionView() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={{ fontSize: 18, fontWeight: 'bold' }}>ACTIVITY STATUS</Text>
+      <Text style={{ fontSize: 18, fontWeight: 'bold' }}>SENSOR STATUS</Text>
       <Picker
         style={{ height: 200, width: '80%' }}
         enabled={false}
-        selectedValue={activityStatus}
+        selectedValue={sensorStatus}
       >
         <Picker.Item label="Pending" value={0} />
         <Picker.Item label="Unavailable" value={1} />
@@ -45,21 +46,24 @@ export default function MotionView() {
         disabled={isDisabled}
         onPress={() => {
           console.log('press');
-          if (activityStatus === SahhaActivityStatus.disabled) {
-            Sahha.openAppSettings();
-          } else {
-            Sahha.activate(
-              SahhaActivity.motion,
-              (error: string, value: SahhaActivityStatus) => {
-                if (error) {
-                  console.error(`Error: ${error}`);
-                } else if (value) {
-                  console.log(`Activity Status: ${value}`);
-                  setActivityStatus(value);
-                }
+          Sahha.enableSensor(
+            SahhaSensor.sleep,
+            (error: string, value: SahhaSensorStatus) => {
+              if (error) {
+                console.error(`Error: ${error}`);
+              } else if (value) {
+                console.log(`Sensor Status: ${value}`);
+                setSensorStatus(value);
               }
-            );
-          }
+            }
+          );
+        }}
+      />
+      <View style={styles.divider} />
+      <Button
+        title={'OPEN APP SETTINGS'}
+        onPress={() => {
+          Sahha.openAppSettings();
         }}
       />
     </ScrollView>

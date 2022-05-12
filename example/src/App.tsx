@@ -5,9 +5,9 @@ import Sahha, { SahhaEnvironment, SahhaSensor } from 'sahha-react-native';
 import HomeView from './HomeView';
 import AuthenticationView from './AuthenticationView';
 import ProfileView from './ProfileView';
-import MotionView from './MotionView';
+import PedometerView from './PedometerView';
 import AnalyzationView from './AnalyzationView';
-import HealthView from './HealthView';
+import SleepView from './SleepView';
 //const { message } = Sahha.getConstants();
 const Stack = createNativeStackNavigator();
 
@@ -15,8 +15,8 @@ export enum PageTitle {
   HOME = 'HOME',
   AUTHENTICATION = 'AUTHENTICATION',
   PROFILE = 'PROFILE',
-  HEALTH = 'HEALTH ACTIVITY',
-  MOTION = 'MOTION ACTIVITY',
+  SLEEP = 'SLEEP',
+  PEDOMETER = 'PEDOMETER',
   ANALYZATION = 'ANALYZATION',
 }
 
@@ -65,13 +65,10 @@ export default function App() {
           name={PageTitle.PROFILE.toString()}
           component={ProfileView}
         />
+        <Stack.Screen name={PageTitle.SLEEP.toString()} component={SleepView} />
         <Stack.Screen
-          name={PageTitle.HEALTH.toString()}
-          component={HealthView}
-        />
-        <Stack.Screen
-          name={PageTitle.MOTION.toString()}
-          component={MotionView}
+          name={PageTitle.PEDOMETER.toString()}
+          component={PedometerView}
         />
         <Stack.Screen
           name={PageTitle.ANALYZATION.toString()}

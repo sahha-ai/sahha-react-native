@@ -27,20 +27,18 @@ export default function HomeView({ navigation }) {
           navigation.navigate(PageTitle.PROFILE.toString());
         }}
       />
-      {Platform.OS === 'ios' && <View style={styles.divider} />}
-      {Platform.OS === 'ios' && (
-        <Button
-          title={PageTitle.HEALTH.toString()}
-          onPress={() => {
-            navigation.navigate(PageTitle.HEALTH.toString());
-          }}
-        />
-      )}
       <View style={styles.divider} />
       <Button
-        title={PageTitle.MOTION.toString()}
+        title={PageTitle.SLEEP.toString()}
         onPress={() => {
-          navigation.navigate(PageTitle.MOTION.toString());
+          navigation.navigate(PageTitle.SLEEP.toString());
+        }}
+      />
+      <View style={styles.divider} />
+      <Button
+        title={PageTitle.PEDOMETER.toString()}
+        onPress={() => {
+          navigation.navigate(PageTitle.PEDOMETER.toString());
         }}
       />
       <View style={styles.divider} />
@@ -48,13 +46,6 @@ export default function HomeView({ navigation }) {
         title={PageTitle.ANALYZATION.toString()}
         onPress={() => {
           navigation.navigate(PageTitle.ANALYZATION.toString());
-        }}
-      />
-      <View style={styles.divider} />
-      <Button
-        title={'OPEN APP SETTINGS'}
-        onPress={() => {
-          Sahha.openAppSettings();
         }}
       />
     </ScrollView>

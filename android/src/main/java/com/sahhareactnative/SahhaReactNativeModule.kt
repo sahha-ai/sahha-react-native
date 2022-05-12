@@ -1,20 +1,13 @@
 package com.sahhareactnative
 
-import android.Manifest
-import android.app.Activity
-import android.content.pm.PackageManager
 import android.util.Log
-import androidx.core.app.ActivityCompat
-import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
-import androidx.core.content.ContextCompat
 import com.facebook.react.bridge.*
 import com.facebook.react.modules.core.PermissionAwareActivity
-import com.facebook.react.modules.core.PermissionListener
 import com.google.gson.Gson
 import sdk.sahha.android.source.*
 
 
-class SahhaReactNativeModule(reactContext: ReactApplicationContext) : PermissionListener, ReactContextBaseJavaModule(reactContext) {
+class SahhaReactNativeModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
 
   override fun getName(): String {
     return "SahhaReactNative"
@@ -51,13 +44,22 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) : Permission
           var sensor = SahhaSensor.valueOf(it as String)
           sahhaSensors.add(sensor)
         }
-        sahhaSettings = SahhaSettings(sahhaEnvironment, SahhaFramework.react_native, sahhaSensors, postSensorDataManually)
+        sahhaSettings = SahhaSettings(
+          sahhaEnvironment,
+          SahhaFramework.react_native,
+          sahhaSensors,
+          postSensorDataManually
+        )
       } catch (e: IllegalArgumentException) {
         callback.invoke("Sahha.configure() sensor parameter is not valid", null)
         return
       }
     } else {
-      sahhaSettings = SahhaSettings(sahhaEnvironment, SahhaFramework.react_native, postSensorDataManually = postSensorDataManually)
+      sahhaSettings = SahhaSettings(
+        sahhaEnvironment,
+        SahhaFramework.react_native,
+        postSensorDataManually = postSensorDataManually
+      )
     }
     Log.d("Sahha", "Activity")
     Log.d("Sahha", currentActivity.toString())
@@ -132,127 +134,40 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) : Permission
   }
 
   @ReactMethod
-  fun activityStatus(activity: String, callback: Callback) {
-    var sahhaActivity = SahhaActivity.valueOf(activity)
-    when (sahhaActivity) {
-      SahhaActivity.motion -> {
-        val isEnabled = ContextCompat.checkSelfPermission(reactApplicationContext.baseContext, Manifest.permission.ACTIVITY_RECOGNITION)
-        if (isEnabled == PackageManager.PERMISSION_GRANTED)
-          callback.invoke(null, SahhaActivityStatus.enabled.ordinal)
-        else {
-          var permissionAwareActivity = getPermissionAwareActivity()
-          if (permissionAwareActivity != null) {
-            if (permissionAwareActivity.shouldShowRequestPermissionRationale(Manifest.permission.ACTIVITY_RECOGNITION)) {
-              permissionCallback?.invoke(null, SahhaActivityStatus.pending.ordinal)
-            } else {
-              permissionCallback?.invoke(null, SahhaActivityStatus.disabled.ordinal)
-            }
-          }
-        }
-      }
-      else -> {
-        permissionCallback?.invoke("Requested Sahha activity is not a valid activity", null)
-      }
-    }
+  fun getSensorStatus(sensor: String, callback: Callback) {
 
-    return
-    // TODO: Use Sahha Android SDK
-    /*
     try {
-      var sahhaActivity = SahhaActivity.valueOf(activity)
-      when (sahhaActivity) {
-        SahhaActivity.motion -> {
-          callback.invoke(null, Sahha.motion.activityStatus.ordinal)
-        }
-        else -> {
-          callback.invoke("Sahha activity parameter is not valid", null)
+      var sahhaSensor = SahhaSensor.valueOf(sensor)
+      Sahha.getSensorStatus(
+        reactApplicationContext.baseContext,
+        sahhaSensor
+      ) { error, sensorStatus ->
+        if (error != null) {
+          callback.invoke(error, null)
+        } else {
+          callback.invoke(null, sensorStatus.ordinal)
         }
       }
     } catch (e: IllegalArgumentException) {
-      callback.invoke("Sahha activity parameter is not valid", null)
+      callback.invoke("Sahha sensor parameter is not valid", null)
     }
-     */
   }
-
-  override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>?, grantResults: IntArray?): Boolean {
-    when (requestCode) {
-      0 -> {
-        // If request is cancelled, the result arrays are empty.
-        if (grantResults != null && grantResults.isNotEmpty()) {
-          when (grantResults[0]) {
-            PackageManager.PERMISSION_DENIED -> {
-              var permissionAwareActivity = getPermissionAwareActivity()
-              if (permissionAwareActivity != null) {
-                if (permissionAwareActivity.shouldShowRequestPermissionRationale(Manifest.permission.ACTIVITY_RECOGNITION)) {
-                  permissionCallback?.invoke(null, SahhaActivityStatus.pending.ordinal)
-                } else {
-                  permissionCallback?.invoke(null, SahhaActivityStatus.disabled.ordinal)
-                }
-              } else {
-                permissionCallback?.invoke(null, SahhaActivityStatus.pending.ordinal)
-              }
-            }
-            PackageManager.PERMISSION_GRANTED -> {
-              permissionCallback?.invoke(null, SahhaActivityStatus.enabled.ordinal)
-            }
-            else -> {
-              permissionCallback?.invoke("Requested Sahha activity status could not be determined", null)
-            }
-          }
-        } else {
-          permissionCallback?.invoke("Requested Sahha activity status could not be determined", null)
-        }
-      }
-      // Add other 'when' lines to check for other
-      // permissions this app might request.
-      else -> {
-        // Ignore all other requests.
-        permissionCallback?.invoke("Requested Sahha activity is not a valid activity", null)
-      }
-    }
-    permissionCallback = null
-    return true
-  }
-
-  private var permissionCallback: Callback? = null
 
   @ReactMethod
-  fun activate(activity: String, callback: Callback) {
-    var sahhaActivity = SahhaActivity.valueOf(activity)
-    when (sahhaActivity) {
-      SahhaActivity.motion -> {
-        var permissionAwareActivity = getPermissionAwareActivity()
-        if (permissionAwareActivity != null) {
-          permissionCallback = callback
-          permissionAwareActivity.requestPermissions(arrayOf(Manifest.permission.ACTIVITY_RECOGNITION), 0, this)
-        } else {
-          callback.invoke("Sahha activity not able to be activated", null)
-        }
-      }
-      else -> {
-        permissionCallback?.invoke("Requested Sahha activity is not a valid activity", null)
-      }
-    }
+  fun enableSensor(sensor: String, callback: Callback) {
 
-    return
-    // TODO: Use Sahha Android SDK
-    /*
     try {
-      var sahhaActivity = SahhaActivity.valueOf(activity)
-      when (sahhaActivity) {
-        SahhaActivity.motion -> {
-          Sahha.motion.activate { error, newStatus ->
-            callback.invoke(error, newStatus.ordinal)
-          }
-        }
-        else -> {
-          callback.invoke("Sahha activity parameter is not valid", null)
+      var sahhaSensor = SahhaSensor.valueOf(sensor)
+      Sahha.enableSensor(reactApplicationContext.baseContext, sahhaSensor) { error, sensorStatus ->
+        if (error != null) {
+          callback.invoke(error, null)
+        } else {
+          callback.invoke(null, sensorStatus.ordinal)
         }
       }
     } catch (e: IllegalArgumentException) {
-      callback.invoke("Sahha activity parameter is not valid", null)
+      callback.invoke("Sahha sensor parameter is not valid", null)
     }
-    */
   }
 
   @ReactMethod
@@ -260,7 +175,13 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) : Permission
 
     var sensors: ReadableArray? = settings.getArray("sensors")
     if (sensors == null) {
-      callback.invoke("Sahha.postSensorData() sensors parameter is missing", null)
+      Sahha.postSensorData { error, success ->
+        if (error != null) {
+          callback.invoke(error, null)
+        } else {
+          callback.invoke(null, success)
+        }
+      }
       return
     }
     var sahhaSensors: MutableSet<SahhaSensor> = mutableSetOf()
