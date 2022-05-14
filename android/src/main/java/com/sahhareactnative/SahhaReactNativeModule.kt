@@ -6,7 +6,6 @@ import com.facebook.react.modules.core.PermissionAwareActivity
 import com.google.gson.Gson
 import sdk.sahha.android.source.*
 
-
 class SahhaReactNativeModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
 
   override fun getName(): String {
@@ -37,7 +36,13 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) : ReactConte
 
     var sahhaSettings: SahhaSettings
 
-    if (sensors != null) {
+    if (sensors == null) {
+      sahhaSettings = SahhaSettings(
+        sahhaEnvironment,
+        SahhaFramework.react_native,
+        postSensorDataManually = postSensorDataManually
+      )
+    } else {
       var sahhaSensors: MutableSet<SahhaSensor> = mutableSetOf()
       try {
         sensors.toArrayList().forEach {
@@ -54,22 +59,14 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) : ReactConte
         callback.invoke("Sahha.configure() sensor parameter is not valid", null)
         return
       }
-    } else {
-      sahhaSettings = SahhaSettings(
-        sahhaEnvironment,
-        SahhaFramework.react_native,
-        postSensorDataManually = postSensorDataManually
-      )
     }
-    Log.d("Sahha", "Activity")
-    Log.d("Sahha", currentActivity.toString())
     var app = currentActivity?.application
 
-    if (app != null) {
+    if (app == null) {
+      callback("Sahha.configure() application parameter is null", false)
+    } else {
       Sahha.configure(app, sahhaSettings)
       callback(null, true)
-    } else {
-      callback("Sahha.configure() application parameter is null", false)
     }
   }
 
@@ -117,19 +114,6 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) : ReactConte
       } else {
         callback.invoke(null, success)
       }
-    }
-  }
-
-  private fun getPermissionAwareActivity(): PermissionAwareActivity? {
-    try {
-      if (currentActivity != null) {
-        var permissionAwareActivity = currentActivity as PermissionAwareActivity
-        return permissionAwareActivity
-      } else {
-        return null
-      }
-    } catch (error: Error) {
-      return null
     }
   }
 
@@ -206,7 +190,21 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) : ReactConte
   }
 
   @ReactMethod
-  fun analyze(callback: Callback) {
+  fun analyze(settings: ReadableMap, callback: Callback) {
+
+    val startDate: String? = settings.getString("startDate")
+    if (startDate != null) {
+      Log.d("Sahha", "startDate $startDate")
+    } else {
+      Log.d("Sahha", "startDate missing")
+    }
+
+    val endDate: String? = settings.getString("endDate")
+    if (endDate != null) {
+      Log.d("Sahha", "endDate $endDate")
+    } else {
+      Log.d("Sahha", "endDate missing")
+    }
 
     Sahha.analyze() { error, value ->
       if (error != null) {
