@@ -16,5 +16,7 @@ target 'SahhaReactNativeExample' do
   post_install do |installer|
     flipper_post_install(installer)
   end
+  
+  pod "Sahha", "0.0.3"
 
 end
