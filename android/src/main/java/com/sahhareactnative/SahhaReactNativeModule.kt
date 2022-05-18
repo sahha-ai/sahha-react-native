@@ -193,7 +193,7 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) : ReactConte
   fun analyze(callback: Callback) {
 
     Sahha.analyze() { error, value ->
-      if (error != null) {
+      if (error != null) { 
         callback.invoke(error, null)
       } else if (value != null) {
         callback.invoke(null, value)
