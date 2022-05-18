@@ -38,7 +38,7 @@
   ],
   "repository": "https://github.com/sahha-ai/sahha-react-native",
   "author": "Sahha <developer@sahha.ai> (https://sahha.ai)",
-  "license": "MIT",
+  "license": "Sahha SDK License",
   "bugs": {
     "url": "https://github.com/sahha-ai/sahha-react-native/issues"
   },

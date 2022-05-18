@@ -49,7 +49,7 @@ export default function PedometerView() {
           if (sensorStatus === SahhaSensorStatus.disabled) {
             Sahha.openAppSettings();
           } else {
-            Sahha.activate(
+            Sahha.enableSensor(
               SahhaSensor.pedometer,
               (error: string, value: SahhaSensorStatus) => {
                 if (error) {
