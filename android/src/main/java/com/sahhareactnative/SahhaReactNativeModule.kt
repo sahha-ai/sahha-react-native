@@ -190,7 +190,21 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) : ReactConte
   }
 
   @ReactMethod
-  fun analyze(callback: Callback) {
+  fun analyze(settings: ReadableMap, callback: Callback) {
+
+    val startDate: String? = settings.getString("startDate")
+    if (startDate != null) {
+      Log.d("Sahha", "startDate $startDate")
+    } else {
+      Log.d("Sahha", "startDate missing")
+    }
+
+    val endDate: String? = settings.getString("endDate")
+    if (endDate != null) {
+      Log.d("Sahha", "endDate $endDate")
+    } else {
+      Log.d("Sahha", "endDate missing")
+    }
 
     Sahha.analyze() { error, value ->
       if (error != null) {
