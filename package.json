@@ -1,7 +1,7 @@
 {
   "name": "sahha-react-native",
-  "version": "0.0.3",
-  "description": "Integrate the Sahha SDK into your React Native app",
+  "version": "0.0.4",
+  "description": "Sahha React Native SDK",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
   "types": "lib/typescript/index.d.ts",
@@ -38,7 +38,7 @@
   ],
   "repository": "https://github.com/sahha-ai/sahha-react-native",
   "author": "Sahha <developer@sahha.ai> (https://sahha.ai)",
-  "license": "MIT",
+  "license": "Sahha SDK License",
   "bugs": {
     "url": "https://github.com/sahha-ai/sahha-react-native/issues"
   },
