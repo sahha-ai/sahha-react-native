@@ -5,6 +5,8 @@ import com.facebook.react.bridge.*
 import com.facebook.react.modules.core.PermissionAwareActivity
 import com.google.gson.Gson
 import sdk.sahha.android.source.*
+import java.time.LocalDateTime
+import java.util.*
 
 class SahhaReactNativeModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
 
@@ -192,27 +194,45 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) : ReactConte
   @ReactMethod
   fun analyze(settings: ReadableMap, callback: Callback) {
 
-    val startDate: String? = settings.getString("startDate")
+    var startDate: Int? = null
+    if (settings.hasKey("startDate")) {
+      startDate = settings.getInt("startDate")
+    }
     if (startDate != null) {
       Log.d("Sahha", "startDate $startDate")
     } else {
       Log.d("Sahha", "startDate missing")
     }
 
-    val endDate: String? = settings.getString("endDate")
+    var endDate: Int? = null
+    if (settings.hasKey("endDate")) {
+      endDate = settings.getInt("endDate")
+    }
     if (endDate != null) {
       Log.d("Sahha", "endDate $endDate")
     } else {
       Log.d("Sahha", "endDate missing")
     }
 
-    Sahha.analyze() { error, value ->
-      if (error != null) {
-        callback.invoke(error, null)
-      } else if (value != null) {
-        callback.invoke(null, value)
-      } else {
-        callback.invoke("Sahha.analyze() failed", null)
+    if (startDate != null && endDate != null) {
+     Sahha.analyze(Pair(Date(startDate.toLong()), Date(endDate.toLong()))) { error, value ->
+        if (error != null) {
+          callback.invoke(error, null)
+        } else if (value != null) {
+          callback.invoke(null, value)
+        } else {
+          callback.invoke("Sahha.analyze() failed", null)
+        }
+      }
+    } else {
+      Sahha.analyze() { error, value ->
+        if (error != null) {
+          callback.invoke(error, null)
+        } else if (value != null) {
+          callback.invoke(null, value)
+        } else {
+          callback.invoke("Sahha.analyze() failed", null)
+        }
       }
     }
   }

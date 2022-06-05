@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Sahha, { SahhaEnvironment, SahhaSensor } from 'sahha-react-native';
+import Sahha, { SahhaEnvironment } from 'sahha-react-native';
 import HomeView from './HomeView';
 import AuthenticationView from './AuthenticationView';
 import ProfileView from './ProfileView';

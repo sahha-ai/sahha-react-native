@@ -16,7 +16,7 @@ RCT_EXTERN_METHOD(enableSensor:(NSString *)sensor callback:(RCTResponseSenderBlo
 
 RCT_EXTERN_METHOD(postSensorData:(NSDictionary *)settings callback:(RCTResponseSenderBlock)callback)
 
-RCT_EXTERN_METHOD(analyze:(RCTResponseSenderBlock)callback)
+RCT_EXTERN_METHOD(analyze:(NSDictionary *)settings callback:(RCTResponseSenderBlock)callback)
 
 RCT_EXTERN_METHOD(openAppSettings)
 
