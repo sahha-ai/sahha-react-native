@@ -194,9 +194,9 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) : ReactConte
   @ReactMethod
   fun analyze(settings: ReadableMap, callback: Callback) {
 
-    var startDate: Int? = null
+    var startDate: Double? = null
     if (settings.hasKey("startDate")) {
-      startDate = settings.getInt("startDate")
+      startDate = settings.getDouble("startDate")
     }
     if (startDate != null) {
       Log.d("Sahha", "startDate $startDate")
@@ -204,9 +204,9 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) : ReactConte
       Log.d("Sahha", "startDate missing")
     }
 
-    var endDate: Int? = null
+    var endDate: Double? = null
     if (settings.hasKey("endDate")) {
-      endDate = settings.getInt("endDate")
+      endDate = settings.getDouble("endDate")
     }
     if (endDate != null) {
       Log.d("Sahha", "endDate $endDate")
@@ -215,7 +215,11 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) : ReactConte
     }
 
     if (startDate != null && endDate != null) {
-     Sahha.analyze(Pair(Date(startDate.toLong()), Date(endDate.toLong()))) { error, value ->
+      val sahhaStartDate = Date(startDate.toLong())
+      val sahhaEndDate = Date(endDate.toLong())
+      Log.d("Sahha", "sahhaStartDate $sahhaStartDate")
+      Log.d("Sahha", "sahhaEndDate $sahhaEndDate")
+     Sahha.analyze(Pair(sahhaStartDate, sahhaEndDate)) { error, value ->
         if (error != null) {
           callback.invoke(error, null)
         } else if (value != null) {
