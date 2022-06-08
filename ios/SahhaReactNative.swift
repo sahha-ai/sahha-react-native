@@ -207,8 +207,10 @@ class SahhaReactNative: NSObject {
     func analyze(_ settings: NSDictionary, callback: @escaping RCTResponseSenderBlock) -> Void {
         var dates: (startDate: Date, endDate: Date)?
         if let configSettings = settings as? [String: Any], let startDateNumber = configSettings["startDate"] as? NSNumber, let endDateNumber = configSettings["endDate"] as? NSNumber {
-            let startDate = Date(timeIntervalSince1970: TimeInterval(startDateNumber.intValue / 1000))
-            let endDate = Date(timeIntervalSince1970: TimeInterval(endDateNumber.intValue / 1000))
+            let startDate = Date(timeIntervalSince1970: TimeInterval(startDateNumber.doubleValue / 1000))
+            let endDate = Date(timeIntervalSince1970: TimeInterval(endDateNumber.doubleValue / 1000))
+            print("startDate", startDate.toTimezoneFormat)
+            print("endDate", endDate.toTimezoneFormat)
             dates = (startDate, endDate)
             print(startDate, endDate)
         } else {
