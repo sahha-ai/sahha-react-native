@@ -152,7 +152,7 @@ class SahhaReactNative: NSObject {
     @objc(getSensorStatus:callback:)
     func getSensorStatus(_ sensor: String, callback: @escaping RCTResponseSenderBlock) -> Void {
         if let sahhaSensor = SahhaSensor(rawValue: sensor) {
-            Sahha.getSensorStatus(sensor) { sensorStatus in
+            Sahha.getSensorStatus(sahhaSensor) { sensorStatus in
                 callback([NSNull(),sensorStatus.rawValue])
             }
         } else {
@@ -163,7 +163,7 @@ class SahhaReactNative: NSObject {
     @objc(enableSensor:callback:)
     func enableSensor(_ sensor: String, callback: @escaping RCTResponseSenderBlock) -> Void {
         if let sahhaSensor = SahhaSensor(rawValue: sensor) {
-            Sahha.enableSensor(sensor) { sensorStatus in
+            Sahha.enableSensor(sahhaSensor) { sensorStatus in
                 callback([NSNull(),sensorStatus.rawValue])
             }
         } else {
@@ -203,7 +203,7 @@ class SahhaReactNative: NSObject {
         }
     }
 
-    @objc(analyze:)
+    @objc(analyze:callback:)
     func analyze(_ settings: NSDictionary, callback: @escaping RCTResponseSenderBlock) -> Void {
         var dates: (startDate: Date, endDate: Date)?
         if let configSettings = settings as? [String: Any], let startDateNumber = configSettings["startDate"] as? NSNumber, let endDateNumber = configSettings["endDate"] as? NSNumber {

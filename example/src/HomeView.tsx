@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  Platform,
-  View,
-  StyleSheet,
-  Image,
-  ScrollView,
-  Button,
-} from 'react-native';
+import { View, StyleSheet, Image, ScrollView, Button } from 'react-native';
 import { PageTitle } from './App';
 import Sahha, { SahhaEnvironment, SahhaSensor } from 'sahha-react-native';
 
