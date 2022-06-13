@@ -222,6 +222,12 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) : ReactConte
       Log.d("Sahha", "endDate missing")
     }
 
+    var includeSourceData: Boolean = false
+    if (settings.hasKey("includeSourceData")) {
+      includeSourceData = settings.getBoolean("includeSourceData")
+    }
+    Log.d("Sahha", "includeSourceData " + includeSourceData.toString())
+
     if (startDate != null && endDate != null) {
       val sahhaStartDate = Date(startDate.toLong())
       val sahhaEndDate = Date(endDate.toLong())
