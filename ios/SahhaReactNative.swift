@@ -109,35 +109,35 @@ class SahhaReactNative: NSObject {
             }
 
             if let ethnicity = configDemographic["ethnicity"] as? String {
-                //requestDemographic.ethnicity = ethnicity
+                requestDemographic.ethnicity = ethnicity
             }
 
             if let occupation = configDemographic["occupation"] as? String {
-                //requestDemographic.occupation = occupation
+                requestDemographic.occupation = occupation
             }
 
             if let industry = configDemographic["industry"] as? String {
-                //requestDemographic.industry = industry
+                requestDemographic.industry = industry
             }
 
             if let incomeRange = configDemographic["incomeRange"] as? String {
-                //requestDemographic.incomeRange = incomeRange
+                requestDemographic.incomeRange = incomeRange
             }
 
             if let education = configDemographic["education"] as? String {
-                //requestDemographic.education = education
+                requestDemographic.education = education
             }
 
             if let relationship = configDemographic["relationship"] as? String {
-                //requestDemographic.relationship = relationship
+                requestDemographic.relationship = relationship
             }
 
             if let locale = configDemographic["locale"] as? String {
-                //requestDemographic.locale = locale
+                requestDemographic.locale = locale
             }
 
             if let livingArrangement = configDemographic["livingArrangement"] as? String {
-                //requestDemographic.livingArrangement = livingArrangement
+                requestDemographic.livingArrangement = livingArrangement
             }
 
             Sahha.postDemographic(requestDemographic) { error, success in
