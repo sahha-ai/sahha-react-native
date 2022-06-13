@@ -108,6 +108,14 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) : ReactConte
     val gender: String? = demographic.getString("gender")
     val country: String? = demographic.getString("country")
     val birthCountry: String? = demographic.getString("birthCountry")
+    val ethnicity: String? = demographic.getString<String>("ethnicity")
+    val occupation: String? = demographic.getString<String>("occupation")
+    val industry: String? = demographic.getString<String>("industry")
+    val incomeRange: String? = demographic.getString<String>("incomeRange")
+    val education: String? = demographic.getString<String>("education")
+    val relationship: String? = demographic.getString<String>("relationship")
+    val locale: String? = demographic.getString<String>("locale")
+    val livingArrangement: String? = demographic.getString<String>("livingArrangement")
     var sahhaDemographic = SahhaDemographic(age, gender, country, birthCountry)
 
     Sahha.postDemographic(sahhaDemographic) { error, success ->
