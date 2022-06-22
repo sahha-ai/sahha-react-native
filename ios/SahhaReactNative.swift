@@ -139,6 +139,10 @@ class SahhaReactNative: NSObject {
             if let livingArrangement = configDemographic["livingArrangement"] as? String {
                 requestDemographic.livingArrangement = livingArrangement
             }
+            
+            if let birthDate = configDemographic["birthDate"] as? String {
+                requestDemographic.birthDate = birthDate
+            }
 
             Sahha.postDemographic(requestDemographic) { error, success in
                 callback([error ?? NSNull(), success])
