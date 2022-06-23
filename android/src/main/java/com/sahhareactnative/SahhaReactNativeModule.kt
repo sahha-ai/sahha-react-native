@@ -234,7 +234,7 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) : ReactConte
       val sahhaEndDate = Date(endDate.toLong())
       Log.d("Sahha", "sahhaStartDate $sahhaStartDate")
       Log.d("Sahha", "sahhaEndDate $sahhaEndDate")
-     Sahha.analyze(Pair(sahhaStartDate, sahhaEndDate)) { error, value ->
+     Sahha.analyze(includeSourceData, Pair(sahhaStartDate, sahhaEndDate)) { error, value ->
         if (error != null) {
           callback.invoke(error, null)
         } else if (value != null) {
@@ -244,7 +244,7 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) : ReactConte
         }
       }
     } else {
-      Sahha.analyze() { error, value ->
+      Sahha.analyze(includeSourceData) { error, value ->
         if (error != null) {
           callback.invoke(error, null)
         } else if (value != null) {
