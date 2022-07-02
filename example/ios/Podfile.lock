@@ -322,10 +322,10 @@ PODS:
   - RNScreens (3.13.1):
     - React-Core
     - React-RCTImage
-  - Sahha (0.0.4)
+  - Sahha (0.0.5)
   - sahha-react-native (0.0.6):
     - React-Core
-    - Sahha (= 0.0.4)
+    - Sahha (~> 0.0.5)
   - SocketRocket (0.6.0)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
@@ -519,12 +519,12 @@ SPEC CHECKSUMS:
   RNCPicker: abc646b53a3d28ccfa3232c927a0ca52e0cf024d
   RNGestureHandler: 61628a2c859172551aa2100d3e73d1e57878392f
   RNScreens: 40a2cb40a02a609938137a1e0acfbf8fc9eebf19
-  Sahha: 116a3cf167eb87a2a2834f03e45747a9f8e28577
-  sahha-react-native: b7e8dd7d90dd95da0b7a5e93cc9d374f54366daf
+  Sahha: 89bbc927dd94c6b33c63bf29853aa94e8625e319
+  sahha-react-native: 296a2b475dce22fac248724554411a503fd92239
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
   Yoga: 4bd86afe9883422a7c4028c00e34790f560923d6
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 49769ac621ad8d9f530e131c0f5e547d2d17a60b
+PODFILE CHECKSUM: 88994609b805f725b06c921718103ff0cd8a7447
 
 COCOAPODS: 1.11.3
