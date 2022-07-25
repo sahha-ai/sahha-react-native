@@ -1,7 +1,7 @@
 {
   "name": "sahha-react-native-example",
   "description": "Example app for sahha-react-native",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "private": false,
   "scripts": {
     "android": "react-native run-android",
