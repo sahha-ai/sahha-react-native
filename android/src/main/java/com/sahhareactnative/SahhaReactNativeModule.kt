@@ -3,8 +3,6 @@ package com.sahhareactnative
 import android.util.Log
 import com.facebook.react.bridge.*
 import com.google.gson.Gson
-import sdk.sahha.android.common.SahhaConverterUtility
-import sdk.sahha.android.domain.model.config.SahhaNotificationConfiguration
 import sdk.sahha.android.source.*
 import java.time.LocalDateTime
 import java.util.*
