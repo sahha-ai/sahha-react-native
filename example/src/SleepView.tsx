@@ -14,17 +14,14 @@ export default function SleepView() {
 
   useEffect(() => {
     console.log('sleep');
-    Sahha.getSensorStatus(
-      SahhaSensor.sleep,
-      (error: string, value: SahhaSensorStatus) => {
-        if (error) {
-          console.error(`Error: ${error}`);
-        } else if (value) {
-          console.log(`Sensor Status: ${value}`);
-          setSensorStatus(value);
-        }
+    Sahha.getSensorStatus((error: string, value: SahhaSensorStatus) => {
+      if (error) {
+        console.error(`Error: ${error}`);
+      } else if (value) {
+        console.log(`Sensor Status: ${value}`);
+        setSensorStatus(value);
       }
-    );
+    });
   }, []);
 
   return (
@@ -46,17 +43,14 @@ export default function SleepView() {
         disabled={isDisabled}
         onPress={() => {
           console.log('press');
-          Sahha.enableSensor(
-            SahhaSensor.sleep,
-            (error: string, value: SahhaSensorStatus) => {
-              if (error) {
-                console.error(`Error: ${error}`);
-              } else if (value) {
-                console.log(`Sensor Status: ${value}`);
-                setSensorStatus(value);
-              }
+          Sahha.enableSensors((error: string, value: SahhaSensorStatus) => {
+            if (error) {
+              console.error(`Error: ${error}`);
+            } else if (value) {
+              console.log(`Sensor Status: ${value}`);
+              setSensorStatus(value);
             }
-          );
+          });
         }}
       />
       <View style={styles.divider} />

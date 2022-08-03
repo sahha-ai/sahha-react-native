@@ -168,75 +168,38 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
   }
 
   @ReactMethod
-  fun getSensorStatus(sensor: String, callback: Callback) {
-
-    try {
-      var sahhaSensor = SahhaSensor.valueOf(sensor)
-      Sahha.getSensorStatus(
-        reactApplicationContext.baseContext,
-        sahhaSensor
-      ) { error, sensorStatus ->
-        if (error != null) {
-          callback.invoke(error, null)
-        } else {
-          callback.invoke(null, sensorStatus.ordinal)
-        }
+  fun getSensorStatus(callback: Callback) {
+    Sahha.getSensorStatus(
+      reactApplicationContext.baseContext,
+    ) { error, sensorStatus ->
+      if (error != null) {
+        callback.invoke(error, null)
+      } else {
+        callback.invoke(null, sensorStatus.ordinal)
       }
-    } catch (e: IllegalArgumentException) {
-      callback.invoke("Sahha sensor parameter is not valid", null)
     }
   }
 
   @ReactMethod
-  fun enableSensor(sensor: String, callback: Callback) {
-
-    try {
-      var sahhaSensor = SahhaSensor.valueOf(sensor)
-      Sahha.enableSensor(reactApplicationContext.baseContext, sahhaSensor) { error, sensorStatus ->
-        if (error != null) {
-          callback.invoke(error, null)
-        } else {
-          callback.invoke(null, sensorStatus.ordinal)
-        }
+  fun enableSensors(callback: Callback) {
+    Sahha.enableSensors(reactApplicationContext.baseContext) { error, sensorStatus ->
+      if (error != null) {
+        callback.invoke(error, null)
+      } else {
+        callback.invoke(null, sensorStatus.ordinal)
       }
-    } catch (e: IllegalArgumentException) {
-      callback.invoke("Sahha sensor parameter is not valid", null)
     }
   }
 
   @ReactMethod
-  fun postSensorData(settings: ReadableMap, callback: Callback) {
-
-    var sensors: ReadableArray? = settings.getArray("sensors")
-    if (sensors == null) {
-      Sahha.postSensorData { error, success ->
-        if (error != null) {
-          callback.invoke(error, null)
-        } else {
-          callback.invoke(null, success)
-        }
+  fun postSensorData(callback: Callback) {
+    Sahha.postSensorData { error, success ->
+      if (error != null) {
+        callback.invoke(error, null)
+      } else {
+        callback.invoke(null, success)
       }
-      return
     }
-    var sahhaSensors: MutableSet<SahhaSensor> = mutableSetOf()
-    try {
-      sensors.toArrayList().forEach {
-        var sensor = SahhaSensor.valueOf(it as String)
-        sahhaSensors.add(sensor)
-      }
-      Sahha.postSensorData(sahhaSensors) { error, success ->
-        if (error != null) {
-          callback.invoke(error, null)
-        } else {
-          callback.invoke(null, success)
-        }
-      }
-    } catch (e: IllegalArgumentException) {
-      callback.invoke("Sahha.postSensorData() sensor parameter is not valid", null)
-      return
-    }
-
-    callback.invoke(null, true)
   }
 
   @ReactMethod

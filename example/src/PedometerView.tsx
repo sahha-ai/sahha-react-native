@@ -14,17 +14,14 @@ export default function PedometerView() {
 
   useEffect(() => {
     console.log('pedometer');
-    Sahha.getSensorStatus(
-      SahhaSensor.pedometer,
-      (error: string, value: SahhaSensorStatus) => {
-        if (error) {
-          console.error(`Error: ${error}`);
-        } else if (value) {
-          console.log(`Sensor Status: ${value}`);
-          setSensorStatus(value);
-        }
+    Sahha.getSensorStatus((error: string, value: SahhaSensorStatus) => {
+      if (error) {
+        console.error(`Error: ${error}`);
+      } else if (value) {
+        console.log(`Sensor Status: ${value}`);
+        setSensorStatus(value);
       }
-    );
+    });
   }, []);
 
   return (
@@ -49,17 +46,14 @@ export default function PedometerView() {
           if (sensorStatus === SahhaSensorStatus.disabled) {
             Sahha.openAppSettings();
           } else {
-            Sahha.enableSensor(
-              SahhaSensor.pedometer,
-              (error: string, value: SahhaSensorStatus) => {
-                if (error) {
-                  console.error(`Error: ${error}`);
-                } else if (value) {
-                  console.log(`Sensor Status: ${value}`);
-                  setSensorStatus(value);
-                }
+            Sahha.enableSensors((error: string, value: SahhaSensorStatus) => {
+              if (error) {
+                console.error(`Error: ${error}`);
+              } else if (value) {
+                console.log(`Sensor Status: ${value}`);
+                setSensorStatus(value);
               }
-            );
+            });
           }
         }}
       />

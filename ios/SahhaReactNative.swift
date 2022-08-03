@@ -153,57 +153,28 @@ class SahhaReactNative: NSObject {
         }
     }
     
-    @objc(getSensorStatus:callback:)
-    func getSensorStatus(_ sensor: String, callback: @escaping RCTResponseSenderBlock) -> Void {
-        if let sahhaSensor = SahhaSensor(rawValue: sensor) {
-            Sahha.getSensorStatus(sahhaSensor) { sensorStatus in
-                callback([NSNull(),sensorStatus.rawValue])
-            }
-        } else {
-            callback(["\(sensor) is not a valid Sahha Sensor",NSNull()])
+    @objc(getSensorStatus:)
+    func getSensorStatus(_ callback: @escaping RCTResponseSenderBlock) -> Void {
+        Sahha.getSensorStatus { sensorStatus in
+            callback([NSNull(),sensorStatus.rawValue])
+        }
+    }
+    
+    @objc(enableSensors:)
+    func enableSensors(_ callback: @escaping RCTResponseSenderBlock) -> Void {
+        Sahha.enableSensors { sensorStatus in
+            callback([NSNull(),sensorStatus.rawValue])
         }
     }
 
-    @objc(enableSensor:callback:)
-    func enableSensor(_ sensor: String, callback: @escaping RCTResponseSenderBlock) -> Void {
-        if let sahhaSensor = SahhaSensor(rawValue: sensor) {
-            Sahha.enableSensor(sahhaSensor) { sensorStatus in
-                callback([NSNull(),sensorStatus.rawValue])
+    @objc(postSensorData:)
+    func postSensorData(_ callback: @escaping RCTResponseSenderBlock) {
+        Sahha.postSensorData { error, success in
+            if let error = error {
+                callback([error, false])
+            } else {
+                callback([NSNull(), success])
             }
-        } else {
-            callback(["\(sensor) is not a valid Sahha Sensor",NSNull()])
-        }
-    }
-
-    @objc(postSensorData:callback:)
-    func postSensorData(_ settings: NSDictionary, callback: @escaping RCTResponseSenderBlock) {
-
-        if let configSettings = settings as? [String: Any] {
-            if let sensors = configSettings[SahhaSettingsIdentifier.sensors.rawValue] as? [String] {
-                var sahhaSensors: Set<SahhaSensor> = []
-                for sensor in sensors {
-                    if let sahhaSensor = SahhaSensor(rawValue: sensor) {
-                        sahhaSensors.insert(sahhaSensor)
-                    } else {
-                        callback(["\(sensor) is not a valid Sahha Sensor", false])
-                        return
-                    }
-                }
-                if sahhaSensors.isEmpty {
-                    callback(["Sahha Sensors parameter is empty", false])
-                } else {
-                    Sahha.postSensorData(sahhaSensors) { error, success in
-                        if let error = error {
-                            callback([error, false])
-                        } else {
-                            callback([NSNull(), success])
-                        }
-                    }
-                }
-            }
-
-        } else {
-            callback(["Sahha.postSensorData() settings are not valid", false])
         }
     }
 
