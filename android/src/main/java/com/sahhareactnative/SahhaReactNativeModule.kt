@@ -92,8 +92,13 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
     if (app == null) {
       callback("Sahha.configure() application parameter is null", false)
     } else {
-      Sahha.configure(app, sahhaSettings)
-      callback(null, true)
+      Sahha.configure(app, sahhaSettings) { error, success ->
+        if (error != null) {
+          callback(error, false)
+        } else {
+          callback(null, success)
+        }
+      }
     }
   }
 

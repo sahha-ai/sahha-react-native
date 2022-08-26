@@ -44,12 +44,12 @@ class SahhaReactNative: NSObject {
             var settings = SahhaSettings(environment: configEnvironment, sensors: configSensors, postSensorDataManually: postSensorDataManually)
             settings.framework = .react_native
 
-            Sahha.configure(settings)
+            Sahha.configure(settings) {
+                callback([NSNull(), true])
+            }
 
             // Needed for React Native since native iOS lifecycle is delayed at launch
             Sahha.launch()
-
-            callback([NSNull(), true])
         } else {
             callback(["Sahha settings are invalid", false])
         }
