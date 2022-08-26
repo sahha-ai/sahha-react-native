@@ -132,6 +132,6 @@ dependencies {
   api 'com.facebook.react:react-native:+'
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
   implementation "com.google.code.gson:gson:2.9.0"
-  implementation "com.github.sahha-ai:sahha-android:0.13.0"
+  implementation "com.github.sahha-ai:sahha-android:0.13.1"
   implementation("androidx.multidex:multidex:2.0.1")
 }
