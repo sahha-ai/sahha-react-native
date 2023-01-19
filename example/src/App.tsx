@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect} from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Sahha, { SahhaEnvironment } from 'sahha-react-native';
+import Sahha, { SahhaEnvironment, SahhaSensor } from 'sahha-react-native';
 import HomeView from './HomeView';
 import AuthenticationView from './AuthenticationView';
 import ProfileView from './ProfileView';
@@ -21,31 +21,29 @@ export enum PageTitle {
 }
 
 export default function App() {
-  /*
-  // Use custom settings
-  const settings = {
-    environment: SahhaEnvironment.production],
-    sensors: [SahhaSensor.sleep, SahhaSensor.pedometer],
-    postSensorDataManually: true,
-  };
-*/
 
-  const settings = {
-    environment: SahhaEnvironment.development,
-    notificationSettings: {
-      icon: 'ic_test',
-      title: 'Test Title',
-      shortDescription: 'Test description.',
-    },
-  };
-
-  Sahha.configure(settings, (error: string, success: boolean) => {
-    if (error) {
-      console.error(`Error: ${error}`);
-    } else if (success) {
-      console.log(`Success: ${success}`);
-    }
-  });
+  useEffect(() =>
+  {
+    console.log("hello");
+    const settings = {
+      environment: SahhaEnvironment.development,
+      notificationSettings: {
+        icon: 'ic_test',
+        title: 'Test Title',
+        shortDescription: 'Test description.',
+      },
+      //sensors: [SahhaSensor.sleep, SahhaSensor.pedometer],
+      //postSensorDataManually: true,
+    };
+  
+    Sahha.configure(settings, (error: string, success: boolean) => {
+      if (error) {
+        console.error(`Error: ${error}`);
+      } else if (success) {
+        console.log(`Success: ${success}`);
+      }
+    });
+  }, []);
 
   return (
     <NavigationContainer>
