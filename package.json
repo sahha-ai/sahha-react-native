@@ -145,8 +145,5 @@
         }
       ]
     ]
-  },
-  "dependencies": {
-    "sahha-react-native": "^0.0.7"
   }
 }
