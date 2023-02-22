@@ -1,6 +1,6 @@
 {
   "name": "sahha-react-native",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "Sahha React Native SDK",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
