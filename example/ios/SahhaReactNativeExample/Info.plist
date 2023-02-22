@@ -45,6 +45,13 @@
 	<string>Sahha Demo would like access to your location activity for analysis.</string>
 	<key>NSMotionUsageDescription</key>
 	<string>Sahha Demo would like access to your motion activity for analysis.</string>
+	<key>UIApplicationSceneManifest</key>
+	<dict>
+		<key>UIApplicationSupportsMultipleScenes</key>
+		<false/>
+		<key>UISceneConfigurations</key>
+		<dict/>
+	</dict>
 	<key>UIBackgroundModes</key>
 	<array/>
 	<key>UILaunchStoryboardName</key>
