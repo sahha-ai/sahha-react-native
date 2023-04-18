@@ -148,8 +148,5 @@
   },
   "np": {
     "yarn": false
-  },
-  "dependencies": {
-    "np": "^7.7.0"
   }
 }
