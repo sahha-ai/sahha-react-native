@@ -12,8 +12,9 @@ import Sahha from 'sahha-react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function AuthenticationView() {
-  const [profileToken, setProfileToken] = useState<string>('');
-  const [refreshToken, setRefreshToken] = useState<string>('');
+  const [appId, setAppId] = useState<string>('');
+  const [appSecret, setAppSecret] = useState<string>('');
+  const [externalId, setExternalId] = useState<string>('');
   const [isAuth, setIsAuth] = useState<boolean>(false);
   const isFirstRender = useRef(true);
 
@@ -30,8 +31,9 @@ export default function AuthenticationView() {
 
     const setPrefs = async () => {
       try {
-        await AsyncStorage.setItem('@profileToken', profileToken);
-        await AsyncStorage.setItem('@refreshToken', refreshToken);
+        await AsyncStorage.setItem('@appId', appId);
+        await AsyncStorage.setItem('@appSecret', appSecret);
+        await AsyncStorage.setItem('@externalId', externalId);
         const jsonValue = JSON.stringify(isAuth);
         await AsyncStorage.setItem('@isAuth', jsonValue);
       } catch (error) {
@@ -43,13 +45,17 @@ export default function AuthenticationView() {
 
   const getPrefs = async () => {
     try {
-      const _profileToken = await AsyncStorage.getItem('@profileToken');
-      if (_profileToken !== null) {
-        setProfileToken(_profileToken);
+      const _appId = await AsyncStorage.getItem('@appId');
+      if (_appId !== null) {
+        setAppId(_appId);
       }
-      const _refreshToken = await AsyncStorage.getItem('@refreshToken');
-      if (_refreshToken !== null) {
-        setRefreshToken(_refreshToken);
+      const _appSecret = await AsyncStorage.getItem('@appSecret');
+      if (_appSecret !== null) {
+        setAppSecret(_appSecret);
+      }
+      const _externalId = await AsyncStorage.getItem('@externalId');
+      if (_externalId !== null) {
+        setExternalId(_externalId);
       }
       const jsonValue = await AsyncStorage.getItem('@isAuth');
       if (jsonValue !== null) {
@@ -62,14 +68,17 @@ export default function AuthenticationView() {
   };
 
   function onPressAuthenticate() {
-    if (!!profileToken === false) {
-      Alert.alert('Missing PROFILE TOKEN');
-    } else if (!!refreshToken === false) {
-      Alert.alert('Missing REFRESH TOKEN');
+    if (!!appId === false) {
+      Alert.alert('Missing APP ID');
+    } else if (!!appSecret === false) {
+      Alert.alert('Missing APP SECRET');
+    } else if (!!externalId === false) {
+      Alert.alert('Missing EXTERNAL ID');
     } else {
       Sahha.authenticate(
-        profileToken,
-        refreshToken,
+        appId,
+        appSecret,
+        externalId,
         (error: string, success: boolean) => {
           console.log(`Success: ${success}`);
           setIsAuth(success);
@@ -82,8 +91,9 @@ export default function AuthenticationView() {
   }
 
   function onPressDelete() {
-    setProfileToken('');
-    setRefreshToken('');
+    setAppId('');
+    setAppSecret('');
+    setExternalId('');
     setIsAuth(false);
   }
 
@@ -93,18 +103,25 @@ export default function AuthenticationView() {
         {isAuth ? 'You are authenticated' : 'You are not authenticated'}
       </Text>
       <View style={styles.divider} />
-      <Text>Profile Token</Text>
+      <Text>App ID</Text>
       <TextInput
         style={styles.input}
-        onChangeText={setProfileToken}
-        value={profileToken}
+        onChangeText={setAppId}
+        value={appId}
         placeholder="ABC123"
       />
-      <Text>Refresh Token</Text>
+      <Text>App Secret</Text>
       <TextInput
         style={styles.input}
-        onChangeText={setRefreshToken}
-        value={refreshToken}
+        onChangeText={setAppSecret}
+        value={appSecret}
+        placeholder="ABC123"
+      />
+      <Text>External ID</Text>
+      <TextInput
+        style={styles.input}
+        onChangeText={setExternalId}
+        value={externalId}
         placeholder="ABC123"
       />
       <View style={styles.divider} />

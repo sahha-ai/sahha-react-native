@@ -20,7 +20,6 @@ class SahhaReactNative: NSObject {
     enum SahhaSettingsIdentifier: String {
         case environment
         case sensors
-        case postSensorDataManually
     }
 
     @objc(configure:callback:)
@@ -39,9 +38,7 @@ class SahhaReactNative: NSObject {
                 configSensors = nil
             }
 
-            let postSensorDataManually: Bool? = configSettings[SahhaSettingsIdentifier.postSensorDataManually.rawValue] as? Bool
-
-            var settings = SahhaSettings(environment: configEnvironment, sensors: configSensors, postSensorDataManually: postSensorDataManually)
+            var settings = SahhaSettings(environment: configEnvironment, sensors: configSensors)
             settings.framework = .react_native
 
             Sahha.configure(settings) {
@@ -58,10 +55,12 @@ class SahhaReactNative: NSObject {
         Sahha.openAppSettings()
     }
 
-    @objc(authenticate:refreshToken:callback:)
-    func authenticate(_ profileToken: String, refreshToken: String, callback: @escaping RCTResponseSenderBlock) -> Void {
-        let success = Sahha.authenticate(profileToken: profileToken, refreshToken: refreshToken)
-        callback([success ? NSNull() : "Sahha.authenticate() credentials are not valid", success])
+    @objc(authenticate:appSecret:externalId:callback:)
+    func authenticate(_ appId: String, appSecret: String, externalId: String, callback: @escaping RCTResponseSenderBlock) -> Void {
+        
+        Sahha.authenticate(appId: appId, appSecret: appSecret, externalId: externalId) { error, success in
+            callback([error ?? NSNull(), success])
+        }
     }
 
     @objc(getDemographic:)

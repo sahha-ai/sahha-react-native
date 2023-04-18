@@ -4,7 +4,7 @@
 
 RCT_EXTERN_METHOD(configure:(NSDictionary *)settings callback:(RCTResponseSenderBlock)callback)
 
-RCT_EXTERN_METHOD(authenticate:(NSString *)profileToken refreshToken:(NSString *)refreshToken callback:(RCTResponseSenderBlock)callback)
+RCT_EXTERN_METHOD(authenticate:(NSString *)appId appSecret:(NSString *)appSecret externalId:(NSString *)externalId callback:(RCTResponseSenderBlock)callback)
 
 RCT_EXTERN_METHOD(getDemographic:(RCTResponseSenderBlock)callback)
 

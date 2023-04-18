@@ -33,7 +33,6 @@ export default function App() {
         shortDescription: 'Test description.',
       },
       //sensors: [SahhaSensor.sleep, SahhaSensor.pedometer],
-      //postSensorDataManually: true,
     };
   
     Sahha.configure(settings, (error: string, success: boolean) => {

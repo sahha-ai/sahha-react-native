@@ -21,11 +21,6 @@ export default function ProfileView() {
         A new analysis will be available every 24 hours
       </Text>
       <View style={styles.divider} />
-      <Text style={{ textAlign: 'center', paddingBottom: 20 }}>
-        Include source data in analysis
-      </Text>
-      <Switch onValueChange={toggleSwitch} value={isSwitchEnabled} />
-      <View style={styles.divider} />
       <Button
         title="ANALYZE PREVIOUS WEEK"
         onPress={() => {
@@ -36,7 +31,6 @@ export default function ProfileView() {
           const settings = {
             startDate: startDate.getTime(),
             endDate: endDate.getTime(),
-            includeSourceData: isSwitchEnabled,
           };
           Sahha.analyze(settings, (error: string, value: string) => {
             if (error) {

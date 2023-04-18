@@ -52,11 +52,6 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
     }
     // Notification config ends
 
-    var postSensorDataManually: Boolean = false
-    if (settings.hasKey("postSensorDataManually")) {
-      postSensorDataManually = settings.getBoolean("postSensorDataManually")
-    }
-
     var sensors: ReadableArray? = settings.getArray("sensors")
 
     var sahhaSettings: SahhaSettings
@@ -65,8 +60,7 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
       sahhaSettings = SahhaSettings(
         environment = sahhaEnvironment,
         notificationSettings = sahhaNotificationConfiguration,
-        framework = SahhaFramework.react_native,
-        postSensorDataManually = postSensorDataManually
+        framework = SahhaFramework.react_native
       )
     } else {
       var sahhaSensors: MutableSet<SahhaSensor> = mutableSetOf()
@@ -79,8 +73,7 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
           environment = sahhaEnvironment,
           notificationSettings = sahhaNotificationConfiguration,
           framework = SahhaFramework.react_native,
-          sensors = sahhaSensors,
-          postSensorDataManually = postSensorDataManually
+          sensors = sahhaSensors
         )
       } catch (e: IllegalArgumentException) {
         callback.invoke("Sahha.configure() sensor parameter is not valid", null)
@@ -103,9 +96,9 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
   }
 
   @ReactMethod
-  fun authenticate(profileToken: String, refreshToken: String, callback: Callback) {
+  fun authenticate(appId: String, appSecret: String, externalId: String, callback: Callback) {
 
-    Sahha.authenticate(profileToken, refreshToken) { error, success ->
+    Sahha.authenticate(appId, appSecret, externalId) { error, success ->
       if (error != null) {
         callback(error, false)
       } else {

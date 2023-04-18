@@ -31,6 +31,8 @@ export enum SahhaSensor {
   sleep = 'sleep',
   pedometer = 'pedometer',
   device = 'device',
+  heart = 'heart',
+  blood = 'blood',
 }
 
 export enum SahhaSensorStatus {

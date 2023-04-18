@@ -9,6 +9,7 @@ target 'SahhaReactNativeExample' do
   use_react_native!(:path => config[:reactNativePath])
 
   pod 'sahha-react-native', :path => '../..'
+  # pod 'Sahha', :path => '../../../sahha-swift/'
 
   # Enables Flipper.
   #
