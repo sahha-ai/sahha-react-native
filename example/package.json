@@ -10,7 +10,9 @@
   },
   "dependencies": {
     "react": "18.2.0",
-    "react-native": "0.71.8"
+    "react-native": "0.71.8",
+    "@react-native-async-storage/async-storage": "^1.18.1",
+    "@react-native-picker/picker": "^2.4.10"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

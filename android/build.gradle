@@ -2,9 +2,12 @@ buildscript {
   // Buildscript is evaluated before everything else so we can't use getExtOrDefault
   def kotlin_version = rootProject.ext.has("kotlinVersion") ? rootProject.ext.get("kotlinVersion") : project.properties["SahhaReactNative_kotlinVersion"]
 
-  repositories {
+   repositories {
+    mavenLocal()
     google()
     mavenCentral()
+    jcenter()
+    maven { url 'https://www.jitpack.io' }
   }
 
   dependencies {
@@ -62,8 +65,11 @@ android {
 }
 
 repositories {
+  mavenLocal()
   mavenCentral()
+  jcenter()
   google()
+  maven { url 'https://www.jitpack.io' }
 }
 
 def kotlin_version = getExtOrDefault("kotlinVersion")
@@ -74,6 +80,8 @@ dependencies {
   //noinspection GradleDynamicVersion
   implementation "com.facebook.react:react-native:+"
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+  implementation "com.google.code.gson:gson:2.9.0"
+  implementation "com.github.sahha-ai:sahha-android:0.14.0"
 }
 
 if (isNewArchitectureEnabled()) {
