@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Alert,
@@ -8,12 +8,15 @@ import {
   Button,
   TextInput,
 } from 'react-native';
-import Sahha, { SahhaEnvironment, SahhaSensor, SahhaSensorStatus } from 'sahha-react-native';
+import Sahha, {
+  SahhaEnvironment,
+  SahhaSensor,
+  SahhaSensorStatus,
+} from 'sahha-react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Picker } from '@react-native-picker/picker';
 
 export default function App() {
-
   const isFirstRender = useRef(true);
   const [isAuth, setIsAuth] = useState<boolean>(false);
   const [appId, setAppId] = useState<string>('');
@@ -26,8 +29,8 @@ export default function App() {
     SahhaSensorStatus.pending
   );
   var isDisabled =
-  sensorStatus === SahhaSensorStatus.unavailable ||
-  sensorStatus === SahhaSensorStatus.enabled;
+    sensorStatus === SahhaSensorStatus.unavailable ||
+    sensorStatus === SahhaSensorStatus.enabled;
   const [jsonString, setJsonString] = useState('');
 
   const getAuthPrefs = async () => {
@@ -74,9 +77,8 @@ export default function App() {
     setAuthPrefs();
   }, [isAuth]);
 
-  useEffect(() =>
-  {
-    console.log("hello");
+  useEffect(() => {
+    console.log('hello');
 
     getAuthPrefs();
     getProfilePrefs();
@@ -90,7 +92,7 @@ export default function App() {
       },
       //sensors: [SahhaSensor.sleep, SahhaSensor.pedometer],
     };
-  
+
     Sahha.configure(settings, (error: string, success: boolean) => {
       if (error) {
         console.error(`Error: ${error}`);
@@ -98,7 +100,7 @@ export default function App() {
         console.log(`Success: ${success}`);
 
         // SDK is ready
-        
+
         Sahha.getSensorStatus((error: string, value: SahhaSensorStatus) => {
           if (error) {
             console.error(`Error: ${error}`);
@@ -109,7 +111,6 @@ export default function App() {
           }
         });
       }
-
     });
   }, []);
 
@@ -296,7 +297,7 @@ export default function App() {
       <Button
         title="ANALYZE PREVIOUS DAY"
         onPress={() => {
-          Sahha.analyze({ }, (error: string, value: string) => {
+          Sahha.analyze({}, (error: string, value: string) => {
             if (error) {
               console.error(`Error: ${error}`);
             } else if (value) {
@@ -365,5 +366,5 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     paddingBottom: 20,
-  }
+  },
 });
