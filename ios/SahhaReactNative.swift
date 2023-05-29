@@ -178,7 +178,6 @@ class SahhaReactNative: NSObject {
     @objc(analyze:callback:)
     func analyze(_ settings: NSDictionary, callback: @escaping RCTResponseSenderBlock) -> Void {
         var dates: (startDate: Date, endDate: Date)?
-        var includeSourceData: Bool = false
         if let configSettings = settings as? [String: Any] {
             if let startDateNumber = configSettings["startDate"] as? NSNumber, let endDateNumber = configSettings["endDate"] as? NSNumber {
                 let startDate = Date(timeIntervalSince1970: TimeInterval(startDateNumber.doubleValue / 1000))
@@ -190,12 +189,8 @@ class SahhaReactNative: NSObject {
             } else {
                 print("no dates")
             }
-            if let boolValue = configSettings["includeSourceData"] as? Bool {
-                includeSourceData = boolValue
-                print("includeSourceData",includeSourceData)
-            }
         }
-        Sahha.analyze(dates: dates, includeSourceData: includeSourceData) { error, value in
+        Sahha.analyze(dates: dates) { error, value in
             callback([error ?? NSNull(), value ?? NSNull()])
         }
     }

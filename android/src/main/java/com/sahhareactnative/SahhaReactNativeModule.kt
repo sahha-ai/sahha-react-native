@@ -223,18 +223,12 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
       Log.d("Sahha", "endDate missing")
     }
 
-    var includeSourceData: Boolean = false
-    if (settings.hasKey("includeSourceData")) {
-      includeSourceData = settings.getBoolean("includeSourceData")
-    }
-    Log.d("Sahha", "includeSourceData " + includeSourceData.toString())
-
     if (startDate != null && endDate != null) {
       val sahhaStartDate = Date(startDate.toLong())
       val sahhaEndDate = Date(endDate.toLong())
       Log.d("Sahha", "sahhaStartDate $sahhaStartDate")
       Log.d("Sahha", "sahhaEndDate $sahhaEndDate")
-      Sahha.analyze(includeSourceData, Pair(sahhaStartDate, sahhaEndDate)) { error, value ->
+      Sahha.analyze(Pair(sahhaStartDate, sahhaEndDate)) { error, value ->
         if (error != null) {
           callback.invoke(error, null)
         } else if (value != null) {
@@ -244,7 +238,7 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
         }
       }
     } else {
-      Sahha.analyze(includeSourceData) { error, value ->
+      Sahha.analyze { error, value ->
         if (error != null) {
           callback.invoke(error, null)
         } else if (value != null) {
