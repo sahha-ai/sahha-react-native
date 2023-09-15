@@ -16,8 +16,10 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
 
   @ReactMethod
   fun configure(settings: ReadableMap, callback: Callback) {
+
     var environment: String? = settings.getString("environment")
     if (environment == null) {
+      // Sahha.postError()
       callback.invoke("Sahha.configure() environment parameter is missing", null)
       return
     }
@@ -25,7 +27,8 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
     try {
       sahhaEnvironment = SahhaEnvironment.valueOf(environment)
     } catch (e: IllegalArgumentException) {
-      callback.invoke("Sahha.configure() environment parameter is not valid", null)
+      // Sahha.postError()
+      callback.invoke("Sahha.configure() environment parameter is invalid", null)
       return
     }
 
@@ -47,7 +50,8 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
         )
       }
     } catch (e: IllegalArgumentException) {
-      callback.invoke("Sahha.configure() notification config is not valid", null)
+      // Sahha.postError()
+      callback.invoke("Sahha.configure() notification config is invalid", null)
       return
     }
     // Notification config ends
@@ -76,21 +80,19 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
           sensors = sahhaSensors
         )
       } catch (e: IllegalArgumentException) {
-        callback.invoke("Sahha.configure() sensor parameter is not valid", null)
+        callback.invoke("Sahha.configure() sensor parameter is invalid", null)
+        // Sahha.postError()
         return
       }
     }
     var app = currentActivity?.application
 
     if (app == null) {
+      // Sahha.postError()
       callback("Sahha.configure() application parameter is null", false)
     } else {
       Sahha.configure(app, sahhaSettings) { error, success ->
-        if (error != null) {
-          callback(error, false)
-        } else {
-          callback(null, success)
-        }
+        callback(error, success)
       }
     }
   }
@@ -99,18 +101,30 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
   fun authenticate(appId: String, appSecret: String, externalId: String, callback: Callback) {
 
     Sahha.authenticate(appId, appSecret, externalId) { error, success ->
-      if (error != null) {
-        callback(error, false)
-      } else {
-        callback(null, success)
-      }
+      callback(error, success)
+    }
+  }
+
+  @ReactMethod
+  fun authenticateToken(profileToken: String, refreshToken: String, callback: Callback) {
+
+    Sahha.authenticate(profileToken, refreshToken) { error, success ->
+      callback(error, success)
+    }
+  }
+
+  @ReactMethod
+  fun deauthenticate(callback: Callback) {
+
+    Sahha.deauthenticate { error, success ->
+      callback(error, success)
     }
   }
 
   @ReactMethod
   fun getDemographic(callback: Callback) {
 
-    Sahha.getDemographic() { error, demographic ->
+    Sahha.getDemographic { error, demographic ->
       if (error != null) {
         callback.invoke(error, null)
       } else if (demographic != null) {
@@ -119,7 +133,14 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
         Log.d("Sahha", demographicJson)
         callback.invoke(null, demographicJson)
       } else {
-        callback.invoke("Sahha Error", "Sahha Demographic not available", null)
+        val message: String = "Sahha Demographic not available"
+        Sahha.postError(
+          SahhaFramework.react_native,
+          message,
+          "SahhaReactNativeModule",
+          "getDemographic"
+        )
+        callback.invoke(message, null)
       }
     }
   }
@@ -157,11 +178,7 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
     )
 
     Sahha.postDemographic(sahhaDemographic) { error, success ->
-      if (error != null) {
-        callback.invoke(error, null)
-      } else {
-        callback.invoke(null, success)
-      }
+      callback.invoke(error, success)
     }
   }
 
@@ -170,82 +187,78 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
     Sahha.getSensorStatus(
       reactApplicationContext.baseContext,
     ) { error, sensorStatus ->
-      if (error != null) {
-        callback.invoke(error, null)
-      } else {
-        callback.invoke(null, sensorStatus.ordinal)
-      }
+      callback.invoke(error, sensorStatus.ordinal)
     }
   }
 
   @ReactMethod
   fun enableSensors(callback: Callback) {
     Sahha.enableSensors(reactApplicationContext.baseContext) { error, sensorStatus ->
-      if (error != null) {
-        callback.invoke(error, null)
-      } else {
-        callback.invoke(null, sensorStatus.ordinal)
-      }
+      callback.invoke(error, sensorStatus.ordinal)
     }
   }
 
   @ReactMethod
   fun postSensorData(callback: Callback) {
     Sahha.postSensorData { error, success ->
-      if (error != null) {
-        callback.invoke(error, null)
+      callback.invoke(null, success)
+    }
+  }
+
+  @ReactMethod
+  fun analyze(callback: Callback) {
+
+    Sahha.analyze { error, value ->
+      if (error == null && value == null) {
+        val message: String = "Sahha.analyze() failed"
+        Sahha.postError(SahhaFramework.react_native, message, "SahhaReactNativeModule", "analyze")
+        callback.invoke(message, null)
       } else {
-        callback.invoke(null, success)
+        callback.invoke(error, value)
       }
     }
   }
 
   @ReactMethod
-  fun analyze(settings: ReadableMap, callback: Callback) {
+  fun analyzeDateRange(startDate: Double, endDate: Double, callback: Callback) {
 
-    var startDate: Double? = null
-    if (settings.hasKey("startDate")) {
-      startDate = settings.getDouble("startDate")
-    }
-    if (startDate != null) {
-      Log.d("Sahha", "startDate $startDate")
-    } else {
-      Log.d("Sahha", "startDate missing")
+    val sahhaStartDate: Date
+    val sahhaEndDate: Date
+    var body: String = "startDate: $startDate | endDate: $endDate"
+
+    try {
+      sahhaStartDate = Date(startDate.toLong())
+      sahhaEndDate = Date(endDate.toLong())
+    } catch (e: IllegalArgumentException) {
+      val message: String = "Sahha.analyzeDateRange() parameters invalid"
+      Sahha.postError(
+        SahhaFramework.react_native,
+        message,
+        "SahhaReactNativeModule",
+        "analyzeDateRange",
+        body
+      )
+      callback.invoke(message, null)
+      return
     }
 
-    var endDate: Double? = null
-    if (settings.hasKey("endDate")) {
-      endDate = settings.getDouble("endDate")
-    }
-    if (endDate != null) {
-      Log.d("Sahha", "endDate $endDate")
-    } else {
-      Log.d("Sahha", "endDate missing")
-    }
-
-    if (startDate != null && endDate != null) {
-      val sahhaStartDate = Date(startDate.toLong())
-      val sahhaEndDate = Date(endDate.toLong())
-      Log.d("Sahha", "sahhaStartDate $sahhaStartDate")
-      Log.d("Sahha", "sahhaEndDate $sahhaEndDate")
-      Sahha.analyze(Pair(sahhaStartDate, sahhaEndDate)) { error, value ->
-        if (error != null) {
-          callback.invoke(error, null)
-        } else if (value != null) {
-          callback.invoke(null, value)
-        } else {
-          callback.invoke("Sahha.analyze() failed", null)
-        }
-      }
-    } else {
-      Sahha.analyze { error, value ->
-        if (error != null) {
-          callback.invoke(error, null)
-        } else if (value != null) {
-          callback.invoke(null, value)
-        } else {
-          callback.invoke("Sahha.analyze() failed", null)
-        }
+    Log.d("Sahha", "analyze startDate $sahhaStartDate")
+    Log.d("Sahha", "analyze endDate $sahhaEndDate")
+    Sahha.analyze(Pair(sahhaStartDate, sahhaEndDate)) { error, value ->
+      if (error == null && value == null) {
+        val message: String = "Sahha.analyzeDateRange() failed"
+        body =
+          "startDate: $startDate | endDate: $endDate | startDate: $sahhaStartDate | endDate: $sahhaEndDate"
+        Sahha.postError(
+          SahhaFramework.react_native,
+          message,
+          "SahhaReactNativeModule",
+          "analyzeDateRange",
+          body
+        )
+        callback.invoke(message, null)
+      } else {
+        callback.invoke(error, value)
       }
     }
   }

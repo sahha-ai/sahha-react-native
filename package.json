@@ -114,7 +114,7 @@
     ],
     "rules": {
       "prettier/prettier": [
-        "error",
+        "warn",
         {
           "quoteProps": "consistent",
           "singleQuote": true,

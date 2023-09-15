@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import Sahha, {
   SahhaEnvironment,
-  SahhaSensor,
   SahhaSensorStatus,
 } from 'sahha-react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -75,7 +74,7 @@ export default function App() {
       }
     };
     setAuthPrefs();
-  }, [isAuth]);
+  }, [appId, appSecret, externalId, isAuth]);
 
   useEffect(() => {
     console.log('hello');
@@ -84,7 +83,7 @@ export default function App() {
     getProfilePrefs();
 
     const settings = {
-      environment: SahhaEnvironment.development,
+      environment: SahhaEnvironment.sandbox,
       notificationSettings: {
         icon: 'ic_test',
         title: 'Test Title',
@@ -138,10 +137,18 @@ export default function App() {
   }
 
   function onPressDelete() {
-    setAppId('');
-    setAppSecret('');
-    setExternalId('');
-    setIsAuth(false);
+
+      Sahha.deauthenticate(
+        (error: string, success: boolean) => {
+          console.log(`Success: ${success}`);
+          if (error) {
+            console.error(`Error: ${error}`);
+          } else if (success) {
+              setExternalId('');
+              setIsAuth(false);
+          }
+        }
+      );
   }
 
   const getProfilePrefs = async () => {
@@ -175,7 +182,7 @@ export default function App() {
   const saveProfilePrefs = () => {
     setProfilePrefs();
 
-    const demographic = {
+    const demographic: Object = {
       age: ageNumber, // number
       gender: gender, // string
     };
@@ -198,6 +205,7 @@ export default function App() {
         onChangeText={setAppId}
         value={appId}
         placeholder="ABC123"
+        clearButtonMode="always"
       />
       <Text>App Secret</Text>
       <TextInput
@@ -205,6 +213,7 @@ export default function App() {
         onChangeText={setAppSecret}
         value={appSecret}
         placeholder="ABC123"
+        clearButtonMode="always"
       />
       <Text>External ID</Text>
       <TextInput
@@ -212,13 +221,14 @@ export default function App() {
         onChangeText={setExternalId}
         value={externalId}
         placeholder="ABC123"
+        clearButtonMode="always"
       />
-      <Button title="SAVE AUTH" onPress={onPressAuthenticate} />
+      <Button title="AUTHENTICATE" onPress={onPressAuthenticate} />
       <Text>
         {isAuth ? 'You are authenticated' : 'You are not authenticated'}
       </Text>
       <View style={styles.divider} />
-      <Button title="DELETE AUTH" onPress={onPressDelete} />
+      <Button title="DEAUTHENTICATE" onPress={onPressDelete} />
       <View style={styles.sectionDivider} />
       <Text style={styles.heading}>PROFILE</Text>
       <Text>AGE</Text>
@@ -240,6 +250,7 @@ export default function App() {
         }}
         value={age}
         placeholder="1 - 100"
+        clearButtonMode="always"
       />
       <Text>GENDER</Text>
       <Picker
@@ -254,6 +265,19 @@ export default function App() {
         <Picker.Item label="Gender Diverse" value={'Gender Diverse'} />
       </Picker>
       <Button title="SAVE PROFILE" onPress={saveProfilePrefs} />
+      <View style={styles.divider} />
+      <Button
+        title={"GET DEMOGRAPHIC"}
+        onPress={() => {
+          Sahha.getDemographic((error: string, demographic: Object) => {
+            if (error) {
+              console.error(`Error: ${error}`);
+            } else if (demographic) {
+              console.log(`Demographic: ${demographic}`);
+            }
+          });
+        }}
+      />
       <View style={styles.sectionDivider} />
       <Text style={styles.heading}>SENSOR STATUS</Text>
       <Picker
@@ -288,6 +312,19 @@ export default function App() {
           Sahha.openAppSettings();
         }}
       />
+      <View style={styles.divider} />
+      <Button
+        title={"POST SENSOR DATA"}
+        onPress={() => {
+          Sahha.postSensorData((error: string, success: boolean) => {
+            if (error) {
+              console.error(`Error: ${error}`);
+            } else if (success) {
+              console.log(`Success: ${success}`);
+            }
+          });
+        }}
+      />
       <View style={styles.sectionDivider} />
       <Text style={styles.heading}>ANALYSIS</Text>
       <Text style={{ textAlign: 'center' }}>
@@ -297,7 +334,7 @@ export default function App() {
       <Button
         title="ANALYZE PREVIOUS DAY"
         onPress={() => {
-          Sahha.analyze({}, (error: string, value: string) => {
+          Sahha.analyze((error: string, value: string) => {
             if (error) {
               console.error(`Error: ${error}`);
             } else if (value) {
@@ -315,11 +352,7 @@ export default function App() {
           let days = endDate.getDate() - 7;
           var startDate = new Date();
           startDate.setDate(days);
-          const settings = {
-            startDate: startDate.getTime(),
-            endDate: endDate.getTime(),
-          };
-          Sahha.analyze(settings, (error: string, value: string) => {
+          Sahha.analyzeDateRange(startDate.getTime(), endDate.getTime(), (error: string, value: string) => {
             if (error) {
               console.error(`Error: ${error}`);
             } else if (value) {

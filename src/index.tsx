@@ -23,7 +23,7 @@ const SahhaReactNative = NativeModules.SahhaReactNative
 import { NativeModules } from 'react-native';
 
 export enum SahhaEnvironment {
-  development = 'development',
+  sandbox = 'sandbox',
   production = 'production',
 }
 
@@ -43,4 +43,21 @@ export enum SahhaSensorStatus {
 }
 
 const Sahha = NativeModules.SahhaReactNative;
-export default Sahha;
+
+interface SahhaInterface {
+  configure(settings: Object, callback: (error: string, success: boolean)=>void):void;
+  isAuthenticated(callback: (error: string, success: boolean)=>void):void
+  authenticate(appId: string, appSecret: string, externalId: string, callback: (error: string, success: boolean)=>void):void;
+  authenticateToken(profileToken: string, refreshToken: string, callback: (error: string, success: boolean)=>void):void;
+  deauthenticate(callback: (error: string, success: boolean)=>void):void;
+  getDemographic(callback: (error: string, demographic: Object)=>void):void;
+  postDemographic(demographic: Object, callback: (error: string, success: boolean)=>void):void;
+  getSensorStatus(callback: (error: string, value: SahhaSensorStatus)=>void):void;
+  enableSensors(callback: (error: string, value: SahhaSensorStatus)=>void):void;
+  postSensorData(callback: (error: string, success: boolean)=>void):void;
+  analyze(callback: (error: string, value: string)=>void):void;
+  analyzeDateRange(startDate: number, endDate: number, callback: (error: string, value: string)=>void):void;
+  openAppSettings():void;
+}
+
+export default Sahha as SahhaInterface;

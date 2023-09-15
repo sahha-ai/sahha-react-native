@@ -24,7 +24,6 @@ class SahhaReactNative: NSObject {
 
     @objc(configure:callback:)
     func configure(_ settings: NSDictionary, callback: @escaping RCTResponseSenderBlock) {
-
         if let configSettings = settings as? [String: Any], let environment = configSettings[SahhaSettingsIdentifier.environment.rawValue] as? String, let configEnvironment: SahhaEnvironment = SahhaEnvironment(rawValue: environment) {
 
             var configSensors: Set<SahhaSensor>? = []
@@ -46,7 +45,13 @@ class SahhaReactNative: NSObject {
                 callback([NSNull(), true])
             }
         } else {
-            callback(["Sahha settings are invalid", false])
+            let message = "Sahha configure settings invalid"
+            var body = "INVALID"
+            if let jsonData = try? JSONSerialization.data(withJSONObject: settings, options: [.prettyPrinted]), let jsonString = String(data: jsonData, encoding: .utf8) {
+                body = jsonString
+            }
+            Sahha.postError(framework: .react_native, message: message, path: "SahhaReactNative", method: "configure", body: body)
+            callback([message, false])
         }
     }
 
@@ -55,10 +60,28 @@ class SahhaReactNative: NSObject {
         Sahha.openAppSettings()
     }
 
+    @objc(isAuthenticated:)
+    func isAuthenticated(_ callback: @escaping RCTResponseSenderBlock) {
+        callback([NSNull(), Sahha.isAuthenticated])
+    }
+    
     @objc(authenticate:appSecret:externalId:callback:)
     func authenticate(_ appId: String, appSecret: String, externalId: String, callback: @escaping RCTResponseSenderBlock) -> Void {
-        
         Sahha.authenticate(appId: appId, appSecret: appSecret, externalId: externalId) { error, success in
+            callback([error ?? NSNull(), success])
+        }
+    }
+    
+    @objc(authenticateToken:refreshToken:callback:)
+    func authenticateToken(_ profileToken: String, refreshToken: String, callback: @escaping RCTResponseSenderBlock) -> Void {
+        Sahha.authenticate(profileToken: profileToken, refreshToken: refreshToken) { error, success in
+            callback([error ?? NSNull(), success])
+        }
+    }
+
+    @objc(deauthenticate:)
+    func deauthenticate(_ callback: @escaping RCTResponseSenderBlock) -> Void {
+        Sahha.deauthenticate { error, success in
             callback([error ?? NSNull(), success])
         }
     }
@@ -75,6 +98,9 @@ class SahhaReactNative: NSObject {
                     string = String(data: jsonData, encoding: .utf8)
                 } catch let encodingError {
                     print(encodingError)
+                    Sahha.postError(framework: .react_native, message: encodingError.localizedDescription, path: "SahhaReactNative", method: "getDemographic", body: "if let value = value")
+                    callback([encodingError.localizedDescription, NSNull()])
+                    return
                 }
             }
             callback([error ?? NSNull(), string ?? NSNull()])
@@ -83,7 +109,6 @@ class SahhaReactNative: NSObject {
 
     @objc(postDemographic:callback:)
     func postDemographic(_ demographic: NSDictionary, callback: @escaping RCTResponseSenderBlock) {
-
         if let configDemographic = demographic as? [String: Any] {
 
             var requestDemographic = SahhaDemographic()
@@ -146,52 +171,60 @@ class SahhaReactNative: NSObject {
             }
 
         } else {
-            callback(["Sahha demographic not valid", false])
+            let message = "Sahha demographic invalid"
+            var body = "INVALID"
+            if let jsonData = try? JSONSerialization.data(withJSONObject: demographic, options: [.prettyPrinted]), let jsonString = String(data: jsonData, encoding: .utf8) {
+                body = jsonString
+            }
+            Sahha.postError(framework: .react_native, message: message, path: "SahhaReactNative", method: "postDemographic", body: body)
+            callback([message, false])
         }
     }
     
     @objc(getSensorStatus:)
     func getSensorStatus(_ callback: @escaping RCTResponseSenderBlock) -> Void {
-        Sahha.getSensorStatus { sensorStatus in
-            callback([NSNull(),sensorStatus.rawValue])
+        Sahha.getSensorStatus { error, sensorStatus in
+            callback([error ?? NSNull(), sensorStatus.rawValue])
         }
     }
     
     @objc(enableSensors:)
     func enableSensors(_ callback: @escaping RCTResponseSenderBlock) -> Void {
-        Sahha.enableSensors { sensorStatus in
-            callback([NSNull(),sensorStatus.rawValue])
+        Sahha.enableSensors { error, sensorStatus in
+            callback([error ?? NSNull(), sensorStatus.rawValue])
         }
     }
 
     @objc(postSensorData:)
     func postSensorData(_ callback: @escaping RCTResponseSenderBlock) {
         Sahha.postSensorData { error, success in
-            if let error = error {
-                callback([error, false])
-            } else {
-                callback([NSNull(), success])
-            }
+            callback([error ?? NSNull(), success])
         }
     }
 
-    @objc(analyze:callback:)
-    func analyze(_ settings: NSDictionary, callback: @escaping RCTResponseSenderBlock) -> Void {
-        var dates: (startDate: Date, endDate: Date)?
-        if let configSettings = settings as? [String: Any] {
-            if let startDateNumber = configSettings["startDate"] as? NSNumber, let endDateNumber = configSettings["endDate"] as? NSNumber {
-                let startDate = Date(timeIntervalSince1970: TimeInterval(startDateNumber.doubleValue / 1000))
-                let endDate = Date(timeIntervalSince1970: TimeInterval(endDateNumber.doubleValue / 1000))
-                print("startDate", startDate.toTimezoneFormat)
-                print("endDate", endDate.toTimezoneFormat)
-                dates = (startDate, endDate)
-                print(startDate, endDate)
-            } else {
-                print("no dates")
-            }
+    @objc(analyze:)
+    func analyze(callback: @escaping RCTResponseSenderBlock) -> Void {
+        Sahha.analyze { error, value in
+            callback([error ?? NSNull(), value ?? NSNull()])
         }
+    }
+    
+    @objc(analyzeDateRange:endDate:callback:)
+    func analyzeDateRange(_ startDate: NSNumber, endDate: NSNumber, callback: @escaping RCTResponseSenderBlock) -> Void {
+        let startDateTimeInterval = TimeInterval(startDate.doubleValue / 1000)
+        let endDateTimeInterval = TimeInterval(endDate.doubleValue / 1000)
+        guard startDateTimeInterval > 0, endDateTimeInterval > 0 else {
+            let message = "Sahha analyze date range invalid"
+            Sahha.postError(framework: .react_native, message: message, path: "SahhaReactNative", method: "analyzeDateRange", body: "\(startDate.stringValue) | \(endDate.stringValue)")
+            callback([message, NSNull()])
+            return
+        }
+        let startDate = Date(timeIntervalSince1970: startDateTimeInterval)
+        let endDate = Date(timeIntervalSince1970: endDateTimeInterval)
+        let dates:(startDate: Date, endDate: Date) = (startDate, endDate)
         Sahha.analyze(dates: dates) { error, value in
             callback([error ?? NSNull(), value ?? NSNull()])
         }
     }
+
 }
