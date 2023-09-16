@@ -98,6 +98,11 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
   }
 
   @ReactMethod
+  fun isAuthenticated(callback: Callback) {
+    callback(null, Sahha.isAuthenticated)
+  }
+
+  @ReactMethod
   fun authenticate(appId: String, appSecret: String, externalId: String, callback: Callback) {
 
     Sahha.authenticate(appId, appSecret, externalId) { error, success ->

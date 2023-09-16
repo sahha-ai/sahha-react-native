@@ -69,6 +69,7 @@ export default function App() {
         await AsyncStorage.setItem('@externalId', externalId);
         const jsonValue = JSON.stringify(isAuth);
         await AsyncStorage.setItem('@isAuth', jsonValue);
+
       } catch (error) {
         console.error(error);
       }
@@ -99,6 +100,15 @@ export default function App() {
         console.log(`Success: ${success}`);
 
         // SDK is ready
+
+        Sahha.isAuthenticated(
+          (error: string, success: boolean) => {
+            console.log(`Is Auth: ${success}`);
+            if (error) {
+              console.error(`Error: ${error}`);
+            }
+          }
+        );
 
         Sahha.getSensorStatus((error: string, value: SahhaSensorStatus) => {
           if (error) {
