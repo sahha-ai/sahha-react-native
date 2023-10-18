@@ -11,7 +11,7 @@ buildscript {
   }
 
   dependencies {
-    classpath "com.android.tools.build:gradle:7.2.1"
+    classpath "com.android.tools.build:gradle:7.4.2"
     // noinspection DifferentKotlinGradleVersion
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
   }
@@ -81,7 +81,7 @@ dependencies {
   implementation "com.facebook.react:react-native:+"
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
   implementation "com.google.code.gson:gson:2.9.0"
-  implementation "com.github.sahha-ai:sahha-android:0.14.7"
+  implementation "com.github.sahha-ai:sahha-android:0.15.0"
 }
 
 if (isNewArchitectureEnabled()) {
