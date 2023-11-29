@@ -29,10 +29,13 @@ export enum SahhaEnvironment {
 
 export enum SahhaSensor {
   sleep = 'sleep',
-  pedometer = 'pedometer',
+  activity = 'activity',
   device = 'device',
   heart = 'heart',
   blood = 'blood',
+  oxygen = 'oxygen',
+  energy = 'energy',
+  body = 'body',
 }
 
 export enum SahhaSensorStatus {

@@ -90,7 +90,7 @@ export default function App() {
         title: 'Test Title',
         shortDescription: 'Test description.',
       },
-      //sensors: [SahhaSensor.sleep, SahhaSensor.pedometer],
+      //sensors: [SahhaSensor.sleep, SahhaSensor.activity],
     };
 
     Sahha.configure(settings, (error: string, success: boolean) => {
