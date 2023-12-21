@@ -204,13 +204,6 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
   }
 
   @ReactMethod
-  fun postSensorData(callback: Callback) {
-    Sahha.postSensorData { error, success ->
-      callback.invoke(null, success)
-    }
-  }
-
-  @ReactMethod
   fun analyze(callback: Callback) {
 
     Sahha.analyze { error, value ->

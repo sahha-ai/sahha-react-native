@@ -195,13 +195,6 @@ class SahhaReactNative: NSObject {
         }
     }
 
-    @objc(postSensorData:)
-    func postSensorData(_ callback: @escaping RCTResponseSenderBlock) {
-        Sahha.postSensorData { error, success in
-            callback([error ?? NSNull(), success])
-        }
-    }
-
     @objc(analyze:)
     func analyze(callback: @escaping RCTResponseSenderBlock) -> Void {
         Sahha.analyze { error, value in

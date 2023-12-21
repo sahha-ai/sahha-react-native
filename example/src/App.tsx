@@ -322,19 +322,6 @@ export default function App() {
           Sahha.openAppSettings();
         }}
       />
-      <View style={styles.divider} />
-      <Button
-        title={"POST SENSOR DATA"}
-        onPress={() => {
-          Sahha.postSensorData((error: string, success: boolean) => {
-            if (error) {
-              console.error(`Error: ${error}`);
-            } else if (success) {
-              console.log(`Success: ${success}`);
-            }
-          });
-        }}
-      />
       <View style={styles.sectionDivider} />
       <Text style={styles.heading}>ANALYSIS</Text>
       <Text style={{ textAlign: 'center' }}>

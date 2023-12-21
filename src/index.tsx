@@ -57,7 +57,6 @@ interface SahhaInterface {
   postDemographic(demographic: Object, callback: (error: string, success: boolean)=>void):void;
   getSensorStatus(callback: (error: string, value: SahhaSensorStatus)=>void):void;
   enableSensors(callback: (error: string, value: SahhaSensorStatus)=>void):void;
-  postSensorData(callback: (error: string, success: boolean)=>void):void;
   analyze(callback: (error: string, value: string)=>void):void;
   analyzeDateRange(startDate: number, endDate: number, callback: (error: string, value: string)=>void):void;
   openAppSettings():void;
