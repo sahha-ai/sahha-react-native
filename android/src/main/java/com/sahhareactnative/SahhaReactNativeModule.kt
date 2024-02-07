@@ -67,17 +67,13 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
         framework = SahhaFramework.react_native
       )
     } else {
-      var sahhaSensors: MutableSet<SahhaSensor> = mutableSetOf()
+      val sahhaSensors = sensors.toArrayList().map { SahhaSensor.valueOf(it as String) }
       try {
-        sensors.toArrayList().forEach {
-          var sensor = SahhaSensor.valueOf(it as String)
-          sahhaSensors.add(sensor)
-        }
         sahhaSettings = SahhaSettings(
           environment = sahhaEnvironment,
           notificationSettings = sahhaNotificationConfiguration,
           framework = SahhaFramework.react_native,
-          sensors = sahhaSensors
+          sensors = sahhaSensors.toSet()
         )
       } catch (e: IllegalArgumentException) {
         callback.invoke("Sahha.configure() sensor parameter is invalid", null)

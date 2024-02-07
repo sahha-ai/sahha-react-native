@@ -8,10 +8,7 @@ import {
   Button,
   TextInput,
 } from 'react-native';
-import Sahha, {
-  SahhaEnvironment,
-  SahhaSensorStatus,
-} from 'sahha-react-native';
+import Sahha, { SahhaEnvironment, SahhaSensorStatus } from 'sahha-react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Picker } from '@react-native-picker/picker';
 
@@ -69,7 +66,6 @@ export default function App() {
         await AsyncStorage.setItem('@externalId', externalId);
         const jsonValue = JSON.stringify(isAuth);
         await AsyncStorage.setItem('@isAuth', jsonValue);
-
       } catch (error) {
         console.error(error);
       }
@@ -101,14 +97,12 @@ export default function App() {
 
         // SDK is ready
 
-        Sahha.isAuthenticated(
-          (error: string, success: boolean) => {
-            console.log(`Is Auth: ${success}`);
-            if (error) {
-              console.error(`Error: ${error}`);
-            }
+        Sahha.isAuthenticated((error: string, success: boolean) => {
+          console.log(`Is Auth: ${success}`);
+          if (error) {
+            console.error(`Error: ${error}`);
           }
-        );
+        });
 
         Sahha.getSensorStatus((error: string, value: SahhaSensorStatus) => {
           if (error) {
@@ -147,18 +141,15 @@ export default function App() {
   }
 
   function onPressDelete() {
-
-      Sahha.deauthenticate(
-        (error: string, success: boolean) => {
-          console.log(`Success: ${success}`);
-          if (error) {
-            console.error(`Error: ${error}`);
-          } else if (success) {
-              setExternalId('');
-              setIsAuth(false);
-          }
-        }
-      );
+    Sahha.deauthenticate((error: string, success: boolean) => {
+      console.log(`Success: ${success}`);
+      if (error) {
+        console.error(`Error: ${error}`);
+      } else if (success) {
+        setExternalId('');
+        setIsAuth(false);
+      }
+    });
   }
 
   const getProfilePrefs = async () => {
@@ -277,7 +268,7 @@ export default function App() {
       <Button title="SAVE PROFILE" onPress={saveProfilePrefs} />
       <View style={styles.divider} />
       <Button
-        title={"GET DEMOGRAPHIC"}
+        title={'GET DEMOGRAPHIC'}
         onPress={() => {
           Sahha.getDemographic((error: string, demographic: Object) => {
             if (error) {
@@ -349,14 +340,18 @@ export default function App() {
           let days = endDate.getDate() - 7;
           var startDate = new Date();
           startDate.setDate(days);
-          Sahha.analyzeDateRange(startDate.getTime(), endDate.getTime(), (error: string, value: string) => {
-            if (error) {
-              console.error(`Error: ${error}`);
-            } else if (value) {
-              console.log(`Value: ${value}`);
-              setJsonString(value);
+          Sahha.analyzeDateRange(
+            startDate.getTime(),
+            endDate.getTime(),
+            (error: string, value: string) => {
+              if (error) {
+                console.error(`Error: ${error}`);
+              } else if (value) {
+                console.log(`Value: ${value}`);
+                setJsonString(value);
+              }
             }
-          });
+          );
         }}
       />
       <View style={styles.divider} />
