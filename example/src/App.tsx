@@ -85,7 +85,6 @@ export default function App() {
         icon: 'ic_test',
         title: 'Test Title',
         shortDescription: 'Test description.',
-        sensors: [],
       },
       //sensors: [SahhaSensor.sleep, SahhaSensor.activity],
     };
