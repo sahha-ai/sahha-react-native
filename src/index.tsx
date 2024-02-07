@@ -35,6 +35,7 @@ export enum SahhaSensor {
   blood = 'blood',
   oxygen = 'oxygen',
   energy = 'energy',
+  temperature = 'temperature',
   body = 'body',
 }
 
