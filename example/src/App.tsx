@@ -8,7 +8,10 @@ import {
   Button,
   TextInput,
 } from 'react-native';
-import Sahha, { SahhaEnvironment, SahhaSensorStatus } from 'sahha-react-native';
+import Sahha, {
+  SahhaEnvironment,
+  SahhaSensorStatus,
+} from 'sahha-react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Picker } from '@react-native-picker/picker';
 
