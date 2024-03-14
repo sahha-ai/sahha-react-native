@@ -37,6 +37,7 @@ export enum SahhaSensor {
   energy = 'energy',
   temperature = 'temperature',
   body = 'body',
+  exercise = 'exercise',
 }
 
 export enum SahhaSensorStatus {
