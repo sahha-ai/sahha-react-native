@@ -25,6 +25,7 @@ xcuserdata
 *.moved-aside
 DerivedData
 DerivedData/
+ios/DerivedData/
 *.hmap
 *.ipa
 *.xcuserstate
