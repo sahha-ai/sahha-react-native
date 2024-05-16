@@ -489,10 +489,10 @@ PODS:
     - React-Core
   - RNCPicker (2.4.10):
     - React-Core
-  - Sahha (0.4.0)
-  - sahha-react-native (0.4.0):
+  - Sahha (0.4.1)
+  - sahha-react-native (0.4.1):
     - React-Core
-    - Sahha (= 0.4.0)
+    - Sahha (= 0.4.1)
   - SocketRocket (0.6.1)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
@@ -723,8 +723,8 @@ SPEC CHECKSUMS:
   ReactCommon: 76843a9bb140596351ac2786257ac9fe60cafabb
   RNCAsyncStorage: b90b71f45b8b97be43bc4284e71a6af48ac9f547
   RNCPicker: 0bc2f0a29abcca7b7ed44a2d036aac9ab6d25700
-  Sahha: c19742b5a8a1d1e6c5df5339d43f5c3c4bdb171c
-  sahha-react-native: 055dcfd5d3f5f713e9eedb30f97222de5b52870f
+  Sahha: 0b57629e6f04cea02a14f40ab1b2d3c5c249875b
+  sahha-react-native: ade31ef19686356ef5a59030ff468406bc9a7df0
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   Yoga: 87e59f6d458e5061d2421086c5de994b3f7cd151
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
