@@ -162,37 +162,37 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
   }
 
   @ReactMethod
-  fun getSensorStatus(sensors: Array<String>, callback: Callback) {
+  fun getSensorStatus(sensors: ReadableArray?, callback: Callback?) {
 
     if (sensors == null) {
       Sahha.getSensorStatus(
         reactApplicationContext.baseContext,
         null
       ) { error, sensorStatus ->
-        callback.invoke(error, sensorStatus.ordinal)
+        callback?.invoke(error, sensorStatus.ordinal)
       }
     } else {
-      val sahhaSensors = sensors.map { SahhaSensor.valueOf(it as String) }.toSet()
+      val sahhaSensors = sensors?.map { SahhaSensor.valueOf(it as String) }.toSet()
       Sahha.getSensorStatus(
         reactApplicationContext.baseContext,
         sahhaSensors
       ) { error, sensorStatus ->
-        callback.invoke(error, sensorStatus.ordinal)
+        callback?.invoke(error, sensorStatus.ordinal)
       }
     }
   }
 
   @ReactMethod
-  fun enableSensors(sensors: Array<String>, callback: Callback) {
+  fun enableSensors(sensors: ReadableArray?, callback: Callback?) {
 
     if (sensors == null) {
       Sahha.enableSensors(reactApplicationContext.baseContext, null) { error, sensorStatus ->
-        callback.invoke(error, sensorStatus.ordinal)
+        callback?.invoke(error, sensorStatus.ordinal)
       }
     } else {
       val sahhaSensors = sensors.map { SahhaSensor.valueOf(it as String) }.toSet()
       Sahha.enableSensors(reactApplicationContext.baseContext, sahhaSensors) { error, sensorStatus ->
-        callback.invoke(error, sensorStatus.ordinal)
+        callback?.invoke(error, sensorStatus.ordinal)
       }
     }
   }
