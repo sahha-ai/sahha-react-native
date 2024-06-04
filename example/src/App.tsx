@@ -342,7 +342,7 @@ function SensorScreen({ navigation }) {
     <Button
       title="GET EMPTY SENSORS"
       onPress={() => {
-        console.log('press');
+        console.log("GET EMPTY SENSORS");
         Sahha.getSensorStatus([], (error: string, value: SahhaSensorStatus) => {
           if (error) {
             console.error(`Error: ${error}`);
@@ -356,7 +356,7 @@ function SensorScreen({ navigation }) {
     <Button
       title="GET SOME SENSORS"
       onPress={() => {
-        console.log('press');
+        console.log("GET SOME SENSORS");
         Sahha.getSensorStatus([SahhaSensor.step_count, SahhaSensor.sleep], (error: string, value: SahhaSensorStatus) => {
           if (error) {
             console.error(`Error: ${error}`);
@@ -370,7 +370,7 @@ function SensorScreen({ navigation }) {
     <Button
       title="GET ALL SENSORS"
       onPress={() => {
-        console.log('press');
+        console.log("GET ALL SENSORS");
         Sahha.getSensorStatus(undefined, (error: string, value: SahhaSensorStatus) => {
           if (error) {
             console.error(`Error: ${error}`);
@@ -384,7 +384,7 @@ function SensorScreen({ navigation }) {
     <Button
       title="ENABLE EMPTY SENSORS"
       onPress={() => {
-        console.log('press');
+        console.log("ENABLE EMPTY SENSORS");
         Sahha.enableSensors([], (error: string, value: SahhaSensorStatus) => {
           if (error) {
             console.error(`Error: ${error}`);
@@ -398,7 +398,7 @@ function SensorScreen({ navigation }) {
     <Button
       title="ENABLE SOME SENSORS"
       onPress={() => {
-        console.log('press');
+        console.log("ENABLE SOME SENSORS");
         Sahha.enableSensors([SahhaSensor.step_count, SahhaSensor.sleep], (error: string, value: SahhaSensorStatus) => {
           if (error) {
             console.error(`Error: ${error}`);
@@ -412,7 +412,7 @@ function SensorScreen({ navigation }) {
     <Button
       title="ENABLE ALL SENSORS"
       onPress={() => {
-        console.log('press');
+        console.log("ENABLE ALL SENSORS");
         Sahha.enableSensors(undefined, (error: string, value: SahhaSensorStatus) => {
           if (error) {
             console.error(`Error: ${error}`);
