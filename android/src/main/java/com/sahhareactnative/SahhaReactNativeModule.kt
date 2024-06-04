@@ -172,7 +172,7 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
         callback?.invoke(error, sensorStatus.ordinal)
       }
     } else {
-      val sahhaSensors = sensors?.map { SahhaSensor.valueOf(it as String) }.toSet()
+      val sahhaSensors = sensors.toArrayList().map { SahhaSensor.valueOf(it as String) }.toSet()
       Sahha.getSensorStatus(
         reactApplicationContext.baseContext,
         sahhaSensors
@@ -190,7 +190,7 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
         callback?.invoke(error, sensorStatus.ordinal)
       }
     } else {
-      val sahhaSensors = sensors.map { SahhaSensor.valueOf(it as String) }.toSet()
+      val sahhaSensors = sensors.toArrayList().map { SahhaSensor.valueOf(it as String) }.toSet()
       Sahha.enableSensors(reactApplicationContext.baseContext, sahhaSensors) { error, sensorStatus ->
         callback?.invoke(error, sensorStatus.ordinal)
       }
