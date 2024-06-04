@@ -179,23 +179,30 @@ function AuthenticationScreen({ navigation }) {
 
 function InsightsScreen({ navigation, ...props  }) {
 
-  const [isLoading, setIsLoading] = useState<Boolean>(true);
+  const [profileToken, setProfileToken] = useState<string>('');
 
   useEffect(() => {
+
+    Sahha.getProfileToken((error: string, token?: string) => {
+      if (error) {
+        console.error(`Error: ${error}`);
+      } else if (token) {
+        setProfileToken(token);
+      } else {
+        console.log(`Profile Token: null`);
+      }
+    });
     
   }, []);
 
 
   return (
-    <View>
-    {isLoading && <ActivityIndicator />}
-      <WebView style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} source={{
-        uri: "https://sandbox.webview.sahha.ai/app",
-        headers: {
-          'Authorization': props.profileToken,
-        },
-    }} onLoadStart={() => setIsLoading(false)} />
-    </View>
+    <WebView style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} source={{
+      uri: "https://sandbox.webview.sahha.ai/app",
+      headers: {
+        'Authorization': profileToken,
+      }
+    }}  />
   );
 }
 
@@ -346,7 +353,7 @@ function SensorScreen({ navigation }) {
         Sahha.getSensorStatus([], (error: string, value: SahhaSensorStatus) => {
           if (error) {
             console.error(`Error: ${error}`);
-          } else if (value) {
+          } else {
             console.log(`Sensor Status: ${value}`);
             setSensorStatus(value);
           }
@@ -360,7 +367,7 @@ function SensorScreen({ navigation }) {
         Sahha.getSensorStatus([SahhaSensor.step_count, SahhaSensor.sleep], (error: string, value: SahhaSensorStatus) => {
           if (error) {
             console.error(`Error: ${error}`);
-          } else if (value) {
+          } else {
             console.log(`Sensor Status: ${value}`);
             setSensorStatus(value);
           }
@@ -374,7 +381,7 @@ function SensorScreen({ navigation }) {
         Sahha.getSensorStatus(undefined, (error: string, value: SahhaSensorStatus) => {
           if (error) {
             console.error(`Error: ${error}`);
-          } else if (value) {
+          } else {
             console.log(`Sensor Status: ${value}`);
             setSensorStatus(value);
           }
@@ -388,7 +395,7 @@ function SensorScreen({ navigation }) {
         Sahha.enableSensors([], (error: string, value: SahhaSensorStatus) => {
           if (error) {
             console.error(`Error: ${error}`);
-          } else if (value) {
+          } else {
             console.log(`Sensor Status: ${value}`);
             setSensorStatus(value);
           }
@@ -402,7 +409,7 @@ function SensorScreen({ navigation }) {
         Sahha.enableSensors([SahhaSensor.step_count, SahhaSensor.sleep], (error: string, value: SahhaSensorStatus) => {
           if (error) {
             console.error(`Error: ${error}`);
-          } else if (value) {
+          } else {
             console.log(`Sensor Status: ${value}`);
             setSensorStatus(value);
           }
@@ -416,7 +423,7 @@ function SensorScreen({ navigation }) {
         Sahha.enableSensors(undefined, (error: string, value: SahhaSensorStatus) => {
           if (error) {
             console.error(`Error: ${error}`);
-          } else if (value) {
+          } else {
             console.log(`Sensor Status: ${value}`);
             setSensorStatus(value);
           }
@@ -485,7 +492,6 @@ function AnalysisScreen({ navigation }) {
 }
 
 export default function App() {
-  const [profileToken, setProfileToken] = useState<string>('');
 
   useEffect(() => {
     console.log('hello');
@@ -506,23 +512,6 @@ export default function App() {
         console.log(`Success: ${success}`);
 
         // SDK is ready
-
-        Sahha.isAuthenticated((error: string, success: boolean) => {
-          console.log(`Is Auth: ${success}`);
-          if (error) {
-            console.error(`Error: ${error}`);
-          } else {
-            Sahha.getProfileToken((error: string, token?: string) => {
-              if (error) {
-                console.error(`Error: ${error}`);
-              } else if (token) {
-                setProfileToken(token);
-              } else {
-                console.log(`Profile Token: null`);
-              }
-            });
-          }
-        });
       }
     });
   }, []);
@@ -535,9 +524,7 @@ export default function App() {
         <Stack.Screen name="Profile" component={ProfileScreen} />
         <Stack.Screen name="Sensors" component={SensorScreen} />
         <Stack.Screen name="Analysis" component={AnalysisScreen} />
-        <Stack.Screen name="Insights">
-  {(props) => <InsightsScreen {...props} profileToken={profileToken} />}
-</Stack.Screen>
+        <Stack.Screen name="Insights" component={InsightsScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
