@@ -28,15 +28,43 @@ export enum SahhaEnvironment {
 }
 
 export enum SahhaSensor {
+  gender = 'gender',
+  date_of_birth = 'date_of_birth',
   sleep = 'sleep',
-  activity = 'activity',
-  device = 'device',
-  heart = 'heart',
-  blood = 'blood',
-  oxygen = 'oxygen',
-  energy = 'energy',
-  temperature = 'temperature',
-  body = 'body',
+  step_count = 'step_count',
+  floor_count = 'floor_count',
+  heart_rate = 'heart_rate',
+  resting_heart_rate = 'resting_heart_rate',
+  walking_heart_rate_average = 'walking_heart_rate_average',
+  heart_rate_variability_sdnn = 'heart_rate_variability_sdnn',
+  heart_rate_variability_rmssd = 'heart_rate_variability_rmssd',
+  blood_pressure_systolic = 'blood_pressure_systolic',
+  blood_pressure_diastolic = 'blood_pressure_diastolic',
+  blood_glucose = 'blood_glucose',
+  vo2_max = 'vo2_max',
+  oxygen_saturation = 'oxygen_saturation',
+  respiratory_rate = 'respiratory_rate',
+  active_energy_burned = 'active_energy_burned',
+  basal_energy_burned = 'basal_energy_burned',
+  total_energy_burned = 'total_energy_burned',
+  basal_metabolic_rate = 'basal_metabolic_rate',
+  time_in_daylight = 'time_in_daylight',
+  body_temperature = 'body_temperature',
+  basal_body_temperature = 'basal_body_temperature',
+  sleeping_wrist_temperature = 'sleeping_wrist_temperature',
+  height = 'height',
+  weight = 'weight',
+  lean_body_mass = 'lean_body_mass',
+  body_mass_index = 'body_mass_index',
+  body_fat = 'body_fat',
+  body_water_mass = 'body_water_mass',
+  bone_mass = 'bone_mass',
+  waist_circumference = 'waist_circumference',
+  stand_time = 'stand_time',
+  move_time = 'move_time',
+  exercise_time = 'exercise_time',
+  activity_summary = 'activity_summary',
+  device_lock = 'device_lock',
   exercise = 'exercise',
 }
 
@@ -55,10 +83,11 @@ interface SahhaInterface {
   authenticate(appId: string, appSecret: string, externalId: string, callback: (error: string, success: boolean)=>void):void;
   authenticateToken(profileToken: string, refreshToken: string, callback: (error: string, success: boolean)=>void):void;
   deauthenticate(callback: (error: string, success: boolean)=>void):void;
-  getDemographic(callback: (error: string, demographic: Object)=>void):void;
+  getProfileToken(callback: (error: string, profileToken?: string)=>void):void;
+  getDemographic(callback: (error: string, demographic?: string)=>void):void;
   postDemographic(demographic: Object, callback: (error: string, success: boolean)=>void):void;
-  getSensorStatus(callback: (error: string, value: SahhaSensorStatus)=>void):void;
-  enableSensors(callback: (error: string, value: SahhaSensorStatus)=>void):void;
+  getSensorStatus(sensors?: Array<SahhaSensor>, callback?: (error: string, value: SahhaSensorStatus)=>void):void;
+  enableSensors(sensors?: Array<SahhaSensor>, callback?: (error: string, value: SahhaSensorStatus)=>void):void;
   analyze(callback: (error: string, value: string)=>void):void;
   analyzeDateRange(startDate: number, endDate: number, callback: (error: string, value: string)=>void):void;
   openAppSettings():void;

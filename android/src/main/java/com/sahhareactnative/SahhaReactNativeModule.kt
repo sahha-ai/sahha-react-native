@@ -56,35 +56,15 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
     }
     // Notification config ends
 
-    var sensors: ReadableArray? = settings.getArray("sensors")
-
-    var sahhaSettings: SahhaSettings
-
-    if (sensors == null) {
-      sahhaSettings = SahhaSettings(
+    var sahhaSettings: SahhaSettings = SahhaSettings(
         environment = sahhaEnvironment,
         notificationSettings = sahhaNotificationConfiguration,
         framework = SahhaFramework.react_native
       )
-    } else {
-      val sahhaSensors = sensors.toArrayList().map { SahhaSensor.valueOf(it as String) }
-      try {
-        sahhaSettings = SahhaSettings(
-          environment = sahhaEnvironment,
-          notificationSettings = sahhaNotificationConfiguration,
-          framework = SahhaFramework.react_native,
-          sensors = sahhaSensors.toSet()
-        )
-      } catch (e: IllegalArgumentException) {
-        callback.invoke("Sahha.configure() sensor parameter is invalid", null)
-        // Sahha.postError()
-        return
-      }
-    }
+
     var app = currentActivity?.application
 
     if (app == null) {
-      // Sahha.postError()
       callback("Sahha.configure() application parameter is null", false)
     } else {
       Sahha.configure(app, sahhaSettings) { error, success ->
@@ -123,6 +103,11 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
   }
 
   @ReactMethod
+  fun getProfileToken(callback: Callback) {
+    callback.invoke(null, Sahha.profileToken)
+  }
+
+  @ReactMethod
   fun getDemographic(callback: Callback) {
 
     Sahha.getDemographic { error, demographic ->
@@ -134,14 +119,7 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
         Log.d("Sahha", demographicJson)
         callback.invoke(null, demographicJson)
       } else {
-        val message: String = "Sahha Demographic not available"
-        Sahha.postError(
-          SahhaFramework.react_native,
-          message,
-          "SahhaReactNativeModule",
-          "getDemographic"
-        )
-        callback.invoke(message, null)
+        callback.invoke(null, null)
       }
     }
   }
@@ -184,18 +162,38 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
   }
 
   @ReactMethod
-  fun getSensorStatus(callback: Callback) {
-    Sahha.getSensorStatus(
-      reactApplicationContext.baseContext,
-    ) { error, sensorStatus ->
-      callback.invoke(error, sensorStatus.ordinal)
+  fun getSensorStatus(sensors: Array<String>, callback: Callback) {
+
+    if (sensors == null) {
+      Sahha.getSensorStatus(
+        reactApplicationContext.baseContext,
+        null
+      ) { error, sensorStatus ->
+        callback.invoke(error, sensorStatus.ordinal)
+      }
+    } else {
+      val sahhaSensors = sensors.map { SahhaSensor.valueOf(it as String) }.toSet()
+      Sahha.getSensorStatus(
+        reactApplicationContext.baseContext,
+        sahhaSensors
+      ) { error, sensorStatus ->
+        callback.invoke(error, sensorStatus.ordinal)
+      }
     }
   }
 
   @ReactMethod
-  fun enableSensors(callback: Callback) {
-    Sahha.enableSensors(reactApplicationContext.baseContext) { error, sensorStatus ->
-      callback.invoke(error, sensorStatus.ordinal)
+  fun enableSensors(sensors: Array<String>, callback: Callback) {
+
+    if (sensors == null) {
+      Sahha.enableSensors(reactApplicationContext.baseContext, null) { error, sensorStatus ->
+        callback.invoke(error, sensorStatus.ordinal)
+      }
+    } else {
+      val sahhaSensors = sensors.map { SahhaSensor.valueOf(it as String) }.toSet()
+      Sahha.enableSensors(reactApplicationContext.baseContext, sahhaSensors) { error, sensorStatus ->
+        callback.invoke(error, sensorStatus.ordinal)
+      }
     }
   }
 

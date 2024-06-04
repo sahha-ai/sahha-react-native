@@ -12,13 +12,15 @@ RCT_EXTERN_METHOD(authenticateToken:(NSString *)profileToken refreshToken:(NSStr
 
 RCT_EXTERN_METHOD(deauthenticate:(RCTResponseSenderBlock)callback)
 
+RCT_EXTERN_METHOD(getProfileToken:(RCTResponseSenderBlock)callback)
+
 RCT_EXTERN_METHOD(getDemographic:(RCTResponseSenderBlock)callback)
 
 RCT_EXTERN_METHOD(postDemographic:(NSDictionary *)demographic callback:(RCTResponseSenderBlock)callback)
 
-RCT_EXTERN_METHOD(getSensorStatus:(RCTResponseSenderBlock)callback)
+RCT_EXTERN_METHOD(getSensorStatus:(NSArray *)sensors callback:(RCTResponseSenderBlock)callback)
 
-RCT_EXTERN_METHOD(enableSensors:(RCTResponseSenderBlock)callback)
+RCT_EXTERN_METHOD(enableSensors:(NSArray *)sensors callback:(RCTResponseSenderBlock)callback)
 
 RCT_EXTERN_METHOD(analyze:(RCTResponseSenderBlock)callback)
 
