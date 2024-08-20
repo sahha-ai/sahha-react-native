@@ -86,8 +86,8 @@ interface SahhaInterface {
   getProfileToken(callback: (error: string, profileToken?: string)=>void):void;
   getDemographic(callback: (error: string, demographic?: string)=>void):void;
   postDemographic(demographic: Object, callback: (error: string, success: boolean)=>void):void;
-  getSensorStatus(sensors?: Array<SahhaSensor>, callback?: (error: string, value: SahhaSensorStatus)=>void):void;
-  enableSensors(sensors?: Array<SahhaSensor>, callback?: (error: string, value: SahhaSensorStatus)=>void):void;
+  getSensorStatus(sensors: Array<SahhaSensor>, callback: (error: string, value: SahhaSensorStatus)=>void):void;
+  enableSensors(sensors: Array<SahhaSensor>, callback: (error: string, value: SahhaSensorStatus)=>void):void;
   analyze(callback: (error: string, value: string)=>void):void;
   analyzeDateRange(startDate: number, endDate: number, callback: (error: string, value: string)=>void):void;
   openAppSettings():void;

@@ -177,40 +177,28 @@ class SahhaReactNative: NSObject {
     }
     
     @objc(getSensorStatus:callback:)
-    func getSensorStatus(_ sensors:[String]?, callback: RCTResponseSenderBlock?) -> Void {
-        guard let sensors = sensors else {
-            Sahha.getSensorStatus { error, sensorStatus in
-                callback?([error ?? NSNull(), sensorStatus.rawValue])
-            }
-            return
-        }
-        var configSensors: Set<SahhaSensor>? = []
+    func getSensorStatus(_ sensors:[String], callback: @escaping RCTResponseSenderBlock) -> Void {
+        var configSensors: Set<SahhaSensor> = []
         for sensor in sensors {
             if let configSensor = SahhaSensor(rawValue: sensor) {
-                configSensors?.insert(configSensor)
+                configSensors.insert(configSensor)
             }
         }
         Sahha.getSensorStatus(configSensors) { error, sensorStatus in
-            callback?([error ?? NSNull(), sensorStatus.rawValue])
+            callback([error ?? NSNull(), sensorStatus.rawValue])
         }
     }
     
     @objc(enableSensors:callback:)
-    func enableSensors(_ sensors:[String]?, callback: RCTResponseSenderBlock?) -> Void {
-        guard let sensors = sensors else {
-            Sahha.enableSensors { error, sensorStatus in
-                callback?([error ?? NSNull(), sensorStatus.rawValue])
-            }
-            return
-        }
-        var configSensors: Set<SahhaSensor>? = []
+    func enableSensors(_ sensors:[String], callback: @escaping RCTResponseSenderBlock) -> Void {
+        var configSensors: Set<SahhaSensor> = []
         for sensor in sensors {
             if let configSensor = SahhaSensor(rawValue: sensor) {
-                configSensors?.insert(configSensor)
+                configSensors.insert(configSensor)
             }
         }
         Sahha.enableSensors(configSensors) { error, sensorStatus in
-            callback?([error ?? NSNull(), sensorStatus.rawValue])
+            callback([error ?? NSNull(), sensorStatus.rawValue])
         }
     }
     

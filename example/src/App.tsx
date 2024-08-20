@@ -322,10 +322,10 @@ function SensorScreen({ navigation }) {
 
     useEffect(() => {
       console.log('getAllSensorStatus');
-    Sahha.getSensorStatus(undefined, (error: string, value: SahhaSensorStatus) => {
+    Sahha.getSensorStatus([SahhaSensor.step_count, SahhaSensor.sleep], (error: string, value: SahhaSensorStatus) => {
       if (error) {
         console.error(`Error: ${error}`);
-      } else if (value) {
+      } else {
         console.log(`Sensor Status: ${value}`);
         // Set sensor status to value
         setSensorStatus(value);
@@ -375,20 +375,6 @@ function SensorScreen({ navigation }) {
       }}
     />
     <Button
-      title="GET ALL SENSORS"
-      onPress={() => {
-        console.log("GET ALL SENSORS");
-        Sahha.getSensorStatus(undefined, (error: string, value: SahhaSensorStatus) => {
-          if (error) {
-            console.error(`Error: ${error}`);
-          } else {
-            console.log(`Sensor Status: ${value}`);
-            setSensorStatus(value);
-          }
-        });
-      }}
-    />
-    <Button
       title="ENABLE EMPTY SENSORS"
       onPress={() => {
         console.log("ENABLE EMPTY SENSORS");
@@ -407,20 +393,6 @@ function SensorScreen({ navigation }) {
       onPress={() => {
         console.log("ENABLE SOME SENSORS");
         Sahha.enableSensors([SahhaSensor.step_count, SahhaSensor.sleep], (error: string, value: SahhaSensorStatus) => {
-          if (error) {
-            console.error(`Error: ${error}`);
-          } else {
-            console.log(`Sensor Status: ${value}`);
-            setSensorStatus(value);
-          }
-        });
-      }}
-    />
-    <Button
-      title="ENABLE ALL SENSORS"
-      onPress={() => {
-        console.log("ENABLE ALL SENSORS");
-        Sahha.enableSensors(undefined, (error: string, value: SahhaSensorStatus) => {
           if (error) {
             console.error(`Error: ${error}`);
           } else {
