@@ -498,10 +498,10 @@ PODS:
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
     - React-RCTImage
-  - Sahha (0.4.4)
-  - sahha-react-native (0.4.4):
+  - Sahha (0.4.5)
+  - sahha-react-native (0.4.5):
     - React-Core
-    - Sahha (= 0.4.4)
+    - Sahha (= 0.4.5)
   - SocketRocket (0.6.1)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
@@ -575,7 +575,6 @@ DEPENDENCIES:
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCPicker (from `../node_modules/@react-native-picker/picker`)"
   - RNScreens (from `../node_modules/react-native-screens`)
-  - Sahha (from `../../../sahha-swift/`)
   - sahha-react-native (from `../..`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -593,6 +592,7 @@ SPEC REPOS:
     - fmt
     - libevent
     - OpenSSL-Universal
+    - Sahha
     - SocketRocket
     - YogaKit
 
@@ -683,15 +683,13 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-picker/picker"
   RNScreens:
     :path: "../node_modules/react-native-screens"
-  Sahha:
-    :path: "../../../sahha-swift/"
   sahha-react-native:
     :path: "../.."
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  boost: 57d2868c099736d80fcd648bf211b4431e51a558
+  boost: 7dcd2de282d72e344012f7d6564d024930a6a440
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
   FBLazyVector: a31ac2336aea59512b5b982f8e231f65d7d148e1
@@ -746,12 +744,12 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: b90b71f45b8b97be43bc4284e71a6af48ac9f547
   RNCPicker: 0bc2f0a29abcca7b7ed44a2d036aac9ab6d25700
   RNScreens: b8d370282cdeae9df85dd5eab20c88eb5181243b
-  Sahha: 8be15be5ff695edca9c464e2dba00589233289c9
-  sahha-react-native: 08a38f9ef5ed30e1f77056ee1a116e7f082c4bce
+  Sahha: a0f4417f0752c3f0b7a7ce97c5a54c489ab8df19
+  sahha-react-native: 977985caaac1e1a317a63da6241511989af577a0
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   Yoga: 87e59f6d458e5061d2421086c5de994b3f7cd151
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: b0f68a39c8eacbb51e4ef0e9811a1f75a5cca3bd
+PODFILE CHECKSUM: 443f0ef1f4ef43966e8003f170ed2f483f83f864
 
 COCOAPODS: 1.15.2
