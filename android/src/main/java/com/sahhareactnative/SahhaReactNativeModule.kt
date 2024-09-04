@@ -109,7 +109,6 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
 
   @ReactMethod
   fun getDemographic(callback: Callback) {
-
     Sahha.getDemographic { error, demographic ->
       if (error != null) {
         callback.invoke(error, null)
@@ -126,8 +125,7 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
 
   @ReactMethod
   fun postDemographic(demographic: ReadableMap, callback: Callback) {
-
-    val age: Int? = demographic.getInt("age")
+    val age: Int? = if (demographic.hasKey("age")) demographic.getInt("age") else null
     val gender: String? = demographic.getString("gender")
     val country: String? = demographic.getString("country")
     val birthCountry: String? = demographic.getString("birthCountry")
@@ -140,6 +138,7 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
     val locale: String? = demographic.getString("locale")
     val livingArrangement: String? = demographic.getString("livingArrangement")
     val birthDate: String? = demographic.getString("birthDate")
+    
     var sahhaDemographic = SahhaDemographic(
       age,
       gender,
