@@ -177,7 +177,7 @@ class SahhaReactNative: NSObject {
     }
     
     @objc(getSensorStatus:callback:)
-    func getSensorStatus(_ sensors:[String], callback: @escaping RCTResponseSenderBlock) -> Void {
+    func getSensorStatus(_ sensors: [String], callback: @escaping RCTResponseSenderBlock) -> Void {
         var configSensors: Set<SahhaSensor> = []
         for sensor in sensors {
             if let configSensor = SahhaSensor(rawValue: sensor) {
@@ -190,7 +190,7 @@ class SahhaReactNative: NSObject {
     }
     
     @objc(enableSensors:callback:)
-    func enableSensors(_ sensors:[String], callback: @escaping RCTResponseSenderBlock) -> Void {
+    func enableSensors(_ sensors: [String], callback: @escaping RCTResponseSenderBlock) -> Void {
         var configSensors: Set<SahhaSensor> = []
         for sensor in sensors {
             if let configSensor = SahhaSensor(rawValue: sensor) {
@@ -202,15 +202,21 @@ class SahhaReactNative: NSObject {
         }
     }
     
-    @objc(analyze:)
-    func analyze(callback: @escaping RCTResponseSenderBlock) -> Void {
-        Sahha.analyze { error, value in
+    @objc(getScores:callback:)
+    func getScores(_ types: [String], callback: @escaping RCTResponseSenderBlock) -> Void {
+        var scoreTypes: Set<SahhaScoreType> = []
+        for type in types {
+            if let scoreType = SahhaScoreType(rawValue: type) {
+                scoreTypes.insert(scoreType)
+            }
+        }
+        Sahha.getScores(scoreTypes) { error, value in
             callback([error ?? NSNull(), value ?? NSNull()])
         }
     }
     
-    @objc(analyzeDateRange:endDate:callback:)
-    func analyzeDateRange(_ startDate: NSNumber, endDate: NSNumber, callback: @escaping RCTResponseSenderBlock) -> Void {
+    @objc(getScoresDateRange:startDate:endDate:callback:)
+    func getScoresDateRange(_ types: [String], startDate: NSNumber, endDate: NSNumber, callback: @escaping RCTResponseSenderBlock) -> Void {
         let startDateTimeInterval = TimeInterval(startDate.doubleValue / 1000)
         let endDateTimeInterval = TimeInterval(endDate.doubleValue / 1000)
         guard startDateTimeInterval > 0, endDateTimeInterval > 0 else {
@@ -222,7 +228,15 @@ class SahhaReactNative: NSObject {
         let startDate = Date(timeIntervalSince1970: startDateTimeInterval)
         let endDate = Date(timeIntervalSince1970: endDateTimeInterval)
         let dates:(startDate: Date, endDate: Date) = (startDate, endDate)
-        Sahha.analyze(dates: dates) { error, value in
+        
+        var scoreTypes: Set<SahhaScoreType> = []
+        for type in types {
+            if let scoreType = SahhaScoreType(rawValue: type) {
+                scoreTypes.insert(scoreType)
+            }
+        }
+        
+        Sahha.getScores(scoreTypes, dates: dates) { error, value in
             callback([error ?? NSNull(), value ?? NSNull()])
         }
     }

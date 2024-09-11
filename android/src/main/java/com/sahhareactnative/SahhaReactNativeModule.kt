@@ -4,7 +4,6 @@ import android.util.Log
 import com.facebook.react.bridge.*
 import com.google.gson.Gson
 import sdk.sahha.android.source.*
-import java.time.LocalDateTime
 import java.util.*
 
 class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
@@ -138,7 +137,7 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
     val locale: String? = demographic.getString("locale")
     val livingArrangement: String? = demographic.getString("livingArrangement")
     val birthDate: String? = demographic.getString("birthDate")
-    
+
     var sahhaDemographic = SahhaDemographic(
       age,
       gender,
@@ -180,12 +179,15 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
   }
 
   @ReactMethod
-  fun analyze(callback: Callback) {
-
-    Sahha.analyze { error, value ->
+  fun getScores(
+    types: ReadableArray,
+    callback: Callback
+  ) {
+    val sahhaScoreTypes = types.toArrayList().map { SahhaScoreType.valueOf(it as String) }.toSet()
+    Sahha.getScores(sahhaScoreTypes) { error, value ->
       if (error == null && value == null) {
-        val message: String = "Sahha.analyze() failed"
-        Sahha.postError(SahhaFramework.react_native, message, "SahhaReactNativeModule", "analyze")
+        val message: String = "Sahha.getScores() failed"
+        Sahha.postError(SahhaFramework.react_native, message, "SahhaReactNativeModule", "getScores")
         callback.invoke(message, null)
       } else {
         callback.invoke(error, value)
@@ -194,7 +196,8 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
   }
 
   @ReactMethod
-  fun analyzeDateRange(startDate: Double, endDate: Double, callback: Callback) {
+  fun getScoresDateRange(types: ReadableArray, startDate: Double, endDate: Double, callback: Callback) {
+    val sahhaScoreTypes = types.toArrayList().map { SahhaScoreType.valueOf(it as String) }.toSet()
 
     val sahhaStartDate: Date
     val sahhaEndDate: Date
@@ -204,30 +207,30 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
       sahhaStartDate = Date(startDate.toLong())
       sahhaEndDate = Date(endDate.toLong())
     } catch (e: IllegalArgumentException) {
-      val message: String = "Sahha.analyzeDateRange() parameters invalid"
+      val message: String = "Sahha.getScoresDateRange() parameters invalid"
       Sahha.postError(
         SahhaFramework.react_native,
         message,
         "SahhaReactNativeModule",
-        "analyzeDateRange",
+        "getScoresDateRange",
         body
       )
       callback.invoke(message, null)
       return
     }
 
-    Log.d("Sahha", "analyze startDate $sahhaStartDate")
-    Log.d("Sahha", "analyze endDate $sahhaEndDate")
-    Sahha.analyze(Pair(sahhaStartDate, sahhaEndDate)) { error, value ->
+    Log.d("Sahha", "getScores startDate $sahhaStartDate")
+    Log.d("Sahha", "getScores endDate $sahhaEndDate")
+    Sahha.getScores(sahhaScoreTypes, Pair(sahhaStartDate, sahhaEndDate)) { error, value ->
       if (error == null && value == null) {
-        val message: String = "Sahha.analyzeDateRange() failed"
+        val message: String = "Sahha.getScoresDateRange() failed"
         body =
           "startDate: $startDate | endDate: $endDate | startDate: $sahhaStartDate | endDate: $sahhaEndDate"
         Sahha.postError(
           SahhaFramework.react_native,
           message,
           "SahhaReactNativeModule",
-          "analyzeDateRange",
+          "getScoresDateRange",
           body
         )
         callback.invoke(message, null)

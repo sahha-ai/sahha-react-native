@@ -13,6 +13,7 @@ import Sahha, {
   SahhaEnvironment,
   SahhaSensor,
   SahhaSensorStatus,
+  SahhaScoreType,
 } from 'sahha-react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Picker } from '@react-native-picker/picker';
@@ -41,8 +42,8 @@ function HomeScreen({ navigation }) {
       />
             <View style={styles.sectionDivider} />
             <Button
-        title="Analysis"
-        onPress={() => navigation.navigate('Analysis')}
+        title="Scores"
+        onPress={() => navigation.navigate('Scores')}
       />
             <View style={styles.sectionDivider} />
       <Button
@@ -412,20 +413,20 @@ function SensorScreen({ navigation }) {
   );
 }
 
-function AnalysisScreen({ navigation }) {
+function ScoresScreen({ navigation }) {
 
   const [jsonString, setJsonString] = useState('');
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={{ textAlign: 'center' }}>
-        A new analysis will be available every 24 hours
+        New scores will be available every 6 hours
       </Text>
       <View style={styles.divider} />
       <Button
-        title="ANALYZE PREVIOUS DAY"
+        title="GET SCORES PREVIOUS DAY"
         onPress={() => {
-          Sahha.analyze((error: string, value: string) => {
+          Sahha.getScores([SahhaScoreType.activity, SahhaScoreType.sleep, SahhaScoreType.wellbeing], (error: string, value: string) => {
             if (error) {
               console.error(`Error: ${error}`);
             } else if (value) {
@@ -437,13 +438,14 @@ function AnalysisScreen({ navigation }) {
       />
       <View style={styles.divider} />
       <Button
-        title="ANALYZE PREVIOUS WEEK"
+        title="GET SCORES PREVIOUS WEEK"
         onPress={() => {
           let endDate: Date = new Date();
           let days = endDate.getDate() - 7;
           var startDate = new Date();
           startDate.setDate(days);
-          Sahha.analyzeDateRange(
+          Sahha.getScoresDateRange(
+            [SahhaScoreType.activity, SahhaScoreType.sleep, SahhaScoreType.wellbeing],
             startDate.getTime(),
             endDate.getTime(),
             (error: string, value: string) => {
@@ -495,7 +497,7 @@ export default function App() {
         <Stack.Screen name="Authentication" component={AuthenticationScreen} />
         <Stack.Screen name="Profile" component={ProfileScreen} />
         <Stack.Screen name="Sensors" component={SensorScreen} />
-        <Stack.Screen name="Analysis" component={AnalysisScreen} />
+        <Stack.Screen name="Scores" component={ScoresScreen} />
         <Stack.Screen name="Insights" component={InsightsScreen} />
       </Stack.Navigator>
     </NavigationContainer>

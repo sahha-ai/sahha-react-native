@@ -75,6 +75,14 @@ export enum SahhaSensorStatus {
   enabled = 3, /// Sensor data has been enabled by the User
 }
 
+export enum SahhaScoreType {
+  wellbeing = 'wellbeing',
+  activity = 'activity',
+  sleep = 'sleep',
+  readiness = 'readiness',
+  mental_wellbeing = 'mental_wellbeing',
+}
+
 const Sahha = NativeModules.SahhaReactNative;
 
 interface SahhaInterface {
@@ -88,8 +96,8 @@ interface SahhaInterface {
   postDemographic(demographic: Object, callback: (error: string, success: boolean)=>void):void;
   getSensorStatus(sensors: Array<SahhaSensor>, callback: (error: string, value: SahhaSensorStatus)=>void):void;
   enableSensors(sensors: Array<SahhaSensor>, callback: (error: string, value: SahhaSensorStatus)=>void):void;
-  analyze(callback: (error: string, value: string)=>void):void;
-  analyzeDateRange(startDate: number, endDate: number, callback: (error: string, value: string)=>void):void;
+  getScores(types: Array<SahhaScoreType>, callback: (error: string, value: string)=>void):void;
+  getScoresDateRange(types: Array<SahhaScoreType>, startDate: number, endDate: number, callback: (error: string, value: string)=>void):void;
   openAppSettings():void;
 }
 

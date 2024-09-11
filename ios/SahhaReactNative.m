@@ -22,9 +22,9 @@ RCT_EXTERN_METHOD(getSensorStatus:(NSArray *)sensors callback:(RCTResponseSender
 
 RCT_EXTERN_METHOD(enableSensors:(NSArray *)sensors callback:(RCTResponseSenderBlock)callback)
 
-RCT_EXTERN_METHOD(analyze:(RCTResponseSenderBlock)callback)
+RCT_EXTERN_METHOD(getScores:(NSArray *)types callback:(RCTResponseSenderBlock)callback)
 
-RCT_EXTERN_METHOD(analyzeDateRange:(nonnull NSNumber *)startDate endDate:(nonnull NSNumber *)endDate  callback:(RCTResponseSenderBlock)callback)
+RCT_EXTERN_METHOD(getScoresDateRange:(NSArray *)types startDate:(nonnull NSNumber *)startDate endDate:(nonnull NSNumber *)endDate  callback:(RCTResponseSenderBlock)callback)
 
 RCT_EXTERN_METHOD(openAppSettings)
 
