@@ -499,7 +499,7 @@ PODS:
     - React-Core
     - React-RCTImage
   - Sahha (1.0.0)
-  - sahha-react-native (1.0.0):
+  - sahha-react-native (1.0.1):
     - React-Core
     - Sahha (= 1.0.0)
   - SocketRocket (0.6.1)
@@ -745,7 +745,7 @@ SPEC CHECKSUMS:
   RNCPicker: f58e790450cb0a74c09dd1c677bd1de41a5741b9
   RNScreens: b8d370282cdeae9df85dd5eab20c88eb5181243b
   Sahha: 8e783be3ddbf40857ae751b64b52b544f51d37da
-  sahha-react-native: 53825483bf18b4f4e727bc0c274c53339aaa6dd5
+  sahha-react-native: 2a25bbc07225ccaa20d863e35e9b45f608e4cb9e
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   Yoga: c32e0be1a17f8f1f0e633a3122f7666441f52c82
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
