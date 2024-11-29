@@ -1,10 +1,25 @@
 package com.sahhareactnative
 
 import android.util.Log
-import com.facebook.react.bridge.*
+import com.facebook.react.bridge.Callback
+import com.facebook.react.bridge.ReactApplicationContext
+import com.facebook.react.bridge.ReactContextBaseJavaModule
+import com.facebook.react.bridge.ReactMethod
+import com.facebook.react.bridge.ReadableArray
+import com.facebook.react.bridge.ReadableMap
 import com.google.gson.Gson
-import sdk.sahha.android.source.*
-import java.util.*
+import sdk.sahha.android.source.Sahha
+import sdk.sahha.android.source.SahhaBiomarkerCategory
+import sdk.sahha.android.source.SahhaBiomarkerType
+import sdk.sahha.android.source.SahhaConverterUtility
+import sdk.sahha.android.source.SahhaDemographic
+import sdk.sahha.android.source.SahhaEnvironment
+import sdk.sahha.android.source.SahhaFramework
+import sdk.sahha.android.source.SahhaNotificationConfiguration
+import sdk.sahha.android.source.SahhaScoreType
+import sdk.sahha.android.source.SahhaSensor
+import sdk.sahha.android.source.SahhaSettings
+import java.util.Date
 
 class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
   ReactContextBaseJavaModule(reactContext) {
@@ -56,10 +71,10 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
     // Notification config ends
 
     var sahhaSettings: SahhaSettings = SahhaSettings(
-        environment = sahhaEnvironment,
-        notificationSettings = sahhaNotificationConfiguration,
-        framework = SahhaFramework.react_native
-      )
+      environment = sahhaEnvironment,
+      notificationSettings = sahhaNotificationConfiguration,
+      framework = SahhaFramework.react_native
+    )
 
     var app = currentActivity?.application
 
@@ -181,7 +196,7 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
   @ReactMethod
   fun getScores(
     types: ReadableArray,
-    callback: Callback
+    callback: Callback,
   ) {
     val sahhaScoreTypes = types.toArrayList().map { SahhaScoreType.valueOf(it as String) }.toSet()
     Sahha.getScores(sahhaScoreTypes) { error, value ->
@@ -196,7 +211,12 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
   }
 
   @ReactMethod
-  fun getScoresDateRange(types: ReadableArray, startDate: Double, endDate: Double, callback: Callback) {
+  fun getScoresDateRange(
+    types: ReadableArray,
+    startDate: Double,
+    endDate: Double,
+    callback: Callback,
+  ) {
     val sahhaScoreTypes = types.toArrayList().map { SahhaScoreType.valueOf(it as String) }.toSet()
 
     val sahhaStartDate: Date
@@ -231,6 +251,76 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
           message,
           "SahhaReactNativeModule",
           "getScoresDateRange",
+          body
+        )
+        callback.invoke(message, null)
+      } else {
+        callback.invoke(error, value)
+      }
+    }
+  }
+
+  @ReactMethod
+  fun getBiomarkers(
+    categories: ReadableArray,
+    types: ReadableArray,
+    callback: Callback,
+  ) {
+    val sahhaBiomarkerCategories = categories.toArrayList().map { SahhaBiomarkerCategory.valueOf(it as String) }.toSet()
+    val sahhaBiomarkerTypes = types.toArrayList().map { SahhaBiomarkerType.valueOf(it as String) }.toSet()
+    Sahha.getBiomarkers(sahhaBiomarkerCategories, sahhaBiomarkerTypes) { error, value ->
+      if (error == null && value == null) {
+        val message: String = "Sahha.getBiomarkers() failed"
+        Sahha.postError(SahhaFramework.react_native, message, "SahhaReactNativeModule", "getBiomarkers")
+        callback.invoke(message, null)
+      } else {
+        callback.invoke(error, value)
+      }
+    }
+  }
+
+  @ReactMethod
+  fun getBiomarkersDateRange(
+    categories: ReadableArray,
+    types: ReadableArray,
+    startDate: Double,
+    endDate: Double,
+    callback: Callback,
+  ) {
+    val sahhaBiomarkerCategories = categories.toArrayList().map { SahhaBiomarkerCategory.valueOf(it as String) }.toSet()
+    val sahhaBiomarkerTypes = types.toArrayList().map { SahhaBiomarkerType.valueOf(it as String) }.toSet()
+    val sahhaStartDate: Date
+    val sahhaEndDate: Date
+    var body: String = "startDate: $startDate | endDate: $endDate"
+
+    try {
+      sahhaStartDate = Date(startDate.toLong())
+      sahhaEndDate = Date(endDate.toLong())
+    } catch (e: IllegalArgumentException) {
+      val message: String = "Sahha.getBiomarkersDateRange() parameters invalid"
+      Sahha.postError(
+        SahhaFramework.react_native,
+        message,
+        "SahhaReactNativeModule",
+        "getBiomarkersDateRange",
+        body
+      )
+      callback.invoke(message, null)
+      return
+    }
+
+    Log.d("Sahha", "getBiomarkersDateRange startDate $sahhaStartDate")
+    Log.d("Sahha", "getBiomarkersDateRange endDate $sahhaEndDate")
+    Sahha.getBiomarkers(sahhaBiomarkerCategories, sahhaBiomarkerTypes, Pair(sahhaStartDate, sahhaEndDate)) { error, value ->
+      if (error == null && value == null) {
+        val message: String = "Sahha.getBiomarkersDateRange() failed"
+        body =
+          "startDate: $startDate | endDate: $endDate | startDate: $sahhaStartDate | endDate: $sahhaEndDate"
+        Sahha.postError(
+          SahhaFramework.react_native,
+          message,
+          "SahhaReactNativeModule",
+          "getBiomarkersDateRange",
           body
         )
         callback.invoke(message, null)
