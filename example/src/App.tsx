@@ -7,7 +7,6 @@ import {
   ScrollView,
   Button,
   TextInput,
-  ActivityIndicator,
 } from 'react-native';
 import Sahha, {
   SahhaEnvironment,
@@ -25,7 +24,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 const Stack = createNativeStackNavigator();
 
-function HomeScreen({ navigation }) {
+function HomeScreen({ navigation }: any) {
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Button
@@ -52,7 +51,7 @@ function HomeScreen({ navigation }) {
   );
 }
 
-function AuthenticationScreen({ navigation }) {
+function AuthenticationScreen() {
   const isFirstRender = useRef(true);
   const [isAuth, setIsAuth] = useState<boolean>(false);
   const [appId, setAppId] = useState<string>('');
@@ -175,7 +174,7 @@ function AuthenticationScreen({ navigation }) {
   );
 }
 
-function InsightsScreen({ navigation, ...props }) {
+function InsightsScreen() {
   const [profileToken, setProfileToken] = useState<string>('');
 
   useEffect(() => {
@@ -203,7 +202,7 @@ function InsightsScreen({ navigation, ...props }) {
   );
 }
 
-function ProfileScreen({ navigation }) {
+function ProfileScreen() {
   const [age, setAge] = useState<string>('');
   const [ageNumber, setAgeNumber] = useState<number>();
   const [gender, setGender] = useState<string>('Male');
@@ -218,7 +217,7 @@ function ProfileScreen({ navigation }) {
       const _age = await AsyncStorage.getItem('@age');
       if (_age !== null) {
         setAge(_age);
-        let ageInt = parseInt(_age);
+        let ageInt = parseInt(_age, 10);
         if (ageInt) {
           setAgeNumber(ageInt);
         }
@@ -266,7 +265,7 @@ function ProfileScreen({ navigation }) {
         keyboardType="numbers-and-punctuation"
         maxLength={3}
         onChangeText={(value) => {
-          let ageInt = parseInt(value);
+          let ageInt = parseInt(value, 10);
           if (ageInt) {
             console.log(ageInt.toString());
             setAge(ageInt.toString());
@@ -311,7 +310,7 @@ function ProfileScreen({ navigation }) {
   );
 }
 
-function SensorScreen({ navigation }) {
+function SensorScreen() {
   const [sensorStatus, setSensorStatus] = useState<SahhaSensorStatus>(
     SahhaSensorStatus.pending
   );
@@ -421,7 +420,7 @@ function SensorScreen({ navigation }) {
   );
 }
 
-function ScoresScreen({ navigation }) {
+function ScoresScreen() {
   const [jsonString, setJsonString] = useState('');
 
   return (
@@ -443,7 +442,9 @@ function ScoresScreen({ navigation }) {
               if (error) {
                 console.error(`Error: ${error}`);
               } else if (value) {
-                console.log(`Value: ${value}`);
+                // console.log(`Value: ${value}`);
+                const jsonArray = JSON.parse(value);
+                console.log(jsonArray[0]);
                 setJsonString(value);
               }
             }
@@ -470,7 +471,9 @@ function ScoresScreen({ navigation }) {
               if (error) {
                 console.error(`Error: ${error}`);
               } else if (value) {
-                console.log(`Value: ${value}`);
+                // console.log(`Value: ${value}`);
+                const jsonArray = JSON.parse(value);
+                console.log(jsonArray[0]);
                 setJsonString(value);
               }
             }
@@ -483,7 +486,7 @@ function ScoresScreen({ navigation }) {
   );
 }
 
-function BiomarkersScreen({ navigation }) {
+function BiomarkersScreen() {
   const [jsonString, setJsonString] = useState('');
 
   return (
@@ -511,7 +514,8 @@ function BiomarkersScreen({ navigation }) {
               if (error) {
                 console.error(`Error: ${error}`);
               } else if (value) {
-                console.log(`Value: ${value}`);
+                const jsonArray = JSON.parse(value);
+                console.log(jsonArray[0]);
                 setJsonString(value);
               }
             }
@@ -544,7 +548,8 @@ function BiomarkersScreen({ navigation }) {
               if (error) {
                 console.error(`Error: ${error}`);
               } else if (value) {
-                console.log(`Value: ${value}`);
+                const jsonArray = JSON.parse(value);
+                console.log(jsonArray[0]);
                 setJsonString(value);
               }
             }
