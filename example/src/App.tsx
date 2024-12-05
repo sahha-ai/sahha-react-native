@@ -7,13 +7,14 @@ import {
   ScrollView,
   Button,
   TextInput,
-  ActivityIndicator
 } from 'react-native';
 import Sahha, {
   SahhaEnvironment,
   SahhaSensor,
   SahhaSensorStatus,
   SahhaScoreType,
+  SahhaBiomarkerCategory,
+  SahhaBiomarkerType,
 } from 'sahha-react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Picker } from '@react-native-picker/picker';
@@ -23,29 +24,25 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 const Stack = createNativeStackNavigator();
 
-function HomeScreen({ navigation }) {
+function HomeScreen({ navigation }: any) {
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Button
         title="Authentication"
         onPress={() => navigation.navigate('Authentication')}
       />
-            <View style={styles.sectionDivider} />
-            <Button
-        title="Profile"
-        onPress={() => navigation.navigate('Profile')}
+      <View style={styles.sectionDivider} />
+      <Button title="Profile" onPress={() => navigation.navigate('Profile')} />
+      <View style={styles.sectionDivider} />
+      <Button title="Sensors" onPress={() => navigation.navigate('Sensors')} />
+      <View style={styles.sectionDivider} />
+      <Button title="Scores" onPress={() => navigation.navigate('Scores')} />
+      <View style={styles.sectionDivider} />
+      <Button
+        title="Biomarkers"
+        onPress={() => navigation.navigate('Biomarkers')}
       />
-            <View style={styles.sectionDivider} />
-            <Button
-        title="Sensors"
-        onPress={() => navigation.navigate('Sensors')}
-      />
-            <View style={styles.sectionDivider} />
-            <Button
-        title="Scores"
-        onPress={() => navigation.navigate('Scores')}
-      />
-            <View style={styles.sectionDivider} />
+      <View style={styles.sectionDivider} />
       <Button
         title="Insights"
         onPress={() => navigation.navigate('Insights')}
@@ -54,8 +51,7 @@ function HomeScreen({ navigation }) {
   );
 }
 
-function AuthenticationScreen({ navigation }) {
-
+function AuthenticationScreen() {
   const isFirstRender = useRef(true);
   const [isAuth, setIsAuth] = useState<boolean>(false);
   const [appId, setAppId] = useState<string>('');
@@ -85,7 +81,7 @@ function AuthenticationScreen({ navigation }) {
       console.error(error);
     }
   };
-  
+
   useEffect(() => {
     if (isFirstRender.current) {
       getAuthPrefs();
@@ -143,47 +139,45 @@ function AuthenticationScreen({ navigation }) {
   }
 
   return (
-<ScrollView contentContainerStyle={styles.container}>
-<Text>App ID</Text>
-<TextInput
-  style={styles.input}
-  onChangeText={setAppId}
-  value={appId}
-  placeholder="ABC123"
-  clearButtonMode="always"
-/>
-<Text>App Secret</Text>
-<TextInput
-  style={styles.input}
-  onChangeText={setAppSecret}
-  value={appSecret}
-  placeholder="ABC123"
-  clearButtonMode="always"
-/>
-<Text>External ID</Text>
-<TextInput
-  style={styles.input}
-  onChangeText={setExternalId}
-  value={externalId}
-  placeholder="ABC123"
-  clearButtonMode="always"
-/>
-<Button title="AUTHENTICATE" onPress={onPressAuthenticate} />
-<Text>
-  {isAuth ? 'You are authenticated' : 'You are not authenticated'}
-</Text>
-<View style={styles.divider} />
-<Button title="DEAUTHENTICATE" onPress={onPressDelete} />
-</ScrollView>
+    <ScrollView contentContainerStyle={styles.container}>
+      <Text>App ID</Text>
+      <TextInput
+        style={styles.input}
+        onChangeText={setAppId}
+        value={appId}
+        placeholder="ABC123"
+        clearButtonMode="always"
+      />
+      <Text>App Secret</Text>
+      <TextInput
+        style={styles.input}
+        onChangeText={setAppSecret}
+        value={appSecret}
+        placeholder="ABC123"
+        clearButtonMode="always"
+      />
+      <Text>External ID</Text>
+      <TextInput
+        style={styles.input}
+        onChangeText={setExternalId}
+        value={externalId}
+        placeholder="ABC123"
+        clearButtonMode="always"
+      />
+      <Button title="AUTHENTICATE" onPress={onPressAuthenticate} />
+      <Text>
+        {isAuth ? 'You are authenticated' : 'You are not authenticated'}
+      </Text>
+      <View style={styles.divider} />
+      <Button title="DEAUTHENTICATE" onPress={onPressDelete} />
+    </ScrollView>
   );
 }
 
-function InsightsScreen({ navigation, ...props  }) {
-
+function InsightsScreen() {
   const [profileToken, setProfileToken] = useState<string>('');
 
   useEffect(() => {
-
     Sahha.getProfileToken((error: string, token?: string) => {
       if (error) {
         console.error(`Error: ${error}`);
@@ -193,22 +187,22 @@ function InsightsScreen({ navigation, ...props  }) {
         console.log(`Profile Token: null`);
       }
     });
-    
   }, []);
 
-
   return (
-    <WebView style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} source={{
-      uri: "https://sandbox.webview.sahha.ai/app",
-      headers: {
-        'Authorization': profileToken,
-      }
-    }}  />
+    <WebView
+      style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
+      source={{
+        uri: 'https://sandbox.webview.sahha.ai/app',
+        headers: {
+          Authorization: profileToken,
+        },
+      }}
+    />
   );
 }
 
-function ProfileScreen({ navigation }) {
-
+function ProfileScreen() {
   const [age, setAge] = useState<string>('');
   const [ageNumber, setAgeNumber] = useState<number>();
   const [gender, setGender] = useState<string>('Male');
@@ -223,7 +217,7 @@ function ProfileScreen({ navigation }) {
       const _age = await AsyncStorage.getItem('@age');
       if (_age !== null) {
         setAge(_age);
-        let ageInt = parseInt(_age);
+        let ageInt = parseInt(_age, 10);
         if (ageInt) {
           setAgeNumber(ageInt);
         }
@@ -265,156 +259,168 @@ function ProfileScreen({ navigation }) {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-    <Text>AGE</Text>
-    <TextInput
-      style={styles.input}
-      keyboardType="numbers-and-punctuation"
-      maxLength={3}
-      onChangeText={(value) => {
-        let ageInt = parseInt(value);
-        if (ageInt) {
-          console.log(ageInt.toString());
-          setAge(ageInt.toString());
-          setAgeNumber(ageInt);
-        } else {
-          console.log('bad int');
-          setAge('');
-          setAgeNumber(undefined);
-        }
-      }}
-      value={age}
-      placeholder="1 - 100"
-      clearButtonMode="always"
-    />
-    <Text>GENDER</Text>
-    <Picker
-      style={{ height: 200, width: '80%' }}
-      selectedValue={gender}
-      onValueChange={(itemValue) => {
-        setGender(itemValue);
-      }}
-    >
-      <Picker.Item label="Male" value={'Male'} />
-      <Picker.Item label="Female" value={'Female'} />
-      <Picker.Item label="Gender Diverse" value={'Gender Diverse'} />
-    </Picker>
-    <Button title="SAVE PROFILE" onPress={saveProfilePrefs} />
-    <View style={styles.divider} />
-    <Button
-      title={'GET DEMOGRAPHIC'}
-      onPress={() => {
-        Sahha.getDemographic((error: string, demographic?: string) => {
-          if (error) {
-            console.error(`Error: ${error}`);
-          } else if (demographic) {
-            console.log(`Demographic: ${demographic}`);
+      <Text>AGE</Text>
+      <TextInput
+        style={styles.input}
+        keyboardType="numbers-and-punctuation"
+        maxLength={3}
+        onChangeText={(value) => {
+          let ageInt = parseInt(value, 10);
+          if (ageInt) {
+            console.log(ageInt.toString());
+            setAge(ageInt.toString());
+            setAgeNumber(ageInt);
+          } else {
+            console.log('bad int');
+            setAge('');
+            setAgeNumber(undefined);
           }
-        });
-      }}
-    /></ScrollView>
+        }}
+        value={age}
+        placeholder="1 - 100"
+        clearButtonMode="always"
+      />
+      <Text>GENDER</Text>
+      <Picker
+        style={{ height: 200, width: '80%' }}
+        selectedValue={gender}
+        onValueChange={(itemValue) => {
+          setGender(itemValue);
+        }}
+      >
+        <Picker.Item label="Male" value={'Male'} />
+        <Picker.Item label="Female" value={'Female'} />
+        <Picker.Item label="Gender Diverse" value={'Gender Diverse'} />
+      </Picker>
+      <Button title="SAVE PROFILE" onPress={saveProfilePrefs} />
+      <View style={styles.divider} />
+      <Button
+        title={'GET DEMOGRAPHIC'}
+        onPress={() => {
+          Sahha.getDemographic((error: string, demographic?: string) => {
+            if (error) {
+              console.error(`Error: ${error}`);
+            } else if (demographic) {
+              console.log(`Demographic: ${demographic}`);
+            }
+          });
+        }}
+      />
+    </ScrollView>
   );
 }
 
-function SensorScreen({ navigation }) {
-
+function SensorScreen() {
   const [sensorStatus, setSensorStatus] = useState<SahhaSensorStatus>(
     SahhaSensorStatus.pending
   );
 
-    useEffect(() => {
-      console.log('getAllSensorStatus');
-    Sahha.getSensorStatus([SahhaSensor.step_count, SahhaSensor.sleep], (error: string, value: SahhaSensorStatus) => {
-      if (error) {
-        console.error(`Error: ${error}`);
-      } else {
-        console.log(`Sensor Status: ${value}`);
-        // Set sensor status to value
-        setSensorStatus(value);
+  useEffect(() => {
+    console.log('getAllSensorStatus');
+    Sahha.getSensorStatus(
+      [SahhaSensor.step_count, SahhaSensor.sleep],
+      (error: string, value: SahhaSensorStatus) => {
+        if (error) {
+          console.error(`Error: ${error}`);
+        } else {
+          console.log(`Sensor Status: ${value}`);
+          // Set sensor status to value
+          setSensorStatus(value);
+        }
       }
-    });
+    );
   }, []);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.heading}>SENSOR STATUS</Text>
-    <Picker
-      style={{ height: 200, width: '80%' }}
-      enabled={false}
-      selectedValue={sensorStatus}
-    >
-      <Picker.Item label="Pending" value={0} />
-      <Picker.Item label="Unavailable" value={1} />
-      <Picker.Item label="Disabled" value={2} />
-      <Picker.Item label="Enabled" value={3} />
-    </Picker>
-    <Button
-      title="GET EMPTY SENSORS"
-      onPress={() => {
-        console.log("GET EMPTY SENSORS");
-        Sahha.getSensorStatus([], (error: string, value: SahhaSensorStatus) => {
-          if (error) {
-            console.error(`Error: ${error}`);
-          } else {
-            console.log(`Sensor Status: ${value}`);
-            setSensorStatus(value);
-          }
-        });
-      }}
-    />
-    <Button
-      title="GET SOME SENSORS"
-      onPress={() => {
-        console.log("GET SOME SENSORS");
-        Sahha.getSensorStatus([SahhaSensor.step_count, SahhaSensor.sleep], (error: string, value: SahhaSensorStatus) => {
-          if (error) {
-            console.error(`Error: ${error}`);
-          } else {
-            console.log(`Sensor Status: ${value}`);
-            setSensorStatus(value);
-          }
-        });
-      }}
-    />
-    <Button
-      title="ENABLE EMPTY SENSORS"
-      onPress={() => {
-        console.log("ENABLE EMPTY SENSORS");
-        Sahha.enableSensors([], (error: string, value: SahhaSensorStatus) => {
-          if (error) {
-            console.error(`Error: ${error}`);
-          } else {
-            console.log(`Sensor Status: ${value}`);
-            setSensorStatus(value);
-          }
-        });
-      }}
-    />
-    <Button
-      title="ENABLE SOME SENSORS"
-      onPress={() => {
-        console.log("ENABLE SOME SENSORS");
-        Sahha.enableSensors([SahhaSensor.step_count, SahhaSensor.sleep], (error: string, value: SahhaSensorStatus) => {
-          if (error) {
-            console.error(`Error: ${error}`);
-          } else {
-            console.log(`Sensor Status: ${value}`);
-            setSensorStatus(value);
-          }
-        });
-      }}
-    />
-    <View style={styles.divider} />
-    <Button
-      title={'OPEN APP SETTINGS'}
-      onPress={() => {
-        Sahha.openAppSettings();
-      }}
-    /></ScrollView>
+      <Picker
+        style={{ height: 200, width: '80%' }}
+        enabled={false}
+        selectedValue={sensorStatus}
+      >
+        <Picker.Item label="Pending" value={0} />
+        <Picker.Item label="Unavailable" value={1} />
+        <Picker.Item label="Disabled" value={2} />
+        <Picker.Item label="Enabled" value={3} />
+      </Picker>
+      <Button
+        title="GET EMPTY SENSORS"
+        onPress={() => {
+          console.log('GET EMPTY SENSORS');
+          Sahha.getSensorStatus(
+            [],
+            (error: string, value: SahhaSensorStatus) => {
+              if (error) {
+                console.error(`Error: ${error}`);
+              } else {
+                console.log(`Sensor Status: ${value}`);
+                setSensorStatus(value);
+              }
+            }
+          );
+        }}
+      />
+      <Button
+        title="GET SOME SENSORS"
+        onPress={() => {
+          console.log('GET SOME SENSORS');
+          Sahha.getSensorStatus(
+            [SahhaSensor.step_count, SahhaSensor.sleep],
+            (error: string, value: SahhaSensorStatus) => {
+              if (error) {
+                console.error(`Error: ${error}`);
+              } else {
+                console.log(`Sensor Status: ${value}`);
+                setSensorStatus(value);
+              }
+            }
+          );
+        }}
+      />
+      <Button
+        title="ENABLE EMPTY SENSORS"
+        onPress={() => {
+          console.log('ENABLE EMPTY SENSORS');
+          Sahha.enableSensors([], (error: string, value: SahhaSensorStatus) => {
+            if (error) {
+              console.error(`Error: ${error}`);
+            } else {
+              console.log(`Sensor Status: ${value}`);
+              setSensorStatus(value);
+            }
+          });
+        }}
+      />
+      <Button
+        title="ENABLE SOME SENSORS"
+        onPress={() => {
+          console.log('ENABLE SOME SENSORS');
+          Sahha.enableSensors(
+            [SahhaSensor.step_count, SahhaSensor.sleep],
+            (error: string, value: SahhaSensorStatus) => {
+              if (error) {
+                console.error(`Error: ${error}`);
+              } else {
+                console.log(`Sensor Status: ${value}`);
+                setSensorStatus(value);
+              }
+            }
+          );
+        }}
+      />
+      <View style={styles.divider} />
+      <Button
+        title={'OPEN APP SETTINGS'}
+        onPress={() => {
+          Sahha.openAppSettings();
+        }}
+      />
+    </ScrollView>
   );
 }
 
-function ScoresScreen({ navigation }) {
-
+function ScoresScreen() {
   const [jsonString, setJsonString] = useState('');
 
   return (
@@ -426,14 +432,23 @@ function ScoresScreen({ navigation }) {
       <Button
         title="GET SCORES PREVIOUS DAY"
         onPress={() => {
-          Sahha.getScores([SahhaScoreType.activity, SahhaScoreType.sleep, SahhaScoreType.wellbeing], (error: string, value: string) => {
-            if (error) {
-              console.error(`Error: ${error}`);
-            } else if (value) {
-              console.log(`Value: ${value}`);
-              setJsonString(value);
+          Sahha.getScores(
+            [
+              SahhaScoreType.activity,
+              SahhaScoreType.sleep,
+              SahhaScoreType.wellbeing,
+            ],
+            (error: string, value: string) => {
+              if (error) {
+                console.error(`Error: ${error}`);
+              } else if (value) {
+                // console.log(`Value: ${value}`);
+                const jsonArray = JSON.parse(value);
+                console.log(jsonArray[0]);
+                setJsonString(value);
+              }
             }
-          });
+          );
         }}
       />
       <View style={styles.divider} />
@@ -445,14 +460,96 @@ function ScoresScreen({ navigation }) {
           var startDate = new Date();
           startDate.setDate(days);
           Sahha.getScoresDateRange(
-            [SahhaScoreType.activity, SahhaScoreType.sleep, SahhaScoreType.wellbeing],
+            [
+              SahhaScoreType.activity,
+              SahhaScoreType.sleep,
+              SahhaScoreType.wellbeing,
+            ],
             startDate.getTime(),
             endDate.getTime(),
             (error: string, value: string) => {
               if (error) {
                 console.error(`Error: ${error}`);
               } else if (value) {
-                console.log(`Value: ${value}`);
+                // console.log(`Value: ${value}`);
+                const jsonArray = JSON.parse(value);
+                console.log(jsonArray[0]);
+                setJsonString(value);
+              }
+            }
+          );
+        }}
+      />
+      <View style={styles.divider} />
+      <Text>{jsonString}</Text>
+    </ScrollView>
+  );
+}
+
+function BiomarkersScreen() {
+  const [jsonString, setJsonString] = useState('');
+
+  return (
+    <ScrollView contentContainerStyle={styles.container}>
+      <Text style={{ textAlign: 'center' }}>
+        New biomarkers will be available every 6 hours
+      </Text>
+      <View style={styles.divider} />
+      <Button
+        title="GET BIOMARKERS PREVIOUS DAY"
+        onPress={() => {
+          Sahha.getBiomarkers(
+            [
+              SahhaBiomarkerCategory.activity,
+              SahhaBiomarkerCategory.sleep,
+              SahhaBiomarkerCategory.vitals,
+            ],
+            [
+              SahhaBiomarkerType.steps,
+              SahhaBiomarkerType.sleep_in_bed_duration,
+              SahhaBiomarkerType.heart_rate_resting,
+              SahhaBiomarkerType.heart_rate_sleep,
+            ],
+            (error: string, value: string) => {
+              if (error) {
+                console.error(`Error: ${error}`);
+              } else if (value) {
+                const jsonArray = JSON.parse(value);
+                console.log(jsonArray[0]);
+                setJsonString(value);
+              }
+            }
+          );
+        }}
+      />
+      <View style={styles.divider} />
+      <Button
+        title="GET BIOMARKERS PREVIOUS WEEK"
+        onPress={() => {
+          let endDate: Date = new Date();
+          let days = endDate.getDate() - 7;
+          var startDate = new Date();
+          startDate.setDate(days);
+          Sahha.getBiomarkersDateRange(
+            [
+              SahhaBiomarkerCategory.activity,
+              SahhaBiomarkerCategory.sleep,
+              SahhaBiomarkerCategory.vitals,
+            ],
+            [
+              SahhaBiomarkerType.steps,
+              SahhaBiomarkerType.sleep_in_bed_duration,
+              SahhaBiomarkerType.heart_rate_resting,
+              SahhaBiomarkerType.heart_rate_sleep,
+            ],
+            startDate.getTime(),
+            endDate.getTime(),
+            (error: string, value: string) => {
+              if (error) {
+                console.error(`Error: ${error}`);
+              } else if (value) {
+                const jsonArray = JSON.parse(value);
+                console.log(jsonArray[0]);
                 setJsonString(value);
               }
             }
@@ -466,7 +563,6 @@ function ScoresScreen({ navigation }) {
 }
 
 export default function App() {
-
   useEffect(() => {
     console.log('hello');
 
@@ -493,11 +589,16 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Sahha React Native Demo' }} />
+        <Stack.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{ title: 'Sahha React Native Demo' }}
+        />
         <Stack.Screen name="Authentication" component={AuthenticationScreen} />
         <Stack.Screen name="Profile" component={ProfileScreen} />
         <Stack.Screen name="Sensors" component={SensorScreen} />
         <Stack.Screen name="Scores" component={ScoresScreen} />
+        <Stack.Screen name="Biomarkers" component={BiomarkersScreen} />
         <Stack.Screen name="Insights" component={InsightsScreen} />
       </Stack.Navigator>
     </NavigationContainer>
