@@ -33,8 +33,8 @@
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
     "prepack": "bob build",
     "release": "release-it",
-    "example": "yarn --cwd example",
-    "bootstrap": "yarn example && yarn install && yarn example pods",
+    "example": "npm install --prefix example",
+    "bootstrap": "npm run example && npm install && npm run pods --prefix example",
     "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build"
   },
   "keywords": [
