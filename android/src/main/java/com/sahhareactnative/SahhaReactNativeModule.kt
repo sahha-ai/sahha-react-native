@@ -9,6 +9,9 @@ import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonPrimitive
+import com.google.gson.JsonSerializer
 import sdk.sahha.android.source.Sahha
 import sdk.sahha.android.source.SahhaBiomarkerCategory
 import sdk.sahha.android.source.SahhaBiomarkerType
@@ -20,6 +23,7 @@ import sdk.sahha.android.source.SahhaNotificationConfiguration
 import sdk.sahha.android.source.SahhaScoreType
 import sdk.sahha.android.source.SahhaSensor
 import sdk.sahha.android.source.SahhaSettings
+import java.time.ZonedDateTime
 import java.util.Date
 
 class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
@@ -330,7 +334,10 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
 
     Log.d("Sahha", "getStats startDate $sahhaStartDate")
     Log.d("Sahha", "getStats endDate $sahhaEndDate")
-    Sahha.getStats(SahhaSensor.valueOf(sensor), Pair(sahhaStartDate, sahhaEndDate)) { error, value ->
+    Sahha.getStats(
+      SahhaSensor.valueOf(sensor),
+      Pair(sahhaStartDate, sahhaEndDate)
+    ) { error, value ->
       if (error == null && value == null) {
         val message: String = "Sahha.getStats() failed"
         body =
@@ -344,12 +351,18 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
         )
         callback.invoke(message, null)
       } else if (value != null) {
-        val gson = Gson()
+        val gson = GsonBuilder()
+          .registerTypeAdapter(
+            ZonedDateTime::class.java,
+            JsonSerializer<ZonedDateTime> { src, _, _ ->
+              JsonPrimitive(src.toString())
+            }
+          ).create()
         val string: String = gson.toJson(value)
         Log.d("Sahha", string)
         callback.invoke(null, string)
       } else {
-        callback.invoke("No stats available for" + sensor, null)
+        callback.invoke("No stats available for $sensor", null)
       }
     }
   }

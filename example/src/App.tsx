@@ -43,10 +43,7 @@ function HomeScreen({ navigation }: any) {
         onPress={() => navigation.navigate('Biomarkers')}
       />
       <View style={styles.sectionDivider} />
-      <Button
-        title="Stats"
-        onPress={() => navigation.navigate('Stats')}
-      />
+      <Button title="Stats" onPress={() => navigation.navigate('Stats')} />
       <View style={styles.sectionDivider} />
       <Button
         title="Insights"
@@ -495,7 +492,7 @@ function ScoresScreen() {
         title="GET SCORES TODAY"
         onPress={() => {
           let date = new Date();
-          Sahha.getScores(
+          Sahha.getScoresDateRange(
             [
               SahhaScoreType.activity,
               SahhaScoreType.sleep,
@@ -524,7 +521,7 @@ function ScoresScreen() {
           let days = endDate.getDate() - 7;
           var startDate = new Date();
           startDate.setDate(days);
-          Sahha.getScores(
+          Sahha.getScoresDateRange(
             [
               SahhaScoreType.activity,
               SahhaScoreType.sleep,
@@ -564,7 +561,7 @@ function BiomarkersScreen() {
         title="GET BIOMARKERS TODAY"
         onPress={() => {
           let date: Date = new Date();
-          Sahha.getBiomarkers(
+          Sahha.getBiomarkersDateRange(
             [
               SahhaBiomarkerCategory.activity,
               SahhaBiomarkerCategory.sleep,
@@ -598,7 +595,7 @@ function BiomarkersScreen() {
           let days = endDate.getDate() - 7;
           var startDate = new Date();
           startDate.setDate(days);
-          Sahha.getBiomarkers(
+          Sahha.getBiomarkersDateRange(
             [
               SahhaBiomarkerCategory.activity,
               SahhaBiomarkerCategory.sleep,

@@ -32,7 +32,7 @@ export enum SahhaSensor {
   date_of_birth = 'date_of_birth',
   sleep = 'sleep',
   steps = 'steps',
-  floors = 'floors',
+  floors_climbed = 'floors_climbed',
   heart_rate = 'heart_rate',
   resting_heart_rate = 'resting_heart_rate',
   walking_heart_rate_average = 'walking_heart_rate_average',
