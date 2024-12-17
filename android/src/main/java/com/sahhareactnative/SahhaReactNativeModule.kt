@@ -320,7 +320,7 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
       sahhaStartDate = Date(startDate.toLong())
       sahhaEndDate = Date(endDate.toLong())
     } catch (e: IllegalArgumentException) {
-      val message: String = "Sahha.getScores() parameters invalid"
+      val message: String = "Sahha.getStats() parameters invalid"
       Sahha.postError(
         SahhaFramework.react_native,
         message,
