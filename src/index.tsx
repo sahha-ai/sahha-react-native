@@ -188,20 +188,11 @@ interface SahhaInterface {
   ): void;
   getScores(
     types: Array<SahhaScoreType>,
-    callback: (error: string, value: string) => void
-  ): void;
-  getScoresDateRange(
-    types: Array<SahhaScoreType>,
     startDate: number,
     endDate: number,
     callback: (error: string, value: string) => void
   ): void;
   getBiomarkers(
-    categories: Array<SahhaBiomarkerCategory>,
-    types: Array<SahhaBiomarkerType>,
-    callback: (error: string, value: string) => void
-  ): void;
-  getBiomarkersDateRange(
     categories: Array<SahhaBiomarkerCategory>,
     types: Array<SahhaBiomarkerType>,
     startDate: number,

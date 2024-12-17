@@ -492,7 +492,7 @@ function ScoresScreen() {
         title="GET SCORES TODAY"
         onPress={() => {
           let date = new Date();
-          Sahha.getScoresDateRange(
+          Sahha.getScores(
             [
               SahhaScoreType.activity,
               SahhaScoreType.sleep,
@@ -521,7 +521,7 @@ function ScoresScreen() {
           let days = endDate.getDate() - 7;
           var startDate = new Date();
           startDate.setDate(days);
-          Sahha.getScoresDateRange(
+          Sahha.getScores(
             [
               SahhaScoreType.activity,
               SahhaScoreType.sleep,
@@ -561,7 +561,7 @@ function BiomarkersScreen() {
         title="GET BIOMARKERS TODAY"
         onPress={() => {
           let date: Date = new Date();
-          Sahha.getBiomarkersDateRange(
+          Sahha.getBiomarkers(
             [
               SahhaBiomarkerCategory.activity,
               SahhaBiomarkerCategory.sleep,
@@ -595,7 +595,7 @@ function BiomarkersScreen() {
           let days = endDate.getDate() - 7;
           var startDate = new Date();
           startDate.setDate(days);
-          Sahha.getBiomarkersDateRange(
+          Sahha.getBiomarkers(
             [
               SahhaBiomarkerCategory.activity,
               SahhaBiomarkerCategory.sleep,
