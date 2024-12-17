@@ -88,7 +88,6 @@ class SahhaReactNative: NSObject {
             if let value = value {
                 do {
                     let jsonEncoder = JSONEncoder()
-                    jsonEncoder.outputFormatting = .prettyPrinted
                     let jsonData = try jsonEncoder.encode(value)
                     string = String(data: jsonData, encoding: .utf8)
                 } catch let encodingError {
