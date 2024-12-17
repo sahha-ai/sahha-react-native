@@ -44,6 +44,11 @@ function HomeScreen({ navigation }: any) {
       />
       <View style={styles.sectionDivider} />
       <Button
+        title="Stats"
+        onPress={() => navigation.navigate('Stats')}
+      />
+      <View style={styles.sectionDivider} />
+      <Button
         title="Insights"
         onPress={() => navigation.navigate('Insights')}
       />
@@ -318,7 +323,7 @@ function SensorScreen() {
   useEffect(() => {
     console.log('getAllSensorStatus');
     Sahha.getSensorStatus(
-      [SahhaSensor.step_count, SahhaSensor.sleep],
+      [SahhaSensor.steps, SahhaSensor.sleep],
       (error: string, value: SahhaSensorStatus) => {
         if (error) {
           console.error(`Error: ${error}`);
@@ -366,7 +371,7 @@ function SensorScreen() {
         onPress={() => {
           console.log('GET SOME SENSORS');
           Sahha.getSensorStatus(
-            [SahhaSensor.step_count, SahhaSensor.sleep],
+            [SahhaSensor.steps, SahhaSensor.sleep],
             (error: string, value: SahhaSensorStatus) => {
               if (error) {
                 console.error(`Error: ${error}`);
@@ -397,7 +402,7 @@ function SensorScreen() {
         onPress={() => {
           console.log('ENABLE SOME SENSORS');
           Sahha.enableSensors(
-            [SahhaSensor.step_count, SahhaSensor.sleep],
+            [SahhaSensor.steps, SahhaSensor.sleep],
             (error: string, value: SahhaSensorStatus) => {
               if (error) {
                 console.error(`Error: ${error}`);
@@ -420,6 +425,63 @@ function SensorScreen() {
   );
 }
 
+function StatsScreen() {
+  const [jsonString, setJsonString] = useState('');
+
+  return (
+    <ScrollView contentContainerStyle={styles.container}>
+      <Button
+        title="GET STATS TODAY"
+        onPress={() => {
+          let date = new Date();
+          Sahha.getStats(
+            SahhaSensor.steps,
+            date.getTime(),
+            date.getTime(),
+            (error: string, value: string) => {
+              if (error) {
+                console.error(`Error: ${error}`);
+              } else if (value) {
+                // console.log(`Value: ${value}`);
+                const jsonArray = JSON.parse(value);
+                console.log(jsonArray[0]);
+                setJsonString(value);
+              }
+            }
+          );
+        }}
+      />
+      <View style={styles.divider} />
+      <Button
+        title="GET STATS PREVIOUS WEEK"
+        onPress={() => {
+          let endDate: Date = new Date();
+          let days = endDate.getDate() - 7;
+          var startDate = new Date();
+          startDate.setDate(days);
+          Sahha.getStats(
+            SahhaSensor.steps,
+            startDate.getTime(),
+            endDate.getTime(),
+            (error: string, value: string) => {
+              if (error) {
+                console.error(`Error: ${error}`);
+              } else if (value) {
+                // console.log(`Value: ${value}`);
+                const jsonArray = JSON.parse(value);
+                console.log(jsonArray[0]);
+                setJsonString(value);
+              }
+            }
+          );
+        }}
+      />
+      <View style={styles.divider} />
+      <Text>{jsonString}</Text>
+    </ScrollView>
+  );
+}
+
 function ScoresScreen() {
   const [jsonString, setJsonString] = useState('');
 
@@ -430,14 +492,17 @@ function ScoresScreen() {
       </Text>
       <View style={styles.divider} />
       <Button
-        title="GET SCORES PREVIOUS DAY"
+        title="GET SCORES TODAY"
         onPress={() => {
+          let date = new Date();
           Sahha.getScores(
             [
               SahhaScoreType.activity,
               SahhaScoreType.sleep,
               SahhaScoreType.wellbeing,
             ],
+            date.getTime(),
+            date.getTime(),
             (error: string, value: string) => {
               if (error) {
                 console.error(`Error: ${error}`);
@@ -459,7 +524,7 @@ function ScoresScreen() {
           let days = endDate.getDate() - 7;
           var startDate = new Date();
           startDate.setDate(days);
-          Sahha.getScoresDateRange(
+          Sahha.getScores(
             [
               SahhaScoreType.activity,
               SahhaScoreType.sleep,
@@ -496,8 +561,9 @@ function BiomarkersScreen() {
       </Text>
       <View style={styles.divider} />
       <Button
-        title="GET BIOMARKERS PREVIOUS DAY"
+        title="GET BIOMARKERS TODAY"
         onPress={() => {
+          let date: Date = new Date();
           Sahha.getBiomarkers(
             [
               SahhaBiomarkerCategory.activity,
@@ -510,6 +576,8 @@ function BiomarkersScreen() {
               SahhaBiomarkerType.heart_rate_resting,
               SahhaBiomarkerType.heart_rate_sleep,
             ],
+            date.getTime(),
+            date.getTime(),
             (error: string, value: string) => {
               if (error) {
                 console.error(`Error: ${error}`);
@@ -530,7 +598,7 @@ function BiomarkersScreen() {
           let days = endDate.getDate() - 7;
           var startDate = new Date();
           startDate.setDate(days);
-          Sahha.getBiomarkersDateRange(
+          Sahha.getBiomarkers(
             [
               SahhaBiomarkerCategory.activity,
               SahhaBiomarkerCategory.sleep,
@@ -599,6 +667,7 @@ export default function App() {
         <Stack.Screen name="Sensors" component={SensorScreen} />
         <Stack.Screen name="Scores" component={ScoresScreen} />
         <Stack.Screen name="Biomarkers" component={BiomarkersScreen} />
+        <Stack.Screen name="Stats" component={StatsScreen} />
         <Stack.Screen name="Insights" component={InsightsScreen} />
       </Stack.Navigator>
     </NavigationContainer>
