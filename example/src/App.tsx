@@ -26,7 +26,7 @@ const Stack = createNativeStackNavigator();
 
 function HomeScreen({ navigation }: any) {
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+    <ScrollView contentContainerStyle={styles.container}>
       <Button
         title="Authentication"
         onPress={() => navigation.navigate('Authentication')}
@@ -45,11 +45,13 @@ function HomeScreen({ navigation }: any) {
       <View style={styles.sectionDivider} />
       <Button title="Stats" onPress={() => navigation.navigate('Stats')} />
       <View style={styles.sectionDivider} />
+      <Button title="Samples" onPress={() => navigation.navigate('Samples')} />
+      <View style={styles.sectionDivider} />
       <Button
         title="Insights"
         onPress={() => navigation.navigate('Insights')}
       />
-    </View>
+    </ScrollView>
   );
 }
 
@@ -479,6 +481,40 @@ function StatsScreen() {
   );
 }
 
+function SamplesScreen() {
+  const [jsonString, setJsonString] = useState('');
+
+  return (
+    <ScrollView contentContainerStyle={styles.container}>
+      <Button
+        title="GET SAMPLES TODAY"
+        onPress={() => {
+          var startDate: Date = new Date();
+          startDate.setHours(0, 0, 0);
+          let endDate: Date = new Date();
+          Sahha.getSamples(
+            SahhaSensor.steps,
+            startDate.getTime(),
+            endDate.getTime(),
+            (error: string, value: string) => {
+              if (error) {
+                console.error(`Error: ${error}`);
+              } else if (value) {
+                // console.log(`Value: ${value}`);
+                const jsonArray = JSON.parse(value);
+                console.log(jsonArray[0]);
+                setJsonString(value);
+              }
+            }
+          );
+        }}
+      />
+      <View style={styles.divider} />
+      <Text>{jsonString}</Text>
+    </ScrollView>
+  );
+}
+
 function ScoresScreen() {
   const [jsonString, setJsonString] = useState('');
 
@@ -665,6 +701,7 @@ export default function App() {
         <Stack.Screen name="Scores" component={ScoresScreen} />
         <Stack.Screen name="Biomarkers" component={BiomarkersScreen} />
         <Stack.Screen name="Stats" component={StatsScreen} />
+        <Stack.Screen name="Samples" component={SamplesScreen} />
         <Stack.Screen name="Insights" component={InsightsScreen} />
       </Stack.Navigator>
     </NavigationContainer>

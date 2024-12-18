@@ -368,6 +368,68 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
   }
 
   @ReactMethod
+  fun getSamples(
+    sensor: String,
+    startDate: Double,
+    endDate: Double,
+    callback: Callback,
+  ) {
+    val sahhaStartDate: Date
+    val sahhaEndDate: Date
+    var body: String = "startDate: $startDate | endDate: $endDate"
+
+    try {
+      sahhaStartDate = Date(startDate.toLong())
+      sahhaEndDate = Date(endDate.toLong())
+    } catch (e: IllegalArgumentException) {
+      val message: String = "Sahha.getSamples() parameters invalid"
+      Sahha.postError(
+        SahhaFramework.react_native,
+        message,
+        "SahhaReactNativeModule",
+        "getSamples",
+        body
+      )
+      callback.invoke(message, null)
+      return
+    }
+
+    Log.d("Sahha", "getSamples startDate $sahhaStartDate")
+    Log.d("Sahha", "getSamples endDate $sahhaEndDate")
+    Sahha.getSamples(
+      SahhaSensor.valueOf(sensor),
+      Pair(sahhaStartDate, sahhaEndDate)
+    ) { error, value ->
+      if (error == null && value == null) {
+        val message: String = "Sahha.getSamples() failed"
+        body =
+          "startDate: $startDate | endDate: $endDate | startDate: $sahhaStartDate | endDate: $sahhaEndDate"
+        Sahha.postError(
+          SahhaFramework.react_native,
+          message,
+          "SahhaReactNativeModule",
+          "getSamples",
+          body
+        )
+        callback.invoke(message, null)
+      } else if (value != null) {
+        val gson = GsonBuilder()
+          .registerTypeAdapter(
+            ZonedDateTime::class.java,
+            JsonSerializer<ZonedDateTime> { src, _, _ ->
+              JsonPrimitive(src.toString())
+            }
+          ).create()
+        val string: String = gson.toJson(value)
+        Log.d("Sahha", string)
+        callback.invoke(null, string)
+      } else {
+        callback.invoke("No stats available for $sensor", null)
+      }
+    }
+  }
+
+  @ReactMethod
   fun openAppSettings() {
     Sahha.openAppSettings(reactApplicationContext.baseContext)
   }

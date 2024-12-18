@@ -43,7 +43,7 @@ target 'SahhaReactNativeExample' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
   
-#  pod 'Sahha', :path => '../../../sahha-swift/'
+  pod 'Sahha', :path => '../../../sahha-swift/'
 
   target 'SahhaReactNativeExampleTests' do
     inherit! :complete

@@ -28,6 +28,8 @@ RCT_EXTERN_METHOD(getBiomarkers: (NSArray *)categories types:(NSArray *)types st
 
 RCT_EXTERN_METHOD(getStats:(NSString *)sensor startDate:(nonnull NSNumber *)startDate endDate:(nonnull NSNumber *)endDate  callback:(RCTResponseSenderBlock)callback)
 
+RCT_EXTERN_METHOD(getSamples:(NSString *)sensor startDate:(nonnull NSNumber *)startDate endDate:(nonnull NSNumber *)endDate  callback:(RCTResponseSenderBlock)callback)
+
 RCT_EXTERN_METHOD(openAppSettings)
 
 @end

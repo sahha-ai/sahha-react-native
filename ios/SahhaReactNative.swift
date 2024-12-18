@@ -348,7 +348,52 @@ class SahhaReactNative: NSObject {
           callback([error ?? NSNull(), string ?? NSNull()])
         }
       } else {
-        callback(["Sahha | Invalid sensor for getStats", NSNull()])
+        callback(["Sahha | Invalid \(sensor) sensor for getStats", NSNull()])
       }
   }
+  
+  @objc(getSamples:startDate:endDate:callback:)
+  func getSamples(
+    _ sensor: String, startDate: NSNumber, endDate: NSNumber,
+    callback: @escaping RCTResponseSenderBlock
+  ) {
+    let startDateTimeInterval = TimeInterval(startDate.doubleValue / 1000)
+    let endDateTimeInterval = TimeInterval(endDate.doubleValue / 1000)
+    guard startDateTimeInterval > 0, endDateTimeInterval > 0 else {
+      let message = "Sahha getSamples date range invalid"
+      Sahha.postError(
+        framework: .react_native, message: message, path: "SahhaReactNative",
+        method: "getSamples",
+        body: "\(startDate.stringValue) | \(endDate.stringValue)")
+      callback([message, NSNull()])
+      return
+    }
+    let start = Date(timeIntervalSince1970: startDateTimeInterval)
+    let end = Date(timeIntervalSince1970: endDateTimeInterval)
+
+      if let sahhaSensor = SahhaSensor(rawValue: sensor) {
+        Sahha.getSamples(sensor: sahhaSensor, startDate: start, endDate: end) { error, value in
+          var string: String?
+            do {
+              let jsonEncoder = JSONEncoder()
+              jsonEncoder.outputFormatting = .prettyPrinted
+              let jsonData = try jsonEncoder.encode(value)
+              string = String(data: jsonData, encoding: .utf8)
+            } catch let encodingError {
+              print(encodingError)
+              Sahha.postError(
+                framework: .react_native,
+                message: encodingError.localizedDescription,
+                path: "SahhaReactNative", method: "getSamples",
+                body: "jsonEncoder")
+              callback([encodingError.localizedDescription, NSNull()])
+              return
+            }
+          callback([error ?? NSNull(), string ?? NSNull()])
+        }
+      } else {
+        callback(["Sahha | Invalid \(sensor) sensor for getSamples", NSNull()])
+      }
+  }
+  
 }
