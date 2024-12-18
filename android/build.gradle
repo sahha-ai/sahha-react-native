@@ -7,7 +7,6 @@ buildscript {
     google()
     mavenCentral()
     jcenter()
-    maven { url 'https://www.jitpack.io' }
   }
 
   dependencies {
@@ -69,7 +68,6 @@ repositories {
   mavenCentral()
   jcenter()
   google()
-  maven { url 'https://www.jitpack.io' }
 }
 
 def kotlin_version = getExtOrDefault("kotlinVersion")
@@ -81,7 +79,7 @@ dependencies {
   implementation "com.facebook.react:react-native:+"
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
   implementation "com.google.code.gson:gson:2.9.0"
-  implementation "ai.sahha:sahha-android:1.0.6"
+  implementation "ai.sahha:sahha-android:1.0.8"
 }
 
 if (isNewArchitectureEnabled()) {

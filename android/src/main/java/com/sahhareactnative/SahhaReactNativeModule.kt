@@ -9,6 +9,9 @@ import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonPrimitive
+import com.google.gson.JsonSerializer
 import sdk.sahha.android.source.Sahha
 import sdk.sahha.android.source.SahhaBiomarkerCategory
 import sdk.sahha.android.source.SahhaBiomarkerType
@@ -20,6 +23,7 @@ import sdk.sahha.android.source.SahhaNotificationConfiguration
 import sdk.sahha.android.source.SahhaScoreType
 import sdk.sahha.android.source.SahhaSensor
 import sdk.sahha.android.source.SahhaSettings
+import java.time.ZonedDateTime
 import java.util.Date
 
 class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
@@ -197,23 +201,6 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
   @ReactMethod
   fun getScores(
     types: ReadableArray,
-    callback: Callback,
-  ) {
-    val sahhaScoreTypes = types.toArrayList().map { SahhaScoreType.valueOf(it as String) }.toSet()
-    Sahha.getScores(sahhaScoreTypes) { error, value ->
-      if (error == null && value == null) {
-        val message: String = "Sahha.getScores() failed"
-        Sahha.postError(SahhaFramework.react_native, message, "SahhaReactNativeModule", "getScores")
-        callback.invoke(message, null)
-      } else {
-        callback.invoke(error, value)
-      }
-    }
-  }
-
-  @ReactMethod
-  fun getScoresDateRange(
-    types: ReadableArray,
     startDate: Double,
     endDate: Double,
     callback: Callback,
@@ -228,12 +215,12 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
       sahhaStartDate = Date(startDate.toLong())
       sahhaEndDate = Date(endDate.toLong())
     } catch (e: IllegalArgumentException) {
-      val message: String = "Sahha.getScoresDateRange() parameters invalid"
+      val message: String = "Sahha.getScores() parameters invalid"
       Sahha.postError(
         SahhaFramework.react_native,
         message,
         "SahhaReactNativeModule",
-        "getScoresDateRange",
+        "getScores",
         body
       )
       callback.invoke(message, null)
@@ -244,14 +231,14 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
     Log.d("Sahha", "getScores endDate $sahhaEndDate")
     Sahha.getScores(sahhaScoreTypes, Pair(sahhaStartDate, sahhaEndDate)) { error, value ->
       if (error == null && value == null) {
-        val message: String = "Sahha.getScoresDateRange() failed"
+        val message: String = "Sahha.getScores() failed"
         body =
           "startDate: $startDate | endDate: $endDate | startDate: $sahhaStartDate | endDate: $sahhaEndDate"
         Sahha.postError(
           SahhaFramework.react_native,
           message,
           "SahhaReactNativeModule",
-          "getScoresDateRange",
+          "getScores",
           body
         )
         callback.invoke(message, null)
@@ -265,32 +252,6 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
   fun getBiomarkers(
     categories: ReadableArray,
     types: ReadableArray,
-    callback: Callback,
-  ) {
-    val sahhaBiomarkerCategories =
-      categories.toArrayList().map { SahhaBiomarkerCategory.valueOf(it as String) }.toSet()
-    val sahhaBiomarkerTypes =
-      types.toArrayList().map { SahhaBiomarkerType.valueOf(it as String) }.toSet()
-    Sahha.getBiomarkers(sahhaBiomarkerCategories, sahhaBiomarkerTypes) { error, value ->
-      if (error == null && value == null) {
-        val message: String = "Sahha.getBiomarkers() failed"
-        Sahha.postError(
-          SahhaFramework.react_native,
-          message,
-          "SahhaReactNativeModule",
-          "getBiomarkers"
-        )
-        callback.invoke(message, null)
-      } else {
-        callback.invoke(error, value)
-      }
-    }
-  }
-
-  @ReactMethod
-  fun getBiomarkersDateRange(
-    categories: ReadableArray,
-    types: ReadableArray,
     startDate: Double,
     endDate: Double,
     callback: Callback,
@@ -307,39 +268,101 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
       sahhaStartDate = Date(startDate.toLong())
       sahhaEndDate = Date(endDate.toLong())
     } catch (e: IllegalArgumentException) {
-      val message: String = "Sahha.getBiomarkersDateRange() parameters invalid"
+      val message: String = "Sahha.getBiomarkers() parameters invalid"
       Sahha.postError(
         SahhaFramework.react_native,
         message,
         "SahhaReactNativeModule",
-        "getBiomarkersDateRange",
+        "getBiomarkers",
         body
       )
       callback.invoke(message, null)
       return
     }
 
-    Log.d("Sahha", "getBiomarkersDateRange startDate $sahhaStartDate")
-    Log.d("Sahha", "getBiomarkersDateRange endDate $sahhaEndDate")
+    Log.d("Sahha", "getBiomarkers startDate $sahhaStartDate")
+    Log.d("Sahha", "getBiomarkers endDate $sahhaEndDate")
     Sahha.getBiomarkers(
       sahhaBiomarkerCategories,
       sahhaBiomarkerTypes,
       Pair(sahhaStartDate, sahhaEndDate)
     ) { error, value ->
       if (error == null && value == null) {
-        val message: String = "Sahha.getBiomarkersDateRange() failed"
+        val message: String = "Sahha.getBiomarkers() failed"
         body =
           "startDate: $startDate | endDate: $endDate | startDate: $sahhaStartDate | endDate: $sahhaEndDate"
         Sahha.postError(
           SahhaFramework.react_native,
           message,
           "SahhaReactNativeModule",
-          "getBiomarkersDateRange",
+          "getBiomarkers",
           body
         )
         callback.invoke(message, null)
       } else {
         callback.invoke(error, value)
+      }
+    }
+  }
+
+  @ReactMethod
+  fun getStats(
+    sensor: String,
+    startDate: Double,
+    endDate: Double,
+    callback: Callback,
+  ) {
+    val sahhaStartDate: Date
+    val sahhaEndDate: Date
+    var body: String = "startDate: $startDate | endDate: $endDate"
+
+    try {
+      sahhaStartDate = Date(startDate.toLong())
+      sahhaEndDate = Date(endDate.toLong())
+    } catch (e: IllegalArgumentException) {
+      val message: String = "Sahha.getStats() parameters invalid"
+      Sahha.postError(
+        SahhaFramework.react_native,
+        message,
+        "SahhaReactNativeModule",
+        "getStats",
+        body
+      )
+      callback.invoke(message, null)
+      return
+    }
+
+    Log.d("Sahha", "getStats startDate $sahhaStartDate")
+    Log.d("Sahha", "getStats endDate $sahhaEndDate")
+    Sahha.getStats(
+      SahhaSensor.valueOf(sensor),
+      Pair(sahhaStartDate, sahhaEndDate)
+    ) { error, value ->
+      if (error == null && value == null) {
+        val message: String = "Sahha.getStats() failed"
+        body =
+          "startDate: $startDate | endDate: $endDate | startDate: $sahhaStartDate | endDate: $sahhaEndDate"
+        Sahha.postError(
+          SahhaFramework.react_native,
+          message,
+          "SahhaReactNativeModule",
+          "getStats",
+          body
+        )
+        callback.invoke(message, null)
+      } else if (value != null) {
+        val gson = GsonBuilder()
+          .registerTypeAdapter(
+            ZonedDateTime::class.java,
+            JsonSerializer<ZonedDateTime> { src, _, _ ->
+              JsonPrimitive(src.toString())
+            }
+          ).create()
+        val string: String = gson.toJson(value)
+        Log.d("Sahha", string)
+        callback.invoke(null, string)
+      } else {
+        callback.invoke("No stats available for $sensor", null)
       }
     }
   }

@@ -31,8 +31,8 @@ export enum SahhaSensor {
   gender = 'gender',
   date_of_birth = 'date_of_birth',
   sleep = 'sleep',
-  step_count = 'step_count',
-  floor_count = 'floor_count',
+  steps = 'steps',
+  floors_climbed = 'floors_climbed',
   heart_rate = 'heart_rate',
   resting_heart_rate = 'resting_heart_rate',
   walking_heart_rate_average = 'walking_heart_rate_average',
@@ -188,10 +188,6 @@ interface SahhaInterface {
   ): void;
   getScores(
     types: Array<SahhaScoreType>,
-    callback: (error: string, value: string) => void
-  ): void;
-  getScoresDateRange(
-    types: Array<SahhaScoreType>,
     startDate: number,
     endDate: number,
     callback: (error: string, value: string) => void
@@ -199,11 +195,12 @@ interface SahhaInterface {
   getBiomarkers(
     categories: Array<SahhaBiomarkerCategory>,
     types: Array<SahhaBiomarkerType>,
+    startDate: number,
+    endDate: number,
     callback: (error: string, value: string) => void
   ): void;
-  getBiomarkersDateRange(
-    categories: Array<SahhaBiomarkerCategory>,
-    types: Array<SahhaBiomarkerType>,
+  getStats(
+    sensor: SahhaSensor,
     startDate: number,
     endDate: number,
     callback: (error: string, value: string) => void
