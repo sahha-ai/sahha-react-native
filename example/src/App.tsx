@@ -444,7 +444,8 @@ function StatsScreen() {
                 // console.log(`Value: ${value}`);
                 const jsonArray = JSON.parse(value);
                 console.log(jsonArray[0]);
-                setJsonString(value);
+                const prettyJson = JSON.stringify(jsonArray, null, 6);
+                setJsonString(prettyJson);
               }
             }
           );
@@ -469,7 +470,8 @@ function StatsScreen() {
                 // console.log(`Value: ${value}`);
                 const jsonArray = JSON.parse(value);
                 console.log(jsonArray[0]);
-                setJsonString(value);
+                const prettyJson = JSON.stringify(jsonArray, null, 6);
+                setJsonString(prettyJson);
               }
             }
           );
@@ -503,7 +505,34 @@ function SamplesScreen() {
                 // console.log(`Value: ${value}`);
                 const jsonArray = JSON.parse(value);
                 console.log(jsonArray[0]);
-                setJsonString(value);
+                const prettyJson = JSON.stringify(jsonArray, null, 6);
+                setJsonString(prettyJson);
+              }
+            }
+          );
+        }}
+      />
+      <View style={styles.divider} />
+      <Button
+        title="GET SAMPLES PREVIOUS WEEK"
+        onPress={() => {
+          let endDate: Date = new Date();
+          let days = endDate.getDate() - 7;
+          var startDate = new Date();
+          startDate.setDate(days);
+          Sahha.getSamples(
+            SahhaSensor.steps,
+            startDate.getTime(),
+            endDate.getTime(),
+            (error: string, value: string) => {
+              if (error) {
+                console.error(`Error: ${error}`);
+              } else if (value) {
+                // console.log(`Value: ${value}`);
+                const jsonArray = JSON.parse(value);
+                console.log(jsonArray[0]);
+                const prettyJson = JSON.stringify(jsonArray, null, 6);
+                setJsonString(prettyJson);
               }
             }
           );
