@@ -188,21 +188,27 @@ interface SahhaInterface {
   ): void;
   getScores(
     types: Array<SahhaScoreType>,
-    startDate: number,
-    endDate: number,
+    startDateTime: number,
+    endDateTime: number,
     callback: (error: string, value: string) => void
   ): void;
   getBiomarkers(
     categories: Array<SahhaBiomarkerCategory>,
     types: Array<SahhaBiomarkerType>,
-    startDate: number,
-    endDate: number,
+    startDateTime: number,
+    endDateTime: number,
     callback: (error: string, value: string) => void
   ): void;
   getStats(
     sensor: SahhaSensor,
-    startDate: number,
-    endDate: number,
+    startDateTime: number,
+    endDateTime: number,
+    callback: (error: string, value: string) => void
+  ): void;
+  getSamples(
+    sensor: SahhaSensor,
+    startDateTime: number,
+    endDateTime: number,
     callback: (error: string, value: string) => void
   ): void;
   openAppSettings(): void;
