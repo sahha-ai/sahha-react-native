@@ -498,10 +498,10 @@ PODS:
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
     - React-RCTImage
-  - Sahha (1.0.8)
-  - sahha-react-native (1.0.8):
+  - Sahha (1.0.9)
+  - sahha-react-native (1.0.9):
     - React-Core
-    - Sahha (= 1.0.8)
+    - Sahha (= 1.0.9)
   - SocketRocket (0.6.1)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
@@ -744,12 +744,12 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: 826b603ae9c0f88b5ac4e956801f755109fa4d5c
   RNCPicker: f58e790450cb0a74c09dd1c677bd1de41a5741b9
   RNScreens: b8d370282cdeae9df85dd5eab20c88eb5181243b
-  Sahha: bd86912da196280c163ca4d47058e5197479f6b6
-  sahha-react-native: d503bbfb564e5331df8cd15968fe13c9c87d48cd
+  Sahha: fda9a32fdb2c3840cfec7c0e517b6c430da756a1
+  sahha-react-native: 171c315cd9d8317830a36f0d7c80eae9e58c1660
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   Yoga: c32e0be1a17f8f1f0e633a3122f7666441f52c82
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 16088137ff6b8ca368f24d1b9e2c9df99a26b591
+PODFILE CHECKSUM: 443f0ef1f4ef43966e8003f170ed2f483f83f864
 
 COCOAPODS: 1.15.2
