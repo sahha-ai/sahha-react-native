@@ -22,11 +22,13 @@ RCT_EXTERN_METHOD(getSensorStatus:(NSArray *)sensors callback:(RCTResponseSender
 
 RCT_EXTERN_METHOD(enableSensors:(NSArray *)sensors callback:(RCTResponseSenderBlock)callback)
 
-RCT_EXTERN_METHOD(getScores:(NSArray *)types startDate:(nonnull NSNumber *)startDate endDate:(nonnull NSNumber *)endDate  callback:(RCTResponseSenderBlock)callback)
+RCT_EXTERN_METHOD(getScores:(NSArray *)types startDateTime:(nonnull NSNumber *)startDateTime endDateTime:(nonnull NSNumber *)endDateTime callback:(RCTResponseSenderBlock)callback)
 
-RCT_EXTERN_METHOD(getBiomarkers: (NSArray *)categories types:(NSArray *)types startDate:(nonnull NSNumber *)startDate endDate:(nonnull NSNumber *)endDate  callback:(RCTResponseSenderBlock)callback)
+RCT_EXTERN_METHOD(getBiomarkers: (NSArray *)categories types:(NSArray *)types startDateTime:(nonnull NSNumber *)startDateTime endDateTime:(nonnull NSNumber *)endDateTime callback:(RCTResponseSenderBlock)callback)
 
-RCT_EXTERN_METHOD(getStats:(NSString *)sensor startDate:(nonnull NSNumber *)startDate endDate:(nonnull NSNumber *)endDate  callback:(RCTResponseSenderBlock)callback)
+RCT_EXTERN_METHOD(getStats:(NSString *)sensor startDateTime:(nonnull NSNumber *)startDateTime endDateTime:(nonnull NSNumber *)endDateTime callback:(RCTResponseSenderBlock)callback)
+
+RCT_EXTERN_METHOD(getSamples:(NSString *)sensor startDateTime:(nonnull NSNumber *)startDateTime endDateTime:(nonnull NSNumber *)endDateTime callback:(RCTResponseSenderBlock)callback)
 
 RCT_EXTERN_METHOD(openAppSettings)
 
