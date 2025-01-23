@@ -575,7 +575,6 @@ DEPENDENCIES:
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCPicker (from `../node_modules/@react-native-picker/picker`)"
   - RNScreens (from `../node_modules/react-native-screens`)
-  - Sahha (from `../../../sahha-swift/`)
   - sahha-react-native (from `../..`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -593,6 +592,7 @@ SPEC REPOS:
     - fmt
     - libevent
     - OpenSSL-Universal
+    - Sahha
     - SocketRocket
     - YogaKit
 
@@ -683,8 +683,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-picker/picker"
   RNScreens:
     :path: "../node_modules/react-native-screens"
-  Sahha:
-    :path: "../../../sahha-swift/"
   sahha-react-native:
     :path: "../.."
   Yoga:
@@ -752,6 +750,6 @@ SPEC CHECKSUMS:
   Yoga: c32e0be1a17f8f1f0e633a3122f7666441f52c82
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: b0f68a39c8eacbb51e4ef0e9811a1f75a5cca3bd
+PODFILE CHECKSUM: 443f0ef1f4ef43966e8003f170ed2f483f83f864
 
 COCOAPODS: 1.15.2
