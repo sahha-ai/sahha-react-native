@@ -498,10 +498,10 @@ PODS:
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
     - React-RCTImage
-  - Sahha (1.1.1)
-  - sahha-react-native (1.1.1):
+  - Sahha (1.1.3)
+  - sahha-react-native (1.1.4):
     - React-Core
-    - Sahha (= 1.1.1)
+    - Sahha (= 1.1.3)
   - SocketRocket (0.6.1)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
@@ -744,8 +744,8 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: 826b603ae9c0f88b5ac4e956801f755109fa4d5c
   RNCPicker: f58e790450cb0a74c09dd1c677bd1de41a5741b9
   RNScreens: b8d370282cdeae9df85dd5eab20c88eb5181243b
-  Sahha: b137a8a6bb8c372f3fe2ac82e9f02d5a12c73ae5
-  sahha-react-native: d9d716b58f9f87e3c0dff0d284ec50431670a5ad
+  Sahha: c7c704e4894d4c82879decba18f2cca8db86fbcf
+  sahha-react-native: e60ed09f94e19cedfc4acc6a542bcb4a6e1484bf
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   Yoga: c32e0be1a17f8f1f0e633a3122f7666441f52c82
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
