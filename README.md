@@ -121,12 +121,12 @@ our [setup guide](https://docs.sahha.ai/docs/data-flow/sdk/setup#minimum-require
 <docgen-index>
 
 * [`configure(...)`](#configure)
-* [`isAuthenticated`](#isauthenticated)
-* [`authenticate()`](#authenticate)
-* [`authenticateToken()`](#authenticatetoken)
-* [`deauthenticate()`](#deauthenticate)
-* [`getProfileToken()`](#getprofiletoken)
-* [`getDemographic()`](#getdemographic)
+* [`isAuthenticated(...)`](#isauthenticated)
+* [`authenticate(...)`](#authenticate)
+* [`authenticateToken(...)`](#authenticatetoken)
+* [`deauthenticate(...)`](#deauthenticate)
+* [`getProfileToken(...)`](#getprofiletoken)
+* [`getDemographic(...)`](#getdemographic)
 * [`postDemographic(...)`](#postdemographic)
 * [`getSensorStatus(...)`](#getsensorstatus)
 * [`enableSensors(...)`](#enablesensors)
@@ -147,7 +147,7 @@ our [setup guide](https://docs.sahha.ai/docs/data-flow/sdk/setup#minimum-require
 configure(
     settings: Object,
     callback: (error: string, success: boolean) => void
-  ): void;
+): void;
 ```
 
 **Example usage**:
@@ -158,11 +158,8 @@ const settings = {
 };
 
 Sahha.configure(settings, (error: string, success: boolean) => {
-      if (error) {
-        console.error(`Error: ${error}`);
-      } else if (success) {
-        console.log(`Success: ${success}`);
-      }
+    if (error) console.error(error);
+    console.log(success);
 });
 ```
 
