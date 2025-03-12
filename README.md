@@ -67,8 +67,8 @@ below for more information.
 <uses-permission android:name="android.permission.health.READ_SLEEP" />
 
   <!-- Activity -->
-<uses-permission android:name="android.permission.health.READ_STEPS" /><uses-permission
-android:name="android.permission.health.READ_FLOORS_CLIMBED" />
+<uses-permission android:name="android.permission.health.READ_STEPS" />
+<uses-permission android:name="android.permission.health.READ_FLOORS_CLIMBED" />
 ```
 
 This is recommended if you'd like to retrieve Health Connect data from other health apps such as
