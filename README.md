@@ -50,12 +50,14 @@ page for more information.
 
 ## Install
 
-In the `pubspec.yaml` file, add the Sahha sdk to dependencies.
+In the `package.json` file, add the Sahha SDK to dependencies.
 
-```yaml
-dependencies:
-  # Sahha
-  sahha-react-native: ^1.1.4
+```json
+{
+  "dependencies": {
+    "sahha-react-native": "^1.1.4"
+  }
+}
 ```
 
 ### Android
