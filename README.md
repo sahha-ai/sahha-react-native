@@ -545,6 +545,8 @@ if (status == SahhaSensorStatus.disabled) {
 }
 ```
 
+---
+
 ### Enums
 
 #### SahhaEnvironment
