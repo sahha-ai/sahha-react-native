@@ -183,6 +183,8 @@ Sahha.isAuthenticated((error: string, success: boolean) => {
 });
 ```
 
+---
+
 ### authenticate(...)
 
 ```
@@ -208,6 +210,8 @@ Sahha.authenticate(
 );
 ```
 
+---
+
 ### authenticateToken(...)
 
 ```
@@ -231,6 +235,8 @@ Sahha.authenticateToken(
 );
 ```
 
+---
+
 ### deauthenticate(...)
 
 ```
@@ -248,6 +254,8 @@ Sahha.deauthenticate((error: string, success: boolean) => {
     if (error) console.error(error);
 });
 ```
+
+---
 
 ### getProfileToken(...)
 
@@ -286,6 +294,8 @@ Sahha.getDemographic((error: string, demographic?: string) => {
 });
 ```
 
+---
+
 ### postDemographic(...)
 
 ```
@@ -308,6 +318,8 @@ Sahha.postDemographic(demographic, (error: string, success: boolean) => {
     console.log(success);
 });
 ```
+
+---
 
 ### getSensorStatus(...)
 
