@@ -50,7 +50,7 @@ page for more information.
 
 ## Install
 
-```
+```bash
 npm install sahha-react-native
 ```
 
