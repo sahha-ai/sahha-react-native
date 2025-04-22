@@ -432,24 +432,25 @@ function StatsScreen() {
       <Button
         title="GET STATS TODAY"
         onPress={() => {
-          let date = new Date();
-          Sahha.getStats(
-            SahhaSensor.steps,
-            date.getTime(),
-            date.getTime(),
-            (error: string, value: string) => {
-              if (error) {
-                console.error(`Error: ${error}`);
-              } else if (value) {
-                // console.log(`Value: ${value}`);
-                const jsonArray = JSON.parse(value);
-                console.log(jsonArray[0]);
-                const prettyJson = JSON.stringify(jsonArray, null, 6);
-                setJsonString(prettyJson);
-              }
+              let date = new Date();
+              Sahha.getStats(
+                SahhaSensor.steps,
+                date.getTime(),
+                date.getTime(),
+                (error: string, value: string) => {
+                  if (error) {
+                    console.error(`Error: ${error}`);
+                  } else if (value) {
+                    // console.log(`Value: ${value}`);
+                    const jsonArray = JSON.parse(value);
+                    console.log(jsonArray[0]);
+                    const prettyJson = JSON.stringify(jsonArray, null, 6);
+                    setJsonString(prettyJson);
+                  }
+                }
+              );
             }
-          );
-        }}
+          }
       />
       <View style={styles.divider} />
       <Button
