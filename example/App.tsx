@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   View,
   Alert,
@@ -17,14 +17,14 @@ import Sahha, {
   SahhaBiomarkerType,
 } from 'sahha-react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Picker } from '@react-native-picker/picker';
-import { WebView } from 'react-native-webview';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {Picker} from '@react-native-picker/picker';
+import {WebView} from 'react-native-webview';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 const Stack = createNativeStackNavigator();
 
-function HomeScreen({ navigation }: any) {
+function HomeScreen({navigation}: any) {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Button
@@ -125,7 +125,7 @@ function AuthenticationScreen() {
           if (error) {
             console.error(`Error: ${error}`);
           }
-        }
+        },
       );
     }
   }
@@ -195,7 +195,7 @@ function InsightsScreen() {
 
   return (
     <WebView
-      style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
+      style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}
       source={{
         uri: 'https://sandbox.webview.sahha.ai/app',
         headers: {
@@ -268,7 +268,7 @@ function ProfileScreen() {
         style={styles.input}
         keyboardType="numbers-and-punctuation"
         maxLength={3}
-        onChangeText={(value) => {
+        onChangeText={value => {
           let ageInt = parseInt(value, 10);
           if (ageInt) {
             console.log(ageInt.toString());
@@ -286,12 +286,11 @@ function ProfileScreen() {
       />
       <Text>GENDER</Text>
       <Picker
-        style={{ height: 200, width: '80%' }}
+        style={{height: 200, width: '80%'}}
         selectedValue={gender}
-        onValueChange={(itemValue) => {
+        onValueChange={itemValue => {
           setGender(itemValue);
-        }}
-      >
+        }}>
         <Picker.Item label="Male" value={'Male'} />
         <Picker.Item label="Female" value={'Female'} />
         <Picker.Item label="Gender Diverse" value={'Gender Diverse'} />
@@ -316,7 +315,7 @@ function ProfileScreen() {
 
 function SensorScreen() {
   const [sensorStatus, setSensorStatus] = useState<SahhaSensorStatus>(
-    SahhaSensorStatus.pending
+    SahhaSensorStatus.pending,
   );
 
   useEffect(() => {
@@ -331,7 +330,7 @@ function SensorScreen() {
           // Set sensor status to value
           setSensorStatus(value);
         }
-      }
+      },
     );
   }, []);
 
@@ -339,10 +338,9 @@ function SensorScreen() {
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.heading}>SENSOR STATUS</Text>
       <Picker
-        style={{ height: 200, width: '80%' }}
+        style={{height: 200, width: '80%'}}
         enabled={false}
-        selectedValue={sensorStatus}
-      >
+        selectedValue={sensorStatus}>
         <Picker.Item label="Pending" value={0} />
         <Picker.Item label="Unavailable" value={1} />
         <Picker.Item label="Disabled" value={2} />
@@ -361,7 +359,7 @@ function SensorScreen() {
                 console.log(`Sensor Status: ${value}`);
                 setSensorStatus(value);
               }
-            }
+            },
           );
         }}
       />
@@ -378,7 +376,7 @@ function SensorScreen() {
                 console.log(`Sensor Status: ${value}`);
                 setSensorStatus(value);
               }
-            }
+            },
           );
         }}
       />
@@ -409,7 +407,7 @@ function SensorScreen() {
                 console.log(`Sensor Status: ${value}`);
                 setSensorStatus(value);
               }
-            }
+            },
           );
         }}
       />
@@ -432,25 +430,24 @@ function StatsScreen() {
       <Button
         title="GET STATS TODAY"
         onPress={() => {
-              let date = new Date();
-              Sahha.getStats(
-                SahhaSensor.steps,
-                date.getTime(),
-                date.getTime(),
-                (error: string, value: string) => {
-                  if (error) {
-                    console.error(`Error: ${error}`);
-                  } else if (value) {
-                    // console.log(`Value: ${value}`);
-                    const jsonArray = JSON.parse(value);
-                    console.log(jsonArray[0]);
-                    const prettyJson = JSON.stringify(jsonArray, null, 6);
-                    setJsonString(prettyJson);
-                  }
-                }
-              );
-            }
-          }
+          let date = new Date();
+          Sahha.getStats(
+            SahhaSensor.steps,
+            date.getTime(),
+            date.getTime(),
+            (error: string, value: string) => {
+              if (error) {
+                console.error(`Error: ${error}`);
+              } else if (value) {
+                // console.log(`Value: ${value}`);
+                const jsonArray = JSON.parse(value);
+                console.log(jsonArray[0]);
+                const prettyJson = JSON.stringify(jsonArray, null, 6);
+                setJsonString(prettyJson);
+              }
+            },
+          );
+        }}
       />
       <View style={styles.divider} />
       <Button
@@ -474,7 +471,7 @@ function StatsScreen() {
                 const prettyJson = JSON.stringify(jsonArray, null, 6);
                 setJsonString(prettyJson);
               }
-            }
+            },
           );
         }}
       />
@@ -509,7 +506,7 @@ function SamplesScreen() {
                 const prettyJson = JSON.stringify(jsonArray, null, 6);
                 setJsonString(prettyJson);
               }
-            }
+            },
           );
         }}
       />
@@ -535,7 +532,7 @@ function SamplesScreen() {
                 const prettyJson = JSON.stringify(jsonArray, null, 6);
                 setJsonString(prettyJson);
               }
-            }
+            },
           );
         }}
       />
@@ -550,7 +547,7 @@ function ScoresScreen() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={{ textAlign: 'center' }}>
+      <Text style={{textAlign: 'center'}}>
         New scores will be available every 6 hours
       </Text>
       <View style={styles.divider} />
@@ -575,7 +572,7 @@ function ScoresScreen() {
                 console.log(jsonArray[0]);
                 setJsonString(value);
               }
-            }
+            },
           );
         }}
       />
@@ -604,7 +601,7 @@ function ScoresScreen() {
                 console.log(jsonArray[0]);
                 setJsonString(value);
               }
-            }
+            },
           );
         }}
       />
@@ -619,7 +616,7 @@ function BiomarkersScreen() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={{ textAlign: 'center' }}>
+      <Text style={{textAlign: 'center'}}>
         New biomarkers will be available every 6 hours
       </Text>
       <View style={styles.divider} />
@@ -649,7 +646,7 @@ function BiomarkersScreen() {
                 console.log(jsonArray[0]);
                 setJsonString(value);
               }
-            }
+            },
           );
         }}
       />
@@ -683,7 +680,7 @@ function BiomarkersScreen() {
                 console.log(jsonArray[0]);
                 setJsonString(value);
               }
-            }
+            },
           );
         }}
       />
@@ -723,7 +720,7 @@ export default function App() {
         <Stack.Screen
           name="Home"
           component={HomeScreen}
-          options={{ title: 'Sahha React Native Demo' }}
+          options={{title: 'Sahha React Native Demo'}}
         />
         <Stack.Screen name="Authentication" component={AuthenticationScreen} />
         <Stack.Screen name="Profile" component={ProfileScreen} />
