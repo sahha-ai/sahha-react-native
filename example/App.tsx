@@ -413,40 +413,6 @@ function SensorScreen() {
       />
       <View style={styles.divider} />
       <Button
-        title="TEST TIME_IN_DAYLIGHT"
-        onPress={() => {
-          Sahha.enableSensors(
-            [SahhaSensor.time_in_daylight],
-            (error: string, value: SahhaSensorStatus) => {
-              if (error) {
-                console.error(`Error: ${error}`);
-              } else {
-                console.log(`Sensor Status: ${value}`);
-                setSensorStatus(value);
-              }
-            },
-          );
-        }}
-      />
-      <View style={styles.divider} />
-      <Button
-        title="TEST RUNNING_POWER"
-        onPress={() => {
-          Sahha.enableSensors(
-            [SahhaSensor.running_power],
-            (error: string, value: SahhaSensorStatus) => {
-              if (error) {
-                console.error(`Error: ${error}`);
-              } else {
-                console.log(`Sensor Status: ${value}`);
-                setSensorStatus(value);
-              }
-            },
-          );
-        }}
-      />
-      <View style={styles.divider} />
-      <Button
         title={'OPEN APP SETTINGS'}
         onPress={() => {
           Sahha.openAppSettings();
@@ -459,9 +425,6 @@ function SensorScreen() {
 function StatsScreen() {
   const [jsonString, setJsonString] = useState('');
 
-  console.log(SahhaSensor.time_in_daylight);
-  console.log(SahhaSensor.running_speed);
-
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Button
@@ -469,7 +432,7 @@ function StatsScreen() {
         onPress={() => {
           let date = new Date();
           Sahha.getStats(
-            SahhaSensor.running_speed,
+            SahhaSensor.steps,
             date.getTime(),
             date.getTime(),
             (error: string, value: string) => {
