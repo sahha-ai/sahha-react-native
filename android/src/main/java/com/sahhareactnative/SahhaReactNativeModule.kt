@@ -2,12 +2,14 @@ package com.sahhareactnative
 
 import android.util.Log
 import androidx.activity.ComponentActivity
+import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.Callback
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
+import com.facebook.react.modules.core.DeviceEventManagerModule
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonPrimitive
@@ -429,8 +431,23 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
     }
   }
 
+  @Deprecated(message = "postSensorData is only supported on iOS", level = DeprecationLevel.WARNING)
+  @ReactMethod
+  fun postSensorData() {
+    sendJavaScriptLog("postSensorData is only supported on iOS")
+  }
+
   @ReactMethod
   fun openAppSettings() {
     Sahha.openAppSettings(reactApplicationContext.baseContext)
+  }
+
+  private fun sendJavaScriptLog(msg: String) {
+    val params = Arguments.createMap().apply {
+      putString("message", msg)
+    }
+    reactApplicationContext
+      .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+      .emit("SahhaReactNativeModule", params)
   }
 }
