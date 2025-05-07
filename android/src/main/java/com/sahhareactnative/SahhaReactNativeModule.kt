@@ -26,6 +26,8 @@ import sdk.sahha.android.source.SahhaSettings
 import java.time.ZonedDateTime
 import java.util.Date
 
+private const val TAG = "SahhaReactNativeModule"
+
 class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
   ReactContextBaseJavaModule(reactContext) {
 
@@ -427,6 +429,12 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
         callback.invoke("No samples available for $sensor", null)
       }
     }
+  }
+
+  @Deprecated(message = "postSensorData is only supported on iOS", level = DeprecationLevel.WARNING)
+  @ReactMethod
+  fun postSensorData() {
+    Log.w(TAG, "postSensorData is only supported on iOS")
   }
 
   @ReactMethod

@@ -225,6 +225,11 @@ interface SahhaInterface {
     callback: (error: string, value: string) => void
   ): void;
   openAppSettings(): void;
+  /**
+   * @remarks
+   * Only available on **iOS**. On Android, this method is a no-op.
+   */
+  postSensorData(): void;
 }
 
 export default Sahha as SahhaInterface;

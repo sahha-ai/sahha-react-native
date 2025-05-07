@@ -51,6 +51,8 @@ function HomeScreen({navigation}: any) {
         title="Insights"
         onPress={() => navigation.navigate('Insights')}
       />
+      <View style={styles.sectionDivider} />
+      <Button title="Manual Post Test" onPress={() => Sahha.postSensorData()} />
     </ScrollView>
   );
 }
