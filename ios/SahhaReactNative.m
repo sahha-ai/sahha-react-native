@@ -32,4 +32,6 @@ RCT_EXTERN_METHOD(getSamples:(NSString *)sensor startDateTime:(nonnull NSNumber 
 
 RCT_EXTERN_METHOD(openAppSettings)
 
+RCT_EXTERN_METHOD(postSensorData)
+
 @end

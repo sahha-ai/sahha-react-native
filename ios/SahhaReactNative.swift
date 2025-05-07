@@ -62,6 +62,11 @@ class SahhaReactNative: NSObject {
     Sahha.openAppSettings()
   }
   
+  @objc(postSensorData)
+  func postSensorData() {
+    Sahha.postSensorData()
+  }
+  
   @objc(isAuthenticated:)
   func isAuthenticated(_ callback: @escaping RCTResponseSenderBlock) {
     callback([NSNull(), Sahha.isAuthenticated])
