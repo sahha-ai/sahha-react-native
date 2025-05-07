@@ -20,7 +20,7 @@ const SahhaReactNative = NativeModules.SahhaReactNative
     );
 */
 
-import { NativeEventEmitter, NativeModules, Platform } from 'react-native';
+import { NativeModules } from 'react-native';
 
 export enum SahhaEnvironment {
   sandbox = 'sandbox',
@@ -164,14 +164,6 @@ export enum SahhaBiomarkerType {
 }
 
 const Sahha = NativeModules.SahhaReactNative;
-
-// Show logs from Android bridging code
-if (__DEV__ && Platform.OS === 'android') {
-  const sahhaEmitter = new NativeEventEmitter(Sahha);
-  sahhaEmitter.addListener('SahhaReactNativeModule', (message) =>
-    console.log('[SahhaReactNativeModule]', message)
-  );
-}
 
 interface SahhaInterface {
   configure(
