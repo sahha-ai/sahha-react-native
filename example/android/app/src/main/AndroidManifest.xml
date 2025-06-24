@@ -44,6 +44,9 @@
   <!-- Exercise -->
   <uses-permission android:name="android.permission.health.READ_EXERCISE" />
 
+  <!-- Nutrition -->
+  <uses-permission android:name="android.permission.health.READ_NUTRITION" />
+
     <application
       android:name=".MainApplication"
       android:label="@string/app_name"

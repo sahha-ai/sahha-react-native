@@ -370,7 +370,7 @@ function SensorScreen() {
         onPress={() => {
           console.log('GET SOME SENSORS');
           Sahha.getSensorStatus(
-            [SahhaSensor.steps, SahhaSensor.sleep],
+            [SahhaSensor.steps, SahhaSensor.sleep, SahhaSensor.energy_consumed],
             (error: string, value: SahhaSensorStatus) => {
               if (error) {
                 console.error(`Error: ${error}`);
@@ -401,7 +401,7 @@ function SensorScreen() {
         onPress={() => {
           console.log('ENABLE SOME SENSORS');
           Sahha.enableSensors(
-            [SahhaSensor.steps, SahhaSensor.sleep],
+            [SahhaSensor.steps, SahhaSensor.sleep, SahhaSensor.energy_consumed],
             (error: string, value: SahhaSensorStatus) => {
               if (error) {
                 console.error(`Error: ${error}`);
