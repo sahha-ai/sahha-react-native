@@ -1854,7 +1854,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - Yoga
   - Sahha (1.2.0)
-  - sahha-react-native (1.2.0):
+  - sahha-react-native (1.2.1):
     - RCT-Folly
     - RCTRequired
     - RCTTypeSafety
@@ -2183,7 +2183,7 @@ SPEC CHECKSUMS:
   RNCPicker: e51a9eb07c7dfbfba3d6c6cc567e083376c717cc
   RNScreens: fcd4717f7c66e65b168d9f58df276ecfbb0c5e6d
   Sahha: 4397e3e4bf62d50a33a88f4d8d80a80589c038c1
-  sahha-react-native: b16a50022ad5752bff2ba95954f373b9ebc55a45
+  sahha-react-native: e093ca326e70e42fb8108db2fa15a44b26565cf0
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Yoga: d15f5aa644c466e917569ac43b19cbf17975239a
 
