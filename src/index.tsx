@@ -79,6 +79,7 @@ export enum SahhaSensor {
   walking_asymmetry_percentage = 'walking_asymmetry_percentage',
   walking_double_support_percentage = 'walking_double_support_percentage',
   walking_step_length = 'walking_step_length',
+  energy_consumed = 'energy_consumed'
 }
 
 export enum SahhaSensorStatus {
