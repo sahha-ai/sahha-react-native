@@ -42,7 +42,10 @@
     "ios",
     "android"
   ],
-  "repository": "https://github.com/sahha-ai/sahha-react-native",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sahha-ai/sahha-react-native.git"
+  },
   "author": "Sahha <developer@sahha.ai> (https://sahha.ai)",
   "license": "MIT",
   "bugs": {
