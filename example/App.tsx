@@ -451,6 +451,7 @@ function StatsScreen() {
           );
         }}
       />
+      
       <View style={styles.divider} />
       <Button
         title="GET STATS PREVIOUS WEEK"
