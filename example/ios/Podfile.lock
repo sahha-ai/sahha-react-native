@@ -2340,7 +2340,6 @@ PODS:
     - React-perflogger (= 0.81.1)
     - React-utils (= 0.81.1)
     - SocketRocket
-  - Sahha (1.2.5)
   - SahhaReactNative (0.1.0):
     - boost
     - DoubleConversion
@@ -2367,7 +2366,6 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - Sahha (~> 1.2.5)
     - SocketRocket
     - Yoga
   - SocketRocket (0.7.1)
@@ -2452,7 +2450,6 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
-    - Sahha
     - SocketRocket
 
 EXTERNAL SOURCES:
@@ -2676,8 +2673,7 @@ SPEC CHECKSUMS:
   ReactAppDependencyProvider: 3eb9096cb139eb433965693bbe541d96eb3d3ec9
   ReactCodegen: 4d203eddf6f977caa324640a20f92e70408d648b
   ReactCommon: ce5d4226dfaf9d5dacbef57b4528819e39d3a120
-  Sahha: d308995f3fe3a333d1d61ca6d22be68f2d5acbad
-  SahhaReactNative: 6fbacf8b2e22cd6c34ffaa1d267706a3a47b35cc
+  SahhaReactNative: b544bc881b925dd9307010175e11b6b96c1f7cce
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Yoga: 11c9686a21e2cd82a094a723649d9f4507200fb0
 
