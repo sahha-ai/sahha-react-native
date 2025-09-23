@@ -1,6 +1,13 @@
 import { useState } from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
-import Sahha, { SahhaEnvironment } from 'sahha-react-native';
+import Sahha, {
+  SahhaEnvironment,
+  SahhaSensor,
+  SahhaSensorStatus,
+  SahhaScoreType,
+  SahhaBiomarkerCategory,
+  SahhaBiomarkerType,
+} from 'sahha-react-native';
 
 export default function App() {
   const [result, setResult] = useState<string>('');
@@ -49,12 +56,194 @@ export default function App() {
     );
   };
 
+  const handleAuthenticateToken = () => {
+    // Replace with your actual profileToken and refreshToken
+    Sahha?.authenticateToken(
+      'profile-token-placeholder',
+      'refresh-token-placeholder',
+      (error: string, success: boolean) => {
+        if (error) {
+          setResult(`Authenticate token error: ${error}`);
+        } else {
+          setResult(`Authenticate token success: ${success}`);
+        }
+      }
+    );
+  };
+
+  const handleDeauthenticate = () => {
+    Sahha?.deauthenticate((error: string, success: boolean) => {
+      if (error) {
+        setResult(`Deauthenticate error: ${error}`);
+      } else {
+        setResult(`Deauthenticate success: ${success}`);
+      }
+    });
+  };
+
+  const handleGetProfileToken = () => {
+    Sahha?.getProfileToken((error: string, profileToken?: string) => {
+      if (error) {
+        setResult(`Get profile token error: ${error}`);
+      } else {
+        setResult(`Profile token: ${profileToken ?? 'none'}`);
+      }
+    });
+  };
+
+  const handleGetDemographic = () => {
+    Sahha?.getDemographic((error: string, demographic?: string) => {
+      if (error) {
+        setResult(`Get demographic error: ${error}`);
+      } else {
+        setResult(`Demographic: ${demographic ?? 'none'}`);
+      }
+    });
+  };
+
+  const handlePostDemographic = () => {
+    const demographic = {
+      age: 30,
+      gender: 'male',
+      // Add more fields as needed
+    };
+    Sahha?.postDemographic(demographic, (error: string, success: boolean) => {
+      if (error) {
+        setResult(`Post demographic error: ${error}`);
+      } else {
+        setResult(`Post demographic success: ${success}`);
+      }
+    });
+  };
+
+  const handleGetSensorStatus = () => {
+    const sensors = [SahhaSensor.steps];
+    Sahha?.getSensorStatus(
+      sensors,
+      (error: string, value: SahhaSensorStatus) => {
+        if (error) {
+          setResult(`Get sensor status error: ${error}`);
+        } else {
+          setResult(`Sensor status: ${value}`);
+        }
+      }
+    );
+  };
+
+  const handleEnableSensors = () => {
+    const sensors = [SahhaSensor.steps];
+    Sahha?.enableSensors(sensors, (error: string, value: SahhaSensorStatus) => {
+      if (error) {
+        setResult(`Enable sensors error: ${error}`);
+      } else {
+        setResult(`Enable sensors status: ${value}`);
+      }
+    });
+  };
+
+  const handleGetScores = () => {
+    const types = [SahhaScoreType.activity];
+    const startDateTime = Date.now() - 7 * 24 * 60 * 60 * 1000; // 7 days ago
+    const endDateTime = Date.now();
+    Sahha?.getScores(
+      types,
+      startDateTime,
+      endDateTime,
+      (error: string, value: string) => {
+        if (error) {
+          setResult(`Get scores error: ${error}`);
+        } else {
+          setResult(`Scores: ${value}`);
+        }
+      }
+    );
+  };
+
+  const handleGetBiomarkers = () => {
+    const categories = [SahhaBiomarkerCategory.activity];
+    const types = [SahhaBiomarkerType.steps];
+    const startDateTime = Date.now() - 7 * 24 * 60 * 60 * 1000; // 7 days ago
+    const endDateTime = Date.now();
+    Sahha?.getBiomarkers(
+      categories,
+      types,
+      startDateTime,
+      endDateTime,
+      (error: string, value: string) => {
+        if (error) {
+          setResult(`Get biomarkers error: ${error}`);
+        } else {
+          setResult(`Biomarkers: ${value}`);
+        }
+      }
+    );
+  };
+
+  const handleGetStats = () => {
+    const sensor = SahhaSensor.steps;
+    const startDateTime = Date.now() - 7 * 24 * 60 * 60 * 1000; // 7 days ago
+    const endDateTime = Date.now();
+    Sahha?.getStats(
+      sensor,
+      startDateTime,
+      endDateTime,
+      (error: string, value: string) => {
+        if (error) {
+          setResult(`Get stats error: ${error}`);
+        } else {
+          setResult(`Stats: ${value}`);
+        }
+      }
+    );
+  };
+
+  const handleGetSamples = () => {
+    const sensor = SahhaSensor.steps;
+    const startDateTime = Date.now() - 7 * 24 * 60 * 60 * 1000; // 7 days ago
+    const endDateTime = Date.now();
+    Sahha?.getSamples(
+      sensor,
+      startDateTime,
+      endDateTime,
+      (error: string, value: string) => {
+        if (error) {
+          setResult(`Get samples error: ${error}`);
+        } else {
+          setResult(`Samples: ${value}`);
+        }
+      }
+    );
+  };
+
+  const handleOpenAppSettings = () => {
+    Sahha?.openAppSettings();
+    setResult('Opened app settings');
+  };
+
+  const handlePostSensorData = () => {
+    Sahha?.postSensorData();
+    setResult('Posted sensor data (iOS only)');
+  };
+
   return (
     <View style={styles.container}>
       <Text>Testing Sahha Module</Text>
       <Button title="Configure" onPress={handleConfigure} />
       <Button title="Is Authenticated" onPress={handleIsAuthenticated} />
       <Button title="Authenticate" onPress={handleAuthenticate} />
+      <Button title="Authenticate Token" onPress={handleAuthenticateToken} />
+      <Button title="Deauthenticate" onPress={handleDeauthenticate} />
+      <Button title="Get Profile Token" onPress={handleGetProfileToken} />
+      <Button title="Get Demographic" onPress={handleGetDemographic} />
+      <Button title="Post Demographic" onPress={handlePostDemographic} />
+      <Button title="Get Sensor Status" onPress={handleGetSensorStatus} />
+      <Button title="Enable Sensors" onPress={handleEnableSensors} />
+      <Button title="Get Scores" onPress={handleGetScores} />
+      <Button title="Get Biomarkers" onPress={handleGetBiomarkers} />
+      <Button title="Get Stats" onPress={handleGetStats} />
+      <Button title="Get Samples" onPress={handleGetSamples} />
+      <Button title="Open App Settings" onPress={handleOpenAppSettings} />
+      <Button title="Post Sensor Data" onPress={handlePostSensorData} />
       <Text>{result}</Text>
     </View>
   );

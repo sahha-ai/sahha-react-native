@@ -156,6 +156,59 @@ export interface Spec extends TurboModule {
     externalId: string,
     callback: (error: string, success: boolean) => void
   ): void;
+  authenticateToken(
+    profileToken: string,
+    refreshToken: string,
+    callback: (error: string, success: boolean) => void
+  ): void;
+  deauthenticate(callback: (error: string, success: boolean) => void): void;
+  getProfileToken(
+    callback: (error: string, profileToken?: string) => void
+  ): void;
+  getDemographic(callback: (error: string, demographic?: string) => void): void;
+  postDemographic(
+    demographic: Object,
+    callback: (error: string, success: boolean) => void
+  ): void;
+  getSensorStatus(
+    sensors: Array<SahhaSensor>,
+    callback: (error: string, value: SahhaSensorStatus) => void
+  ): void;
+  enableSensors(
+    sensors: Array<SahhaSensor>,
+    callback: (error: string, value: SahhaSensorStatus) => void
+  ): void;
+  getScores(
+    types: Array<SahhaScoreType>,
+    startDateTime: number,
+    endDateTime: number,
+    callback: (error: string, value: string) => void
+  ): void;
+  getBiomarkers(
+    categories: Array<SahhaBiomarkerCategory>,
+    types: Array<SahhaBiomarkerType>,
+    startDateTime: number,
+    endDateTime: number,
+    callback: (error: string, value: string) => void
+  ): void;
+  getStats(
+    sensor: SahhaSensor,
+    startDateTime: number,
+    endDateTime: number,
+    callback: (error: string, value: string) => void
+  ): void;
+  getSamples(
+    sensor: SahhaSensor,
+    startDateTime: number,
+    endDateTime: number,
+    callback: (error: string, value: string) => void
+  ): void;
+  openAppSettings(): void;
+  /**
+   * @remarks
+   * Only available on **iOS**. On Android, this method is a no-op.
+   */
+  postSensorData(): void;
 }
 
 const Sahha = TurboModuleRegistry.get<Spec>('SahhaReactNative');
