@@ -4,14 +4,11 @@ Sahha React Native SDK
 
 ## Installation
 
-
 ```sh
 npm install sahha-react-native
 ```
 
-
 ## Usage
-
 
 ```js
 import { multiply } from 'sahha-react-native';
@@ -20,7 +17,6 @@ import { multiply } from 'sahha-react-native';
 
 const result = multiply(3, 7);
 ```
-
 
 ## Contributing
 
