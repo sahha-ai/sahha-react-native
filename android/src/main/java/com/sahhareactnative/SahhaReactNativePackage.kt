@@ -1,13 +1,12 @@
 package com.sahhareactnative
 
-import com.facebook.react.BaseReactPackage
+import com.facebook.react.TurboReactPackage
 import com.facebook.react.bridge.NativeModule
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.module.model.ReactModuleInfo
 import com.facebook.react.module.model.ReactModuleInfoProvider
-import java.util.HashMap
 
-class SahhaReactNativePackage : BaseReactPackage() {
+class SahhaReactNativePackage : TurboReactPackage() {
   override fun getModule(name: String, reactContext: ReactApplicationContext): NativeModule? {
     return if (name == SahhaReactNativeModule.NAME) {
       SahhaReactNativeModule(reactContext)
@@ -19,13 +18,14 @@ class SahhaReactNativePackage : BaseReactPackage() {
   override fun getReactModuleInfoProvider(): ReactModuleInfoProvider {
     return ReactModuleInfoProvider {
       val moduleInfos: MutableMap<String, ReactModuleInfo> = HashMap()
+      val isTurboModule = true  // Always true for TurboModules
       moduleInfos[SahhaReactNativeModule.NAME] = ReactModuleInfo(
         SahhaReactNativeModule.NAME,
-        SahhaReactNativeModule.NAME,
-        false,  // canOverrideExistingModule
+        SahhaReactNativeModule::class.java.name,
+        true,  // canOverrideExistingModule
         false,  // needsEagerInit
         false,  // isCxxModule
-        true // isTurboModule
+        isTurboModule
       )
       moduleInfos
     }

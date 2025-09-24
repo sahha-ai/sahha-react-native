@@ -10,7 +10,7 @@ import Sahha, {
 } from 'sahha-react-native';
 
 export default function App() {
-  const [result, setResult] = useState<string>('blah');
+  const [result, setResult] = useState<string>('');
 
   const handleConfigure = () => {
     const settings = {
@@ -21,7 +21,7 @@ export default function App() {
         shortDescription: 'Test description.',
       },
     };
-    setResult('configuring...');
+
     Sahha?.configure(settings, (error: string, success: boolean) => {
       if (error) {
         setResult(`Configure error: ${error}`);
@@ -46,7 +46,7 @@ export default function App() {
     Sahha?.authenticate(
       'anGxWFRoY1WHmYM2xk15AbFXmDD4C4pn',
       '9Uw0PnTtDA9L8Kn12Bo5jxXDdO4D7Q4apWXc5tvGK3R6qau1WvyAbC1nY2gi85fP',
-      'test-123',
+      'test-android-123',
       (error: string, success: boolean) => {
         if (error) {
           setResult(`Authenticate error: ${error}`);

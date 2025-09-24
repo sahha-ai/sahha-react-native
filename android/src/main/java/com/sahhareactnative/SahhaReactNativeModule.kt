@@ -4,8 +4,6 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import com.facebook.react.bridge.Callback
 import com.facebook.react.bridge.ReactApplicationContext
-import com.facebook.react.bridge.ReactContextBaseJavaModule
-import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
 import com.google.gson.Gson
@@ -29,17 +27,19 @@ import java.util.Date
 private const val TAG = "SahhaReactNativeModule"
 
 class SahhaReactNativeModule(private val reactContext: ReactApplicationContext) :
-  ReactContextBaseJavaModule(reactContext) {
-  override fun getName(): String {
-    return "SahhaReactNative"
-  }
+  NativeSahhaReactNativeSpec(reactContext) {
 
   companion object {
     const val NAME = "SahhaReactNative"
   }
 
-  @ReactMethod
-  fun configure(settings: ReadableMap, callback: Callback) {
+  override fun getName(): String {
+    return NAME
+  }
+
+  override fun invalidate() {}
+
+  override fun configure(settings: ReadableMap, callback: Callback) {
     val environment: String? = settings.getString("environment")
     if (environment == null) {
       // Sahha.postError()
@@ -81,7 +81,7 @@ class SahhaReactNativeModule(private val reactContext: ReactApplicationContext) 
       notificationSettings = sahhaNotificationConfiguration,
       framework = SahhaFramework.react_native
     )
-    val activity = getCurrentActivity() as? ComponentActivity
+    val activity = reactContext.currentActivity as? ComponentActivity  // CHANGED: Use reactContext.currentActivity
     if (activity == null) {
       callback("Sahha.configure() activity parameter is null", false)
     } else {
@@ -90,34 +90,34 @@ class SahhaReactNativeModule(private val reactContext: ReactApplicationContext) 
       }
     }
   }
-  @ReactMethod
-  fun isAuthenticated(callback: Callback) {
+
+  override fun isAuthenticated(callback: Callback) {
     callback(null, Sahha.isAuthenticated)
   }
-  @ReactMethod
-  fun authenticate(appId: String, appSecret: String, externalId: String, callback: Callback) {
+
+  override fun authenticate(appId: String, appSecret: String, externalId: String, callback: Callback) {
     Sahha.authenticate(appId, appSecret, externalId) { error, success ->
       callback(error, success)
     }
   }
-  @ReactMethod
-  fun authenticateToken(profileToken: String, refreshToken: String, callback: Callback) {
+
+  override fun authenticateToken(profileToken: String, refreshToken: String, callback: Callback) {
     Sahha.authenticate(profileToken, refreshToken) { error, success ->
       callback(error, success)
     }
   }
-  @ReactMethod
-  fun deauthenticate(callback: Callback) {
+
+  override fun deauthenticate(callback: Callback) {
     Sahha.deauthenticate { error, success ->
       callback(error, success)
     }
   }
-  @ReactMethod
-  fun getProfileToken(callback: Callback) {
+
+  override fun getProfileToken(callback: Callback) {
     callback.invoke(null, Sahha.profileToken)
   }
-  @ReactMethod
-  fun getDemographic(callback: Callback) {
+
+  override fun getDemographic(callback: Callback) {
     Sahha.getDemographic { error, demographic ->
       if (error != null) {
         callback.invoke(error, null)
@@ -131,8 +131,8 @@ class SahhaReactNativeModule(private val reactContext: ReactApplicationContext) 
       }
     }
   }
-  @ReactMethod
-  fun postDemographic(demographic: ReadableMap, callback: Callback) {
+
+  override fun postDemographic(demographic: ReadableMap, callback: Callback) {
     val age: Int? = if (demographic.hasKey("age")) demographic.getInt("age") else null
     val gender: String? = demographic.getString("gender")
     val country: String? = demographic.getString("country")
@@ -165,25 +165,25 @@ class SahhaReactNativeModule(private val reactContext: ReactApplicationContext) 
       callback.invoke(error, success)
     }
   }
-  @ReactMethod
-  fun getSensorStatus(sensors: ReadableArray, callback: Callback) {
+
+  override fun getSensorStatus(sensors: ReadableArray, callback: Callback) {
     val sahhaSensors = sensors.toArrayList().map { SahhaSensor.valueOf(it as String) }.toSet()
     Sahha.getSensorStatus(
-      reactContext.baseContext,
+      reactContext.baseContext,  // This should work; change to reactContext.applicationContext if issues
       sahhaSensors
     ) { error, sensorStatus ->
       callback.invoke(error, sensorStatus.ordinal)
     }
   }
-  @ReactMethod
-  fun enableSensors(sensors: ReadableArray, callback: Callback) {
+
+  override fun enableSensors(sensors: ReadableArray, callback: Callback) {
     val sahhaSensors = sensors.toArrayList().map { SahhaSensor.valueOf(it as String) }.toSet()
     Sahha.enableSensors(reactContext.baseContext, sahhaSensors) { error, sensorStatus ->
       callback.invoke(error, sensorStatus.ordinal)
     }
   }
-  @ReactMethod
-  fun getScores(
+
+  override fun getScores(
     types: ReadableArray,
     startDateTime: Double,
     endDateTime: Double,
@@ -228,8 +228,8 @@ class SahhaReactNativeModule(private val reactContext: ReactApplicationContext) 
       }
     }
   }
-  @ReactMethod
-  fun getBiomarkers(
+
+  override fun getBiomarkers(
     categories: ReadableArray,
     types: ReadableArray,
     startDateTime: Double,
@@ -282,8 +282,8 @@ class SahhaReactNativeModule(private val reactContext: ReactApplicationContext) 
       }
     }
   }
-  @ReactMethod
-  fun getStats(
+
+  override fun getStats(
     sensor: String,
     startDateTime: Double,
     endDateTime: Double,
@@ -341,8 +341,8 @@ class SahhaReactNativeModule(private val reactContext: ReactApplicationContext) 
       }
     }
   }
-  @ReactMethod
-  fun getSamples(
+
+  override fun getSamples(
     sensor: String,
     startDateTime: Double,
     endDateTime: Double,
@@ -400,13 +400,13 @@ class SahhaReactNativeModule(private val reactContext: ReactApplicationContext) 
       }
     }
   }
+
   @Deprecated(message = "postSensorData is only supported on iOS", level = DeprecationLevel.WARNING)
-  @ReactMethod
-  fun postSensorData() {
+  override fun postSensorData() {
     Log.w(TAG, "postSensorData is only supported on iOS")
   }
-  @ReactMethod
-  fun openAppSettings() {
+
+  override fun openAppSettings() {
     Sahha.openAppSettings(reactContext.baseContext)
   }
 }

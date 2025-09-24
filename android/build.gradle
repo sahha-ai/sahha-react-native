@@ -6,18 +6,20 @@ buildscript {
   repositories {
     google()
     mavenCentral()
+    maven { url "$rootProject.projectDir/../node_modules/react-native/android" }
   }
 
   dependencies {
     classpath "com.android.tools.build:gradle:8.7.2"
     // noinspection DifferentKotlinGradleVersion
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${getExtOrDefault('kotlinVersion')}"
+    classpath "com.facebook.react:react-native-gradle-plugin:0.81.0"  // Added version to fix resolution
   }
 }
 
-
 apply plugin: "com.android.library"
 apply plugin: "kotlin-android"
+apply plugin: "com.facebook.react"
 
 def getExtOrIntegerDefault(name) {
   return rootProject.ext.has(name) ? rootProject.ext.get(name) : (project.properties["SahhaReactNative_" + name]).toInteger()
@@ -65,12 +67,13 @@ android {
 repositories {
   mavenCentral()
   google()
+  maven { url "$rootProject.projectDir/../node_modules/react-native/android" }  // Added for local RN resolution
 }
 
 def kotlin_version = getExtOrDefault("kotlinVersion")
 
 dependencies {
-  implementation "com.facebook.react:react-android"
+  implementation "com.facebook.react:react-native:0.81.0"  // Pinned to your RN version
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
   implementation "com.google.code.gson:gson:2.9.0"
   implementation "ai.sahha:sahha-android:1.2.0"
