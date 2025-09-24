@@ -10,7 +10,7 @@ import Sahha, {
 } from 'sahha-react-native';
 
 export default function App() {
-  const [result, setResult] = useState<string>('');
+  const [result, setResult] = useState<string>('blah');
 
   const handleConfigure = () => {
     const settings = {
@@ -21,6 +21,7 @@ export default function App() {
         shortDescription: 'Test description.',
       },
     };
+    setResult('configuring...');
     Sahha?.configure(settings, (error: string, success: boolean) => {
       if (error) {
         setResult(`Configure error: ${error}`);
