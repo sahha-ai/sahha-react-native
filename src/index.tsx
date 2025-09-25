@@ -2,7 +2,6 @@ import { TurboModuleRegistry } from 'react-native';
 import type { TurboModule } from 'react-native';
 
 export enum SahhaEnvironment {
-  development = 'development',
   sandbox = 'sandbox',
   production = 'production',
 }
