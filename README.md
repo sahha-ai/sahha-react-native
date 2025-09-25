@@ -528,6 +528,7 @@ Sahha.getSamples(
 
 ### openAppSettings()
 
+
 ```
 openAppSettings(): void;
 ```
@@ -623,6 +624,8 @@ export enum SahhaScoreType {
 ```
 
 #### SahhaBiomarkerCategory
+
+
 
 ```
 export enum SahhaBiomarkerCategory {
