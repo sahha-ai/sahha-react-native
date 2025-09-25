@@ -2,15 +2,13 @@ pre-commit:
   parallel: true
   commands:
     lint:
-      files: git diff --name-only @{push}
       glob: '*.{js,ts,jsx,tsx}'
-      run: 'export PATH=/Users/min/.nvm/versions/node/v16.20.2/bin:$PATH && node_modules/.bin/eslint {files}'
-
+      run: npx eslint {staged_files}
     types:
-      files: git diff --name-only @{push}
-      glob: '*.{js,ts,jsx,tsx}'
-      run: 'export PATH=/Users/min/.nvm/versions/node/v16.20.2/bin:$PATH && node_modules/.bin/tsc --noEmit'
-
+      glob: '*.{js,ts, jsx, tsx}'
+      run: npx tsc
 commit-msg:
   parallel: true
   commands:
+    commitlint:
+      run: npx commitlint --edit

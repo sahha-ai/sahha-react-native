@@ -4,8 +4,6 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import com.facebook.react.bridge.Callback
 import com.facebook.react.bridge.ReactApplicationContext
-import com.facebook.react.bridge.ReactContextBaseJavaModule
-import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
 import com.google.gson.Gson
@@ -28,16 +26,20 @@ import java.util.Date
 
 private const val TAG = "SahhaReactNativeModule"
 
-class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
-  ReactContextBaseJavaModule(reactContext) {
+class SahhaReactNativeModule(private val reactContext: ReactApplicationContext) :
+  NativeSahhaReactNativeSpec(reactContext) {
 
-  override fun getName(): String {
-    return "SahhaReactNative"
+  companion object {
+    const val NAME = "SahhaReactNative"
   }
 
-  @ReactMethod
-  fun configure(settings: ReadableMap, callback: Callback) {
+  override fun getName(): String {
+    return NAME
+  }
 
+  override fun invalidate() {}
+
+  override fun configure(settings: ReadableMap, callback: Callback) {
     val environment: String? = settings.getString("environment")
     if (environment == null) {
       // Sahha.postError()
@@ -52,7 +54,6 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
       callback.invoke("Sahha.configure() environment parameter is invalid", null)
       return
     }
-
     // Notification config
     var sahhaNotificationConfiguration: SahhaNotificationConfiguration? = null
     try {
@@ -60,10 +61,9 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
         val icon = nSettings.getString("icon")
         val title = nSettings.getString("title")
         val shortDescription = nSettings.getString("shortDescription")
-
         sahhaNotificationConfiguration = SahhaNotificationConfiguration(
           SahhaConverterUtility.stringToDrawableResource(
-            reactApplicationContext,
+            reactContext,
             icon
           ),
           title,
@@ -76,15 +76,12 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
       return
     }
     // Notification config ends
-
     val sahhaSettings: SahhaSettings = SahhaSettings(
       environment = sahhaEnvironment,
       notificationSettings = sahhaNotificationConfiguration,
       framework = SahhaFramework.react_native
     )
-
-    val activity = currentActivity as? ComponentActivity
-
+    val activity = reactContext.currentActivity as? ComponentActivity  // CHANGED: Use reactContext.currentActivity
     if (activity == null) {
       callback("Sahha.configure() activity parameter is null", false)
     } else {
@@ -94,42 +91,33 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
     }
   }
 
-  @ReactMethod
-  fun isAuthenticated(callback: Callback) {
+  override fun isAuthenticated(callback: Callback) {
     callback(null, Sahha.isAuthenticated)
   }
 
-  @ReactMethod
-  fun authenticate(appId: String, appSecret: String, externalId: String, callback: Callback) {
-
+  override fun authenticate(appId: String, appSecret: String, externalId: String, callback: Callback) {
     Sahha.authenticate(appId, appSecret, externalId) { error, success ->
       callback(error, success)
     }
   }
 
-  @ReactMethod
-  fun authenticateToken(profileToken: String, refreshToken: String, callback: Callback) {
-
+  override fun authenticateToken(profileToken: String, refreshToken: String, callback: Callback) {
     Sahha.authenticate(profileToken, refreshToken) { error, success ->
       callback(error, success)
     }
   }
 
-  @ReactMethod
-  fun deauthenticate(callback: Callback) {
-
+  override fun deauthenticate(callback: Callback) {
     Sahha.deauthenticate { error, success ->
       callback(error, success)
     }
   }
 
-  @ReactMethod
-  fun getProfileToken(callback: Callback) {
+  override fun getProfileToken(callback: Callback) {
     callback.invoke(null, Sahha.profileToken)
   }
 
-  @ReactMethod
-  fun getDemographic(callback: Callback) {
+  override fun getDemographic(callback: Callback) {
     Sahha.getDemographic { error, demographic ->
       if (error != null) {
         callback.invoke(error, null)
@@ -144,8 +132,7 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
     }
   }
 
-  @ReactMethod
-  fun postDemographic(demographic: ReadableMap, callback: Callback) {
+  override fun postDemographic(demographic: ReadableMap, callback: Callback) {
     val age: Int? = if (demographic.hasKey("age")) demographic.getInt("age") else null
     val gender: String? = demographic.getString("gender")
     val country: String? = demographic.getString("country")
@@ -159,7 +146,6 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
     val locale: String? = demographic.getString("locale")
     val livingArrangement: String? = demographic.getString("livingArrangement")
     val birthDate: String? = demographic.getString("birthDate")
-
     var sahhaDemographic = SahhaDemographic(
       age,
       gender,
@@ -175,44 +161,38 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
       livingArrangement,
       birthDate
     )
-
     Sahha.postDemographic(sahhaDemographic) { error, success ->
       callback.invoke(error, success)
     }
   }
 
-  @ReactMethod
-  fun getSensorStatus(sensors: ReadableArray, callback: Callback) {
+  override fun getSensorStatus(sensors: ReadableArray, callback: Callback) {
     val sahhaSensors = sensors.toArrayList().map { SahhaSensor.valueOf(it as String) }.toSet()
     Sahha.getSensorStatus(
-      reactApplicationContext.baseContext,
+      reactContext.baseContext,  // This should work; change to reactContext.applicationContext if issues
       sahhaSensors
     ) { error, sensorStatus ->
       callback.invoke(error, sensorStatus.ordinal)
     }
   }
 
-  @ReactMethod
-  fun enableSensors(sensors: ReadableArray, callback: Callback) {
+  override fun enableSensors(sensors: ReadableArray, callback: Callback) {
     val sahhaSensors = sensors.toArrayList().map { SahhaSensor.valueOf(it as String) }.toSet()
-    Sahha.enableSensors(reactApplicationContext.baseContext, sahhaSensors) { error, sensorStatus ->
+    Sahha.enableSensors(reactContext.baseContext, sahhaSensors) { error, sensorStatus ->
       callback.invoke(error, sensorStatus.ordinal)
     }
   }
 
-  @ReactMethod
-  fun getScores(
+  override fun getScores(
     types: ReadableArray,
     startDateTime: Double,
     endDateTime: Double,
     callback: Callback,
   ) {
     val sahhaScoreTypes = types.toArrayList().map { SahhaScoreType.valueOf(it as String) }.toSet()
-
     val sahhaStartDateTime: Date
     val sahhaEndDateTime: Date
     var body: String = "startDateTime: $startDateTime | endDateTime: $endDateTime"
-
     try {
       sahhaStartDateTime = Date(startDateTime.toLong())
       sahhaEndDateTime = Date(endDateTime.toLong())
@@ -228,7 +208,6 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
       callback.invoke(message, null)
       return
     }
-
     Log.d("Sahha", "getScores startDateTime $sahhaStartDateTime")
     Log.d("Sahha", "getScores endDateTime $sahhaEndDateTime")
     Sahha.getScores(sahhaScoreTypes, Pair(sahhaStartDateTime, sahhaEndDateTime)) { error, value ->
@@ -250,8 +229,7 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
     }
   }
 
-  @ReactMethod
-  fun getBiomarkers(
+  override fun getBiomarkers(
     categories: ReadableArray,
     types: ReadableArray,
     startDateTime: Double,
@@ -265,7 +243,6 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
     val sahhaStartDateTime: Date
     val sahhaEndDateTime: Date
     var body: String = "startDateTime: $startDateTime | endDateTime: $endDateTime"
-
     try {
       sahhaStartDateTime = Date(startDateTime.toLong())
       sahhaEndDateTime = Date(endDateTime.toLong())
@@ -281,7 +258,6 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
       callback.invoke(message, null)
       return
     }
-
     Log.d("Sahha", "getBiomarkers startDateTime $sahhaStartDateTime")
     Log.d("Sahha", "getBiomarkers endDateTime $sahhaEndDateTime")
     Sahha.getBiomarkers(
@@ -307,8 +283,7 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
     }
   }
 
-  @ReactMethod
-  fun getStats(
+  override fun getStats(
     sensor: String,
     startDateTime: Double,
     endDateTime: Double,
@@ -317,7 +292,6 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
     val sahhaStartDateTime: Date
     val sahhaEndDateTime: Date
     var body: String = "startDateTime: $startDateTime | endDateTime: $endDateTime"
-
     try {
       sahhaStartDateTime = Date(startDateTime.toLong())
       sahhaEndDateTime = Date(endDateTime.toLong())
@@ -333,7 +307,6 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
       callback.invoke(message, null)
       return
     }
-
     Log.d("Sahha", "getStats startDateTime $sahhaStartDateTime")
     Log.d("Sahha", "getStats endDateTime $sahhaEndDateTime")
     Sahha.getStats(
@@ -343,7 +316,7 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
       if (error == null && value == null) {
         val message: String = "Sahha.getStats() failed"
         body =
-          "startDateTime: $startDateTime | endDateTime: $endDateTime | startDateTime: $sahhaStartDateTime | endDatTime: $sahhaEndDateTime"
+          "startDateTime: $startDateTime | endDateTime: $endDateTime | startDateTime: $sahhaStartDateTime | endDateTime: $sahhaEndDateTime"
         Sahha.postError(
           SahhaFramework.react_native,
           message,
@@ -369,8 +342,7 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
     }
   }
 
-  @ReactMethod
-  fun getSamples(
+  override fun getSamples(
     sensor: String,
     startDateTime: Double,
     endDateTime: Double,
@@ -379,7 +351,6 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
     val sahhaStartDateTime: Date
     val sahhaEndDateTime: Date
     var body: String = "startDateTime: $startDateTime | endDateTime: $endDateTime"
-
     try {
       sahhaStartDateTime = Date(startDateTime.toLong())
       sahhaEndDateTime = Date(endDateTime.toLong())
@@ -395,7 +366,6 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
       callback.invoke(message, null)
       return
     }
-
     Log.d("Sahha", "getSamples startDateTime $sahhaStartDateTime")
     Log.d("Sahha", "getSamples endDateTime $sahhaEndDateTime")
     Sahha.getSamples(
@@ -432,13 +402,11 @@ class SahhaReactNativeModule(reactContext: ReactApplicationContext) :
   }
 
   @Deprecated(message = "postSensorData is only supported on iOS", level = DeprecationLevel.WARNING)
-  @ReactMethod
-  fun postSensorData() {
+  override fun postSensorData() {
     Log.w(TAG, "postSensorData is only supported on iOS")
   }
 
-  @ReactMethod
-  fun openAppSettings() {
-    Sahha.openAppSettings(reactApplicationContext.baseContext)
+  override fun openAppSettings() {
+    Sahha.openAppSettings(reactContext.baseContext)
   }
 }

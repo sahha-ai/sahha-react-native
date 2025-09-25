@@ -1,5 +1,4 @@
-import { TurboModuleRegistry } from 'react-native';
-import type { TurboModule } from 'react-native';
+import { TurboModuleRegistry, type TurboModule } from 'react-native';
 
 export enum SahhaEnvironment {
   development = 'development',
@@ -211,6 +210,4 @@ export interface Spec extends TurboModule {
   postSensorData(): void;
 }
 
-const Sahha = TurboModuleRegistry.get<Spec>('SahhaReactNative');
-
-export default Sahha;
+export default TurboModuleRegistry.getEnforcing<Spec>('SahhaReactNative');
