@@ -147,18 +147,7 @@ class SahhaReactNativeModule(private val reactContext: ReactApplicationContext) 
     val livingArrangement: String? = demographic.getString("livingArrangement")
     val birthDate: String? = demographic.getString("birthDate")
     var sahhaDemographic = SahhaDemographic(
-      age,
       gender,
-      country,
-      birthCountry,
-      ethnicity,
-      occupation,
-      industry,
-      incomeRange,
-      education,
-      relationship,
-      locale,
-      livingArrangement,
       birthDate
     )
     Sahha.postDemographic(sahhaDemographic) { error, success ->
