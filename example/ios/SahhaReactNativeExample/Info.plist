@@ -35,6 +35,8 @@
 	<string>This app needs your health info to deliver health analysis.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
+	<key>NSMotionUsageDescription</key>
+	<string>This app needs access to motion to capture health information and trigger background processing.</string>
 	<key>RCTNewArchEnabled</key>
 	<false/>
 	<key>UILaunchStoryboardName</key>
