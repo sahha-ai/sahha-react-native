@@ -184,9 +184,9 @@ export default function App() {
   const handleAuthenticate = () => {
     // Replace with your actual appId, appSecret, externalId
     Sahha?.authenticate(
-      'APP_ID',
-      'APP_SECRET',
-      'EXTERNAL_ID',
+      'anGxWFRoY1WHmYM2xk15AbFXmDD4C4pn',
+      '9Uw0PnTtDA9L8Kn12Bo5jxXDdO4D7Q4apWXc5tvGK3R6qau1WvyAbC1nY2gi85fP',
+      'david-1.3.0-ios',
       (error: string, success: boolean) => {
         if (error) {
           setResult(`Authenticate error: ${error}`);

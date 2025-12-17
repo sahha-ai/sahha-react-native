@@ -141,55 +141,9 @@ class SahhaReactNative: NSObject {
 
       var requestDemographic = SahhaDemographic()
 
-      if let ageNumber = configDemographic["age"] as? NSNumber {
-        let age = ageNumber.intValue
-        requestDemographic.age = age
-      }
-
+     
       if let gender = configDemographic["gender"] as? String {
         requestDemographic.gender = gender
-      }
-
-      if let country = configDemographic["country"] as? String {
-        requestDemographic.country = country
-      }
-
-      if let birthCountry = configDemographic["birthCountry"] as? String {
-        requestDemographic.birthCountry = birthCountry
-      }
-
-      if let ethnicity = configDemographic["ethnicity"] as? String {
-        requestDemographic.ethnicity = ethnicity
-      }
-
-      if let occupation = configDemographic["occupation"] as? String {
-        requestDemographic.occupation = occupation
-      }
-
-      if let industry = configDemographic["industry"] as? String {
-        requestDemographic.industry = industry
-      }
-
-      if let incomeRange = configDemographic["incomeRange"] as? String {
-        requestDemographic.incomeRange = incomeRange
-      }
-
-      if let education = configDemographic["education"] as? String {
-        requestDemographic.education = education
-      }
-
-      if let relationship = configDemographic["relationship"] as? String {
-        requestDemographic.relationship = relationship
-      }
-
-      if let locale = configDemographic["locale"] as? String {
-        requestDemographic.locale = locale
-      }
-
-      if let livingArrangement = configDemographic["livingArrangement"]
-        as? String
-      {
-        requestDemographic.livingArrangement = livingArrangement
       }
 
       if let birthDate = configDemographic["birthDate"] as? String {
