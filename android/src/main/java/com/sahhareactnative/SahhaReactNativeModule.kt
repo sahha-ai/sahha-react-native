@@ -133,27 +133,23 @@ class SahhaReactNativeModule(private val reactContext: ReactApplicationContext) 
   }
 
   override fun postDemographic(demographic: ReadableMap, callback: Callback) {
-    val age: Int? = if (demographic.hasKey("age")) demographic.getInt("age") else null
+    val age: Int? =
+      if (demographic.hasKey("age") && !demographic.isNull("age")) demographic.getInt("age") else null
+
     val gender: String? = demographic.getString("gender")
-    val country: String? = demographic.getString("country")
-    val birthCountry: String? = demographic.getString("birthCountry")
-    val ethnicity: String? = demographic.getString("ethnicity")
-    val occupation: String? = demographic.getString("occupation")
-    val industry: String? = demographic.getString("industry")
-    val incomeRange: String? = demographic.getString("incomeRange")
-    val education: String? = demographic.getString("education")
-    val relationship: String? = demographic.getString("relationship")
-    val locale: String? = demographic.getString("locale")
-    val livingArrangement: String? = demographic.getString("livingArrangement")
     val birthDate: String? = demographic.getString("birthDate")
-    var sahhaDemographic = SahhaDemographic(
-      gender,
-      birthDate
+
+    val sahhaDemographic = SahhaDemographic(
+      age = age,
+      gender = gender,
+      birthDate = birthDate
     )
+
     Sahha.postDemographic(sahhaDemographic) { error, success ->
       callback.invoke(error, success)
     }
   }
+
 
   override fun getSensorStatus(sensors: ReadableArray, callback: Callback) {
     val sahhaSensors = sensors.toArrayList().map { SahhaSensor.valueOf(it as String) }.toSet()
