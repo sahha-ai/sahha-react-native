@@ -154,7 +154,7 @@ export default function App() {
 
   const handleConfigure = () => {
     const settings = {
-      environment: SahhaEnvironment.development,
+      environment: SahhaEnvironment.sandbox,
       notificationSettings: {
         icon: 'ic_test',
         title: 'Test Title',
