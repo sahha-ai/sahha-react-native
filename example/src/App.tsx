@@ -154,9 +154,9 @@ export default function App() {
 
   const handleConfigure = () => {
     const settings = {
-      environment: SahhaEnvironment.sandbox,
+      environment: SahhaEnvironment.development,
       notificationSettings: {
-        icon: 'ic_test',
+        icon: 'notification',
         title: 'Test Title',
         shortDescription: 'Test description.',
       },
@@ -184,9 +184,9 @@ export default function App() {
   const handleAuthenticate = () => {
     // Replace with your actual appId, appSecret, externalId
     Sahha?.authenticate(
-      '',
-      '',
-      '',
+      'dJ52F2MXsQ6xjJ6IPRahBG1S3ayzYUSo',
+      'bodDOI8MwQkIlZycZWAlzO7T6CamQ2fl6SpWt9U6vZc1itbqeECfslnecMRPyfDz',
+      'SampleProfile-009294e9-64f7-461e-a36c-61b57f4ece7e',
       (error: string, success: boolean) => {
         if (error) {
           setResult(`Authenticate error: ${error}`);

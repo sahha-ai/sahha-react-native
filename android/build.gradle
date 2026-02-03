@@ -10,7 +10,7 @@ buildscript {
   }
 
   dependencies {
-    classpath "com.android.tools.build:gradle:8.7.2"
+    //classpath "com.android.tools.build:gradle:8.7.3"
     // noinspection DifferentKotlinGradleVersion
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${getExtOrDefault('kotlinVersion')}"
     classpath "com.facebook.react:react-native-gradle-plugin:0.81.0"  // Added version to fix resolution
@@ -73,8 +73,8 @@ repositories {
 def kotlin_version = getExtOrDefault("kotlinVersion")
 
 dependencies {
-  implementation "com.facebook.react:react-native:0.81.0"  // Pinned to your RN version
+  implementation "com.facebook.react:react-native:0.83.1"  // Pinned to your RN version
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-  implementation "com.google.code.gson:gson:2.9.0"
-  implementation "ai.sahha:sahha-android:1.2.1"
+  implementation "com.google.code.gson:gson:2.13.2"
+  implementation "ai.sahha.android:sahha-api:0.1.0-alpha08"
 }
