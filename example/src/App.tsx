@@ -6,6 +6,11 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
+import {
+  SafeAreaProvider,
+  SafeAreaView,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
 import Sahha, {
   SahhaEnvironment,
   SahhaSensor,
@@ -148,15 +153,17 @@ function JSONView({ data, level = 0 }: { data: JSONValue; level?: number }) {
   return null;
 }
 
-export default function App() {
+function AppContent() {
+  const insets = useSafeAreaInsets();
+
   const [result, setResult] = useState<string | JSONValue>('');
   const [isExpanded, setIsExpanded] = useState(false);
 
   const handleConfigure = () => {
     const settings = {
-      environment: SahhaEnvironment.sandbox,
+      environment: SahhaEnvironment.development,
       notificationSettings: {
-        icon: 'ic_test',
+        icon: 'notification',
         title: 'Test Title',
         shortDescription: 'Test description.',
       },
@@ -182,11 +189,10 @@ export default function App() {
   };
 
   const handleAuthenticate = () => {
-    // Replace with your actual appId, appSecret, externalId
     Sahha?.authenticate(
-      '',
-      '',
-      '',
+      'dJ52F2MXsQ6xjJ6IPRahBG1S3ayzYUSo',
+      'bodDOI8MwQkIlZycZWAlzO7T6CamQ2fl6SpWt9U6vZc1itbqeECfslnecMRPyfDz',
+      'SampleProfile-009294e9-64f7-461e-a36c-61b57f4ece7e',
       (error: string, success: boolean) => {
         if (error) {
           setResult(`Authenticate error: ${error}`);
@@ -198,7 +204,6 @@ export default function App() {
   };
 
   const handleAuthenticateToken = () => {
-    // Replace with your actual profileToken and refreshToken
     Sahha?.authenticateToken(
       'profile-token-placeholder',
       'refresh-token-placeholder',
@@ -251,7 +256,6 @@ export default function App() {
     const demographic = {
       age: 30,
       gender: 'male',
-      // Add more fields as needed
     };
     Sahha?.postDemographic(demographic, (error: string, success: boolean) => {
       if (error) {
@@ -289,7 +293,7 @@ export default function App() {
 
   const handleGetScores = () => {
     const types = [SahhaScoreType.activity];
-    const startDateTime = Date.now() - 7 * 24 * 60 * 60 * 1000; // 7 days ago
+    const startDateTime = Date.now() - 7 * 24 * 60 * 60 * 1000;
     const endDateTime = Date.now();
     Sahha?.getScores(
       types,
@@ -302,7 +306,7 @@ export default function App() {
           try {
             const parsed = JSON.parse(value);
             setResult(parsed);
-          } catch (e) {
+          } catch {
             setResult(`Scores: ${value}`);
           }
         }
@@ -313,7 +317,7 @@ export default function App() {
   const handleGetBiomarkers = () => {
     const categories = [SahhaBiomarkerCategory.activity];
     const types = [SahhaBiomarkerType.steps];
-    const startDateTime = Date.now() - 7 * 24 * 60 * 60 * 1000; // 7 days ago
+    const startDateTime = Date.now() - 7 * 24 * 60 * 60 * 1000;
     const endDateTime = Date.now();
     Sahha?.getBiomarkers(
       categories,
@@ -327,7 +331,7 @@ export default function App() {
           try {
             const parsed = JSON.parse(value);
             setResult(parsed);
-          } catch (e) {
+          } catch {
             setResult(`Biomarkers: ${value}`);
           }
         }
@@ -337,7 +341,7 @@ export default function App() {
 
   const handleGetStats = () => {
     const sensor = SahhaSensor.steps;
-    const startDateTime = Date.now() - 7 * 24 * 60 * 60 * 1000; // 7 days ago
+    const startDateTime = Date.now() - 7 * 24 * 60 * 60 * 1000;
     const endDateTime = Date.now();
     Sahha?.getStats(
       sensor,
@@ -350,7 +354,7 @@ export default function App() {
           try {
             const parsed = JSON.parse(value);
             setResult(parsed);
-          } catch (e) {
+          } catch {
             setResult(`Stats: ${value}`);
           }
         }
@@ -360,7 +364,7 @@ export default function App() {
 
   const handleGetSamples = () => {
     const sensor = SahhaSensor.steps;
-    const startDateTime = Date.now() - 7 * 24 * 60 * 60 * 1000; // 7 days ago
+    const startDateTime = Date.now() - 7 * 24 * 60 * 60 * 1000;
     const endDateTime = Date.now();
     Sahha?.getSamples(
       sensor,
@@ -373,7 +377,7 @@ export default function App() {
           try {
             const parsed = JSON.parse(value);
             setResult(parsed);
-          } catch (e) {
+          } catch {
             setResult(`Samples: ${value}`);
           }
         }
@@ -434,8 +438,9 @@ export default function App() {
   ];
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
       <Text style={styles.title}>Testing Sahha Module</Text>
+
       <ScrollView style={styles.buttonContainer}>
         {sections.map((section, sectionIndex) => (
           <View key={sectionIndex} style={styles.section}>
@@ -452,7 +457,13 @@ export default function App() {
           </View>
         ))}
       </ScrollView>
-      <View style={styles.resultHeader}>
+
+      <View style={[
+          styles.resultHeader,
+          {
+            paddingBottom: 10 + insets.bottom,
+          },
+        ]}>
         <Text style={styles.resultTitle}>Result</Text>
         <TouchableOpacity onPress={() => setIsExpanded(!isExpanded)}>
           <Text style={styles.toggleText}>
@@ -460,8 +471,14 @@ export default function App() {
           </Text>
         </TouchableOpacity>
       </View>
+
       {isExpanded && (
-        <ScrollView style={styles.resultContainer}>
+        <ScrollView
+          style={styles.resultContainer}
+          contentContainerStyle={{
+            paddingBottom: 24 + insets.bottom, // <-- keeps logs above Android nav bar
+          }}
+        >
           {typeof result === 'string' ? (
             <Text style={styles.resultText}>{result}</Text>
           ) : (
@@ -469,7 +486,15 @@ export default function App() {
           )}
         </ScrollView>
       )}
-    </View>
+    </SafeAreaView>
+  );
+}
+
+export default function App() {
+  return (
+    <SafeAreaProvider>
+      <AppContent />
+    </SafeAreaProvider>
   );
 }
 
@@ -541,27 +566,27 @@ const styles = StyleSheet.create({
     color: '#000000',
   },
   jsonKey: {
-    color: '#c2185b', // Pink for keys
+    color: '#c2185b',
     fontFamily: 'monospace',
   },
   jsonString: {
-    color: '#388e3c', // Dark green for strings
+    color: '#388e3c',
     fontFamily: 'monospace',
   },
   jsonNumber: {
-    color: '#1976d2', // Blue for numbers
+    color: '#1976d2',
     fontFamily: 'monospace',
   },
   jsonBoolean: {
-    color: '#7b1fa2', // Purple for booleans
+    color: '#7b1fa2',
     fontFamily: 'monospace',
   },
   jsonNull: {
-    color: '#f57c00', // Orange for null
+    color: '#f57c00',
     fontFamily: 'monospace',
   },
   jsonBracket: {
-    color: '#616161', // Gray for brackets
+    color: '#616161',
     fontFamily: 'monospace',
   },
 });

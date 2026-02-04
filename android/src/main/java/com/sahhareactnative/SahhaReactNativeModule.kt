@@ -10,17 +10,18 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonPrimitive
 import com.google.gson.JsonSerializer
-import sdk.sahha.android.source.Sahha
-import sdk.sahha.android.source.SahhaBiomarkerCategory
-import sdk.sahha.android.source.SahhaBiomarkerType
-import sdk.sahha.android.source.SahhaConverterUtility
-import sdk.sahha.android.source.SahhaDemographic
-import sdk.sahha.android.source.SahhaEnvironment
-import sdk.sahha.android.source.SahhaFramework
-import sdk.sahha.android.source.SahhaNotificationConfiguration
-import sdk.sahha.android.source.SahhaScoreType
-import sdk.sahha.android.source.SahhaSensor
-import sdk.sahha.android.source.SahhaSettings
+import ai.sahha.api.Sahha
+import ai.sahha.api.biomarkers.SahhaBiomarkerCategory
+import ai.sahha.api.biomarkers.SahhaBiomarkerType
+import ai.sahha.api.demographic.SahhaDemographic
+import ai.sahha.api.settings.SahhaEnvironment
+import ai.sahha.api.notifications.SahhaNotificationConfiguration
+import ai.sahha.api.settings.SahhaFramework
+import ai.sahha.api.score.SahhaScoreType
+import ai.sahha.api.sensors.SahhaSensor
+import ai.sahha.api.sensors.SahhaSensorStatus
+import ai.sahha.api.settings.SahhaSettings
+import android.content.Context
 import java.time.ZonedDateTime
 import java.util.Date
 
@@ -48,26 +49,26 @@ class SahhaReactNativeModule(private val reactContext: ReactApplicationContext) 
     }
     val sahhaEnvironment: SahhaEnvironment
     try {
-      sahhaEnvironment = SahhaEnvironment.valueOf(environment)
+      sahhaEnvironment = SahhaEnvironment.valueOf(environment.uppercase())
     } catch (e: IllegalArgumentException) {
       // Sahha.postError()
       callback.invoke("Sahha.configure() environment parameter is invalid", null)
       return
     }
     // Notification config
-    var sahhaNotificationConfiguration: SahhaNotificationConfiguration? = null
+    var sahhaNotificationConfiguration = SahhaNotificationConfiguration.DEFAULT
     try {
       settings.getMap("notificationSettings")?.also { nSettings ->
         val icon = nSettings.getString("icon")
         val title = nSettings.getString("title")
         val shortDescription = nSettings.getString("shortDescription")
         sahhaNotificationConfiguration = SahhaNotificationConfiguration(
-          SahhaConverterUtility.stringToDrawableResource(
+          stringToDrawableResource(
             reactContext,
             icon
-          ),
-          title,
-          shortDescription,
+          ) ?: 0,
+          title ?: "title",
+          shortDescription ?: "shortDescription",
         )
       }
     } catch (e: IllegalArgumentException) {
@@ -79,7 +80,7 @@ class SahhaReactNativeModule(private val reactContext: ReactApplicationContext) 
     val sahhaSettings: SahhaSettings = SahhaSettings(
       environment = sahhaEnvironment,
       notificationSettings = sahhaNotificationConfiguration,
-      framework = SahhaFramework.react_native
+      framework = SahhaFramework.REACT_NATIVE
     )
     val activity = reactContext.currentActivity as? ComponentActivity  // CHANGED: Use reactContext.currentActivity
     if (activity == null) {
@@ -152,9 +153,9 @@ class SahhaReactNativeModule(private val reactContext: ReactApplicationContext) 
 
 
   override fun getSensorStatus(sensors: ReadableArray, callback: Callback) {
-    val sahhaSensors = sensors.toArrayList().map { SahhaSensor.valueOf(it as String) }.toSet()
+    val sahhaSensors = sensors.toArrayList().map { SahhaSensor.valueOf((it as String).uppercase()) }.toSet()
     Sahha.getSensorStatus(
-      reactContext.baseContext,  // This should work; change to reactContext.applicationContext if issues
+        // This should work; change to reactContext.applicationContext if issues
       sahhaSensors
     ) { error, sensorStatus ->
       callback.invoke(error, sensorStatus.ordinal)
@@ -162,9 +163,14 @@ class SahhaReactNativeModule(private val reactContext: ReactApplicationContext) 
   }
 
   override fun enableSensors(sensors: ReadableArray, callback: Callback) {
-    val sahhaSensors = sensors.toArrayList().map { SahhaSensor.valueOf(it as String) }.toSet()
-    Sahha.enableSensors(reactContext.baseContext, sahhaSensors) { error, sensorStatus ->
-      callback.invoke(error, sensorStatus.ordinal)
+    val sahhaSensors = sensors.toArrayList().map { SahhaSensor.valueOf((it as String).uppercase()) }.toSet()
+    Sahha.enableSensors( sahhaSensors) { error, sensorStatus ->
+      val status = if (sensorStatus){
+        SahhaSensorStatus.ENABLED.ordinal
+      }else{
+        SahhaSensorStatus.PENDING.ordinal
+      }
+      callback.invoke(error, status)
     }
   }
 
@@ -174,7 +180,7 @@ class SahhaReactNativeModule(private val reactContext: ReactApplicationContext) 
     endDateTime: Double,
     callback: Callback,
   ) {
-    val sahhaScoreTypes = types.toArrayList().map { SahhaScoreType.valueOf(it as String) }.toSet()
+    val sahhaScoreTypes = types.toArrayList().map { SahhaScoreType.valueOf((it as String).uppercase()) }.toSet()
     val sahhaStartDateTime: Date
     val sahhaEndDateTime: Date
     var body: String = "startDateTime: $startDateTime | endDateTime: $endDateTime"
@@ -184,7 +190,7 @@ class SahhaReactNativeModule(private val reactContext: ReactApplicationContext) 
     } catch (e: IllegalArgumentException) {
       val message: String = "Sahha.getScores() parameters invalid"
       Sahha.postError(
-        SahhaFramework.react_native,
+        SahhaFramework.REACT_NATIVE,
         message,
         "SahhaReactNativeModule",
         "getScores",
@@ -201,7 +207,7 @@ class SahhaReactNativeModule(private val reactContext: ReactApplicationContext) 
         body =
           "startDateTime: $startDateTime | endDateTime: $endDateTime | startDateTime: $sahhaStartDateTime | endDateTime: $sahhaEndDateTime"
         Sahha.postError(
-          SahhaFramework.react_native,
+          SahhaFramework.REACT_NATIVE,
           message,
           "SahhaReactNativeModule",
           "getScores",
@@ -222,9 +228,9 @@ class SahhaReactNativeModule(private val reactContext: ReactApplicationContext) 
     callback: Callback,
   ) {
     val sahhaBiomarkerCategories =
-      categories.toArrayList().map { SahhaBiomarkerCategory.valueOf(it as String) }.toSet()
+      categories.toArrayList().map { SahhaBiomarkerCategory.valueOf((it as String).uppercase()) }.toSet()
     val sahhaBiomarkerTypes =
-      types.toArrayList().map { SahhaBiomarkerType.valueOf(it as String) }.toSet()
+      types.toArrayList().map { SahhaBiomarkerType.valueOf((it as String).uppercase()) }.toSet()
     val sahhaStartDateTime: Date
     val sahhaEndDateTime: Date
     var body: String = "startDateTime: $startDateTime | endDateTime: $endDateTime"
@@ -234,7 +240,7 @@ class SahhaReactNativeModule(private val reactContext: ReactApplicationContext) 
     } catch (e: IllegalArgumentException) {
       val message: String = "Sahha.getBiomarkers() parameters invalid"
       Sahha.postError(
-        SahhaFramework.react_native,
+        SahhaFramework.REACT_NATIVE,
         message,
         "SahhaReactNativeModule",
         "getBiomarkers",
@@ -255,7 +261,7 @@ class SahhaReactNativeModule(private val reactContext: ReactApplicationContext) 
         body =
           "startDateTime: $startDateTime | endDateTime: $endDateTime | startDateTime: $sahhaStartDateTime | endDateTime: $sahhaEndDateTime"
         Sahha.postError(
-          SahhaFramework.react_native,
+          SahhaFramework.REACT_NATIVE,
           message,
           "SahhaReactNativeModule",
           "getBiomarkers",
@@ -283,7 +289,7 @@ class SahhaReactNativeModule(private val reactContext: ReactApplicationContext) 
     } catch (e: IllegalArgumentException) {
       val message: String = "Sahha.getStats() parameters invalid"
       Sahha.postError(
-        SahhaFramework.react_native,
+        SahhaFramework.REACT_NATIVE,
         message,
         "SahhaReactNativeModule",
         "getStats",
@@ -295,7 +301,7 @@ class SahhaReactNativeModule(private val reactContext: ReactApplicationContext) 
     Log.d("Sahha", "getStats startDateTime $sahhaStartDateTime")
     Log.d("Sahha", "getStats endDateTime $sahhaEndDateTime")
     Sahha.getStats(
-      SahhaSensor.valueOf(sensor),
+      SahhaSensor.valueOf(sensor.uppercase()),
       Pair(sahhaStartDateTime, sahhaEndDateTime)
     ) { error, value ->
       if (error == null && value == null) {
@@ -303,7 +309,7 @@ class SahhaReactNativeModule(private val reactContext: ReactApplicationContext) 
         body =
           "startDateTime: $startDateTime | endDateTime: $endDateTime | startDateTime: $sahhaStartDateTime | endDateTime: $sahhaEndDateTime"
         Sahha.postError(
-          SahhaFramework.react_native,
+          SahhaFramework.REACT_NATIVE,
           message,
           "SahhaReactNativeModule",
           "getStats",
@@ -342,7 +348,7 @@ class SahhaReactNativeModule(private val reactContext: ReactApplicationContext) 
     } catch (e: IllegalArgumentException) {
       val message: String = "Sahha.getSamples() parameters invalid"
       Sahha.postError(
-        SahhaFramework.react_native,
+        SahhaFramework.REACT_NATIVE,
         message,
         "SahhaReactNativeModule",
         "getSamples",
@@ -354,7 +360,7 @@ class SahhaReactNativeModule(private val reactContext: ReactApplicationContext) 
     Log.d("Sahha", "getSamples startDateTime $sahhaStartDateTime")
     Log.d("Sahha", "getSamples endDateTime $sahhaEndDateTime")
     Sahha.getSamples(
-      SahhaSensor.valueOf(sensor),
+      SahhaSensor.valueOf(sensor.uppercase()),
       Pair(sahhaStartDateTime, sahhaEndDateTime)
     ) { error, value ->
       if (error == null && value == null) {
@@ -362,7 +368,7 @@ class SahhaReactNativeModule(private val reactContext: ReactApplicationContext) 
         body =
           "startDateTime: $startDateTime | endDateTime: $endDateTime | startDateTime: $sahhaStartDateTime | endDateTime: $sahhaEndDateTime"
         Sahha.postError(
-          SahhaFramework.react_native,
+          SahhaFramework.REACT_NATIVE,
           message,
           "SahhaReactNativeModule",
           "getSamples",
@@ -392,6 +398,13 @@ class SahhaReactNativeModule(private val reactContext: ReactApplicationContext) 
   }
 
   override fun openAppSettings() {
-    Sahha.openAppSettings(reactContext.baseContext)
+    Sahha.openAppSettings()
+  }
+  fun stringToDrawableResource(context: Context, iconString: String?): Int? {
+    return try {
+      context.resources.getIdentifier(iconString, "drawable", context.packageName)
+    } catch (e: Exception) {
+      null
+    }
   }
 }
