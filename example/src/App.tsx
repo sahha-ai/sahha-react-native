@@ -191,9 +191,9 @@ function AppContent() {
 
   const handleAuthenticate = () => {
     Sahha?.authenticate(
-      '',
-      '',
-      '',
+      'dJ52F2MXsQ6xjJ6IPRahBG1S3ayzYUSo',
+      'bodDOI8MwQkIlZycZWAlzO7T6CamQ2fl6SpWt9U6vZc1itbqeECfslnecMRPyfDz',
+      '1.3.5-david-react-android-device',
       (error: string, success: boolean) => {
         if (error) {
           setResult(`Authenticate error: ${error}`);
