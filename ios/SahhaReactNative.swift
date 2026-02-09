@@ -21,23 +21,37 @@ class SahhaReactNative: NSObject {
   enum SahhaSettingsIdentifier: String {
     case environment
     case sensors
+    case enableMotionTrigger 
   }
 
-  @objc(configure:callback:)
+   @objc(configure:callback:)
   func configure(
     _ settings: NSDictionary, callback: @escaping RCTResponseSenderBlock
   ) {
     if let configSettings = settings as? [String: Any],
-      let environment = configSettings[
-        SahhaSettingsIdentifier.environment.rawValue] as? String,
-      let configEnvironment: SahhaEnvironment = SahhaEnvironment(
-        rawValue: environment)
+      let environment = configSettings[SahhaSettingsIdentifier.environment.rawValue] as? String,
+      let configEnvironment: SahhaEnvironment = SahhaEnvironment(rawValue: environment)
     {
 
-      var settings = SahhaSettings(environment: configEnvironment)
-      settings.framework = .react_native
+      // ✅ NEW: Optional enableMotionTrigger (default false), supports Bool or NSNumber
+      let enableMotionTrigger: Bool = {
+        if let boolVal = configSettings[SahhaSettingsIdentifier.enableMotionTrigger.rawValue] as? Bool {
+          return boolVal
+        }
+        if let numVal = configSettings[SahhaSettingsIdentifier.enableMotionTrigger.rawValue] as? NSNumber {
+          return numVal.boolValue
+        }
+        return false
+      }()
 
-      Sahha.configure(settings) {
+      // ✅ UPDATED: Pass enableMotionTrigger into settings
+      var sahhaSettings = SahhaSettings(
+        environment: configEnvironment,
+        enableMotionTrigger: enableMotionTrigger
+      )
+      sahhaSettings.framework = .react_native
+
+      Sahha.configure(sahhaSettings) {
         print("Sahha | ReactNative configure success")
         callback([NSNull(), true])
       }

@@ -2679,7 +2679,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - Sahha (1.3.3)
+  - Sahha (1.3.5)
   - SahhaReactNative (1.3.3):
     - boost
     - DoubleConversion
@@ -2706,7 +2706,7 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - Sahha (~> 1.3.3)
+    - Sahha (~> 1.3.5)
     - SocketRocket
     - Yoga
   - SocketRocket (0.7.1)
@@ -2795,13 +2795,13 @@ DEPENDENCIES:
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCPicker (from `../node_modules/@react-native-picker/picker`)"
   - RNScreens (from `../node_modules/react-native-screens`)
+  - Sahha (from `../../../sahha-ios/`)
   - SahhaReactNative (from `../..`)
   - SocketRocket (~> 0.7.1)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
   trunk:
-    - Sahha
     - SocketRocket
 
 EXTERNAL SOURCES:
@@ -2968,6 +2968,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-picker/picker"
   RNScreens:
     :path: "../node_modules/react-native-screens"
+  Sahha:
+    :path: "../../../sahha-ios/"
   SahhaReactNative:
     :path: "../.."
   Yoga:
@@ -3055,11 +3057,11 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: 29f0230e1a25f36c20b05f65e2eb8958d6526e82
   RNCPicker: bf95ec4b2483e2ab256047130bc536b437cd916c
   RNScreens: 714e10b6b554f7dc7ad9f78dcf36dc8e3fc73415
-  Sahha: 260fb4c87a0f5d43751160b3af7f1f6fb9453ac2
-  SahhaReactNative: 1d3a058ae486ee4e3777277688c091ac7a1a9e96
+  Sahha: fd5bd617ec02c82a750dda22cf53f9352dbefcae
+  SahhaReactNative: ce2ac365c0ef770ab220a57984bb4e9703214565
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Yoga: 5456bb010373068fc92221140921b09d126b116e
 
-PODFILE CHECKSUM: ffe0c3c4c1f21363070f1c97db069c1366401f47
+PODFILE CHECKSUM: eeb04bb2ca5459ed26df6fe517bbfdc5ac02d279
 
 COCOAPODS: 1.16.2

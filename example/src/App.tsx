@@ -162,6 +162,7 @@ function AppContent() {
   const handleConfigure = () => {
     const settings = {
       environment: SahhaEnvironment.development,
+      enableMotionTrigger: true,
       notificationSettings: {
         icon: 'notification',
         title: 'Test Title',
@@ -190,9 +191,9 @@ function AppContent() {
 
   const handleAuthenticate = () => {
     Sahha?.authenticate(
-      'dJ52F2MXsQ6xjJ6IPRahBG1S3ayzYUSo',
-      'bodDOI8MwQkIlZycZWAlzO7T6CamQ2fl6SpWt9U6vZc1itbqeECfslnecMRPyfDz',
-      'SampleProfile-009294e9-64f7-461e-a36c-61b57f4ece7e',
+      '',
+      '',
+      '',
       (error: string, success: boolean) => {
         if (error) {
           setResult(`Authenticate error: ${error}`);
@@ -281,7 +282,7 @@ function AppContent() {
   };
 
   const handleEnableSensors = () => {
-    const sensors = [SahhaSensor.steps];
+    const sensors = [SahhaSensor.steps, SahhaSensor.exercise, SahhaSensor.sleep];
     Sahha?.enableSensors(sensors, (error: string, value: SahhaSensorStatus) => {
       if (error) {
         setResult(`Enable sensors error: ${error}`);
