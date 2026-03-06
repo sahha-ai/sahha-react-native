@@ -21,10 +21,10 @@ class SahhaReactNative: NSObject {
   enum SahhaSettingsIdentifier: String {
     case environment
     case sensors
-    case enableMotionTrigger 
+    case enableMotionTrigger
   }
 
-   @objc(configure:callback:)
+  @objc(configure:callback:)
   func configure(
     _ settings: NSDictionary, callback: @escaping RCTResponseSenderBlock
   ) {
@@ -35,10 +35,14 @@ class SahhaReactNative: NSObject {
 
       // ✅ NEW: Optional enableMotionTrigger (default false), supports Bool or NSNumber
       let enableMotionTrigger: Bool = {
-        if let boolVal = configSettings[SahhaSettingsIdentifier.enableMotionTrigger.rawValue] as? Bool {
+        if let boolVal = configSettings[SahhaSettingsIdentifier.enableMotionTrigger.rawValue]
+          as? Bool
+        {
           return boolVal
         }
-        if let numVal = configSettings[SahhaSettingsIdentifier.enableMotionTrigger.rawValue] as? NSNumber {
+        if let numVal = configSettings[SahhaSettingsIdentifier.enableMotionTrigger.rawValue]
+          as? NSNumber
+        {
           return numVal.boolValue
         }
         return false
@@ -155,7 +159,6 @@ class SahhaReactNative: NSObject {
 
       var requestDemographic = SahhaDemographic()
 
-     
       if let gender = configDemographic["gender"] as? String {
         requestDemographic.gender = gender
       }
@@ -184,35 +187,72 @@ class SahhaReactNative: NSObject {
     }
   }
 
-  @objc(getSensorStatus:callback:)
-  func getSensorStatus(
-    _ sensors: [String], callback: @escaping RCTResponseSenderBlock
-  ) {
-    var configSensors: Set<SahhaSensor> = []
-    for sensor in sensors {
-      if let configSensor = SahhaSensor(rawValue: sensor) {
-        configSensors.insert(configSensor)
-      }
-    }
-    Sahha.getSensorStatus(configSensors) { error, sensorStatus in
-      callback([error ?? NSNull(), sensorStatus.rawValue])
+@objc(getSensorStatus:callback:)
+func getSensorStatus(
+  _ sensors: [String],
+  callback: @escaping RCTResponseSenderBlock
+) {
+  var configSensors: Set<SahhaSensor> = []
+  for sensor in sensors {
+    if let configSensor = SahhaSensor(rawValue: sensor) {
+      configSensors.insert(configSensor)
     }
   }
 
-  @objc(enableSensors:callback:)
-  func enableSensors(
-    _ sensors: [String], callback: @escaping RCTResponseSenderBlock
-  ) {
-    var configSensors: Set<SahhaSensor> = []
-    for sensor in sensors {
-      if let configSensor = SahhaSensor(rawValue: sensor) {
-        configSensors.insert(configSensor)
-      }
+  Sahha.getSensorStatus(configSensors) { error, sensorStatus in
+    let statusOrdinal: Int
+    switch sensorStatus {
+    case .pending: statusOrdinal = 0
+    case .unavailable: statusOrdinal = 1
+    case .disabled: statusOrdinal = 2
+    case .enabled: statusOrdinal = 3
+    @unknown default: statusOrdinal = 0
     }
-    Sahha.enableSensors(configSensors) { error, sensorStatus in
-      callback([error ?? NSNull(), sensorStatus.rawValue])
+
+    callback([error ?? NSNull(), statusOrdinal])
+  }
+}
+
+ @objc(enableSensors:callback:)
+func enableSensors(
+  _ sensors: [String],
+  callback: @escaping RCTResponseSenderBlock
+) {
+  var configSensors: Set<SahhaSensor> = []
+  for sensor in sensors {
+    if let configSensor = SahhaSensor(rawValue: sensor) {
+      configSensors.insert(configSensor)
     }
   }
+
+  // 1) Request enable
+  Sahha.enableSensors(configSensors) { error, _ in
+    if let error = error {
+      callback([error, NSNull()])
+      return
+    }
+
+    // 2) Read actual status (source of truth)
+    Sahha.getSensorStatus(configSensors) { statusError, sensorStatus in
+      if let statusError = statusError {
+        callback([statusError, NSNull()])
+        return
+      }
+
+      // 3) Map to TS enum ordinal: 0..3
+      let statusOrdinal: Int
+      switch sensorStatus {
+      case .pending: statusOrdinal = 0
+      case .unavailable: statusOrdinal = 1
+      case .disabled: statusOrdinal = 2
+      case .enabled: statusOrdinal = 3
+      @unknown default: statusOrdinal = 0
+      }
+
+      callback([NSNull(), statusOrdinal])
+    }
+  }
+}
 
   @objc(getScores:startDateTime:endDateTime:callback:)
   func getScores(

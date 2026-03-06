@@ -2679,8 +2679,8 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - Sahha (1.3.5)
-  - SahhaReactNative (1.3.5):
+  - Sahha (1.3.7)
+  - SahhaReactNative (1.3.8):
     - boost
     - DoubleConversion
     - fast_float
@@ -2706,7 +2706,7 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - Sahha (~> 1.3.5)
+    - Sahha (~> 1.3.7)
     - SocketRocket
     - Yoga
   - SocketRocket (0.7.1)
@@ -3055,8 +3055,8 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: 29f0230e1a25f36c20b05f65e2eb8958d6526e82
   RNCPicker: bf95ec4b2483e2ab256047130bc536b437cd916c
   RNScreens: 714e10b6b554f7dc7ad9f78dcf36dc8e3fc73415
-  Sahha: fd5bd617ec02c82a750dda22cf53f9352dbefcae
-  SahhaReactNative: 749ab4735b4d773b4140e5b8c6c6619fe1a1853d
+  Sahha: f1938ca563d764674e6b800c0858fdf54083d5a4
+  SahhaReactNative: 1a332100465e75ae45ca1ecfb20323c79dc6b72e
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Yoga: 5456bb010373068fc92221140921b09d126b116e
 
