@@ -161,8 +161,7 @@ function AppContent() {
 
   const handleConfigure = () => {
     const settings = {
-      environment: SahhaEnvironment.development,
-      enableMotionTrigger: true,
+      environment: SahhaEnvironment.sandbox,
       notificationSettings: {
         icon: 'notification',
         title: 'Test Title',
@@ -191,9 +190,9 @@ function AppContent() {
 
   const handleAuthenticate = () => {
     Sahha?.authenticate(
-      'dJ52F2MXsQ6xjJ6IPRahBG1S3ayzYUSo',
-      'bodDOI8MwQkIlZycZWAlzO7T6CamQ2fl6SpWt9U6vZc1itbqeECfslnecMRPyfDz',
-      '1.3.5-david-react-android-device',
+      '',
+      '',
+      '',
       (error: string, success: boolean) => {
         if (error) {
           setResult(`Authenticate error: ${error}`);
@@ -268,26 +267,29 @@ function AppContent() {
   };
 
   const handleGetSensorStatus = () => {
-    const sensors = [SahhaSensor.steps];
+    const sensors = [SahhaSensor.steps, SahhaSensor.exercise, SahhaSensor.exercise_time, SahhaSensor.sleep, SahhaSensor.heart_rate];
+
     Sahha?.getSensorStatus(
       sensors,
       (error: string, value: SahhaSensorStatus) => {
         if (error) {
           setResult(`Get sensor status error: ${error}`);
         } else {
-          setResult(`Sensor status: ${value}`);
+          const SahhaSensorStatusName: string = SahhaSensorStatus[value]; 
+          setResult(`Sensor status: ${SahhaSensorStatusName}`);
         }
       }
     );
   };
 
   const handleEnableSensors = () => {
-    const sensors = [SahhaSensor.steps, SahhaSensor.exercise, SahhaSensor.sleep];
+    const sensors = [SahhaSensor.steps, SahhaSensor.exercise, SahhaSensor.exercise_time, SahhaSensor.sleep, SahhaSensor.heart_rate];
     Sahha?.enableSensors(sensors, (error: string, value: SahhaSensorStatus) => {
       if (error) {
         setResult(`Enable sensors error: ${error}`);
       } else {
-        setResult(`Enable sensors status: ${value}`);
+          const SahhaSensorStatusName: string = SahhaSensorStatus[value]; 
+        setResult(`Enable sensors status: ${SahhaSensorStatusName}`);
       }
     });
   };
