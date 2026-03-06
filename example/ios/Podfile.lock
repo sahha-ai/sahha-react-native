@@ -2680,7 +2680,7 @@ PODS:
     - SocketRocket
     - Yoga
   - Sahha (1.3.7)
-  - SahhaReactNative (1.3.7):
+  - SahhaReactNative (1.3.8):
     - boost
     - DoubleConversion
     - fast_float
@@ -3056,7 +3056,7 @@ SPEC CHECKSUMS:
   RNCPicker: bf95ec4b2483e2ab256047130bc536b437cd916c
   RNScreens: 714e10b6b554f7dc7ad9f78dcf36dc8e3fc73415
   Sahha: f1938ca563d764674e6b800c0858fdf54083d5a4
-  SahhaReactNative: 4e8db86a36ada022cae8005b6ba645693a8473a4
+  SahhaReactNative: 1a332100465e75ae45ca1ecfb20323c79dc6b72e
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Yoga: 5456bb010373068fc92221140921b09d126b116e
 

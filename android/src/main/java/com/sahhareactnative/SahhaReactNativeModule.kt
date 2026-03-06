@@ -163,14 +163,24 @@ class SahhaReactNativeModule(private val reactContext: ReactApplicationContext) 
   }
 
   override fun enableSensors(sensors: ReadableArray, callback: Callback) {
-    val sahhaSensors = sensors.toArrayList().map { SahhaSensor.valueOf((it as String).uppercase()) }.toSet()
-    Sahha.enableSensors( sahhaSensors) { error, sensorStatus ->
-      val status = if (sensorStatus){
-        SahhaSensorStatus.ENABLED.ordinal
-      }else{
-        SahhaSensorStatus.PENDING.ordinal
+    val sahhaSensors = sensors.toArrayList()
+      .map { SahhaSensor.valueOf((it as String).uppercase()) }
+      .toSet()
+
+    Sahha.enableSensors(sahhaSensors) { error, _ ->
+      if (error != null) {
+        callback.invoke(error, null)
+        return@enableSensors
       }
-      callback.invoke(error, status)
+
+      // After enabling, fetch the real status (0..3)
+      Sahha.getSensorStatus(sahhaSensors) { statusError, sensorStatus ->
+        if (statusError != null) {
+          callback.invoke(statusError, null)
+        } else {
+          callback.invoke(null, sensorStatus.ordinal)
+        }
+      }
     }
   }
 
