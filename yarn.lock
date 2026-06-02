@@ -3077,6 +3077,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-native-community/datetimepicker@npm:^9.1.0":
+  version: 9.1.0
+  resolution: "@react-native-community/datetimepicker@npm:9.1.0"
+  dependencies:
+    invariant: ^2.2.4
+  peerDependencies:
+    expo: ">=52.0.0"
+    react: "*"
+    react-native: "*"
+    react-native-windows: "*"
+  peerDependenciesMeta:
+    expo:
+      optional: true
+    react-native-windows:
+      optional: true
+  checksum: 31b37df04613d299b4f107ee2325d4ea25a895bc358c080eca23ea06dc2278393950b632f67b5a27a8b2b801823f1febc201d3a555972c121e3a1f0b559180e3
+  languageName: node
+  linkType: hard
+
 "@react-native-picker/picker@npm:^2.11.2":
   version: 2.11.4
   resolution: "@react-native-picker/picker@npm:2.11.4"
@@ -10988,6 +11007,7 @@ __metadata:
     "@react-native-community/cli": 20.0.0
     "@react-native-community/cli-platform-android": 20.0.0
     "@react-native-community/cli-platform-ios": 20.0.0
+    "@react-native-community/datetimepicker": ^9.1.0
     "@react-native-picker/picker": ^2.11.2
     "@react-native/babel-preset": 0.81.5
     "@react-native/metro-config": 0.81.5
