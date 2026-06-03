@@ -467,11 +467,11 @@ function AppContent() {
   const [result, setResult] = useState<string | JSONValue>('');
   const [isExpanded, setIsExpanded] = useState(false);
   const [screen, setScreen] = useState<'home' | 'stats' | 'samples'>('home');
-  const [appId, setAppId] = useState('dJ52F2MXsQ6xjJ6IPRahBG1S3ayzYUSo');
+  const [appId, setAppId] = useState('');
   const [appSecret, setAppSecret] = useState(
-    'bodDOI8MwQkIlZycZWAlzO7T6CamQ2fl6SpWt9U6vZc1itbqeECfslnecMRPyfDz'
+    ''
   );
-  const [externalId, setExternalId] = useState('1.3.9-rn-test');
+  const [externalId, setExternalId] = useState('');
 
   // Restore any previously saved credentials on launch. Falls back to the
   // defaults above when nothing is stored (or on read error).
@@ -506,7 +506,7 @@ function AppContent() {
 
   const handleConfigure = () => {
     const settings = {
-      environment: SahhaEnvironment.development,
+      environment: SahhaEnvironment.sandbox,
       notificationSettings: {
         icon: 'notification',
         title: 'Test Title',
