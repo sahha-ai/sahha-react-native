@@ -2,55 +2,75 @@
 
   <uses-permission android:name="android.permission.INTERNET" />
 
-       <!-- Health Connect -->
-    <!-- Heart -->
-    <uses-permission android:name="android.permission.health.READ_HEART_RATE" />
-    <uses-permission android:name="android.permission.health.READ_HEART_RATE_VARIABILITY" />
-    <uses-permission android:name="android.permission.health.READ_RESTING_HEART_RATE" />
+  <!-- Sahha runtime / foreground (declared by sahha-collect AAR; listed here for visibility) -->
+  <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
+  <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+  <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+  <uses-permission android:name="android.permission.FOREGROUND_SERVICE_HEALTH" />
+  <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-    <!-- Blood -->
-    <uses-permission android:name="android.permission.health.READ_BLOOD_GLUCOSE" />
-    <uses-permission android:name="android.permission.health.READ_BLOOD_PRESSURE" />
+  <!-- Health Connect background read (required for SensorStatus.ENABLED aggregate) -->
+  <uses-permission android:name="android.permission.health.READ_HEALTH_DATA_IN_BACKGROUND" />
 
-    <!-- Sleep -->
-    <uses-permission android:name="android.permission.health.READ_SLEEP" />
-        <uses-permission android:name="android.permission.health.WRITE_SLEEP" />
+  <!-- Health Connect -->
 
-    <!-- Activity -->
-    <uses-permission android:name="android.permission.health.READ_STEPS" />
-    <uses-permission android:name="android.permission.health.READ_FLOORS_CLIMBED" />
+  <!-- Sleep -->
+  <uses-permission android:name="android.permission.health.READ_SLEEP" />
 
-    <!-- Oxygen -->
-    <uses-permission android:name="android.permission.health.READ_VO2_MAX" />
-    <uses-permission android:name="android.permission.health.READ_OXYGEN_SATURATION" />
-    <uses-permission android:name="android.permission.health.READ_RESPIRATORY_RATE" />
 
-    <!-- Exercise -->
-    <uses-permission android:name="android.permission.health.READ_EXERCISE" />
+  <!-- Activity -->
+  <uses-permission android:name="android.permission.health.READ_STEPS" />
 
-    <!-- Energy -->
-    <uses-permission android:name="android.permission.health.READ_BASAL_METABOLIC_RATE" />
-    <uses-permission android:name="android.permission.health.READ_ACTIVE_CALORIES_BURNED" />
-    <uses-permission android:name="android.permission.health.READ_TOTAL_CALORIES_BURNED" />
+  <uses-permission android:name="android.permission.health.READ_FLOORS_CLIMBED" />
+  <uses-permission android:name="android.permission.health.READ_EXERCISE" />
 
-    <!-- Body -->
-    <uses-permission android:name="android.permission.health.READ_BODY_FAT" />
-    <uses-permission android:name="android.permission.health.READ_BODY_WATER_MASS" />
-    <uses-permission android:name="android.permission.health.READ_LEAN_BODY_MASS" />
-    <uses-permission android:name="android.permission.health.READ_BONE_MASS" />
-    <uses-permission android:name="android.permission.health.READ_HEIGHT" />
-    <uses-permission android:name="android.permission.health.READ_WEIGHT" />
+  <!-- Heart -->
+  <uses-permission android:name="android.permission.health.READ_HEART_RATE" />
+  <uses-permission android:name="android.permission.health.READ_RESTING_HEART_RATE" />
+  <uses-permission android:name="android.permission.health.READ_HEART_RATE_VARIABILITY" />
 
-    <!-- Temperature -->
-    <uses-permission android:name="android.permission.health.READ_BODY_TEMPERATURE" />
-    <uses-permission android:name="android.permission.health.READ_BASAL_BODY_TEMPERATURE" />
+  <!-- Energy -->
+  <uses-permission android:name="android.permission.health.READ_ACTIVE_CALORIES_BURNED" />
+  <uses-permission android:name="android.permission.health.READ_TOTAL_CALORIES_BURNED" />
+  <uses-permission android:name="android.permission.health.READ_BASAL_METABOLIC_RATE" />
 
-    <!-- Nutrition -->
-    <uses-permission android:name="android.permission.health.READ_NUTRITION" />
+  <!-- Oxygen -->
+  <uses-permission android:name="android.permission.health.READ_VO2_MAX" />
+  <uses-permission android:name="android.permission.health.READ_OXYGEN_SATURATION" />
+  <uses-permission android:name="android.permission.health.READ_RESPIRATORY_RATE" />
 
-    <uses-permission android:name="android.permission.health.WRITE_SLEEP" />
-    <uses-permission android:name="android.permission.health.WRITE_STEPS" />
+  <!-- Blood -->
+  <uses-permission android:name="android.permission.health.READ_BLOOD_GLUCOSE" />
+  <uses-permission android:name="android.permission.health.READ_BLOOD_PRESSURE" />
 
+  <!-- Body -->
+  <uses-permission android:name="android.permission.health.READ_HEIGHT" />
+  <uses-permission android:name="android.permission.health.READ_WEIGHT" />
+  <uses-permission android:name="android.permission.health.READ_LEAN_BODY_MASS" />
+  <uses-permission android:name="android.permission.health.READ_BODY_FAT" />
+  <uses-permission android:name="android.permission.health.READ_BODY_WATER_MASS" />
+  <uses-permission android:name="android.permission.health.READ_BONE_MASS" />
+
+  <!-- Temperature -->
+  <uses-permission android:name="android.permission.health.READ_BODY_TEMPERATURE" />
+  <uses-permission android:name="android.permission.health.READ_BASAL_BODY_TEMPERATURE" />
+
+  <!-- Nutrition (all *_intake sensors map to READ_NUTRITION; water_intake maps to READ_HYDRATION) -->
+  <uses-permission android:name="android.permission.health.READ_NUTRITION" />
+  <uses-permission android:name="android.permission.health.READ_HYDRATION" />
+
+  <!-- Reproductive (menstrual_flow + menstrual_period both map to READ_MENSTRUATION) -->
+  <uses-permission android:name="android.permission.health.READ_MENSTRUATION" />
+  <uses-permission android:name="android.permission.health.READ_INTERMENSTRUAL_BLEEDING" />
+  <uses-permission android:name="android.permission.health.READ_CERVICAL_MUCUS" />
+  <uses-permission android:name="android.permission.health.READ_OVULATION_TEST" />
+  <uses-permission android:name="android.permission.health.READ_SEXUAL_ACTIVITY" />
+
+  <!-- Android 11+ package visibility for Health Connect probe -->
+  <queries>
+    <package android:name="com.google.android.apps.healthdata" />
+  </queries>
 
     <application
       android:name=".MainApplication"

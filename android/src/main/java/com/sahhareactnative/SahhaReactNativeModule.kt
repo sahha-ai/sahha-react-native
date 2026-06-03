@@ -23,9 +23,15 @@ import ai.sahha.api.sensors.SahhaSensorStatus
 import ai.sahha.api.settings.SahhaSettings
 import android.content.Context
 import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Date
 
 private const val TAG = "SahhaReactNativeModule"
+
+// Mirrors the iOS date format exactly, e.g. "2026-06-01T00:00:00.00+12:00"
+// (offset only, no zone region suffix like ZonedDateTime.toString() appends).
+private val ISO_DATE_TIME_FORMATTER: DateTimeFormatter =
+  DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSXXX")
 
 class SahhaReactNativeModule(private val reactContext: ReactApplicationContext) :
   NativeSahhaReactNativeSpec(reactContext) {
@@ -331,7 +337,7 @@ class SahhaReactNativeModule(private val reactContext: ReactApplicationContext) 
           .registerTypeAdapter(
             ZonedDateTime::class.java,
             JsonSerializer<ZonedDateTime> { src, _, _ ->
-              JsonPrimitive(src.toString())
+              JsonPrimitive(src.format(ISO_DATE_TIME_FORMATTER))
             }
           ).create()
         val string: String = gson.toJson(value)
@@ -390,7 +396,7 @@ class SahhaReactNativeModule(private val reactContext: ReactApplicationContext) 
           .registerTypeAdapter(
             ZonedDateTime::class.java,
             JsonSerializer<ZonedDateTime> { src, _, _ ->
-              JsonPrimitive(src.toString())
+              JsonPrimitive(src.format(ISO_DATE_TIME_FORMATTER))
             }
           ).create()
         val string: String = gson.toJson(value)
