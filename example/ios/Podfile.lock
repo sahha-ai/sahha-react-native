@@ -2707,8 +2707,8 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - Sahha (1.3.9-beta.3)
-  - SahhaReactNative (1.3.9-beta.3):
+  - Sahha (1.3.9-beta.5)
+  - SahhaReactNative (1.3.9-beta.5):
     - boost
     - DoubleConversion
     - fast_float
@@ -2734,7 +2734,7 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - Sahha (= 1.3.9-beta.3)
+    - Sahha (= 1.3.9-beta.5)
     - SocketRocket
     - Yoga
   - SocketRocket (0.7.1)
@@ -3087,11 +3087,11 @@ SPEC CHECKSUMS:
   RNCPicker: bf95ec4b2483e2ab256047130bc536b437cd916c
   RNDateTimePicker: 73ffdd45f0ce1d00ff981031679a05206e619fdc
   RNScreens: 714e10b6b554f7dc7ad9f78dcf36dc8e3fc73415
-  Sahha: 2675f297c93bb2392030ee5b86875fd0b13bc642
-  SahhaReactNative: e2b058213cf3b32bbe4968fc91c7df4c9b52b68b
+  Sahha: 0668158530e539ad83a8fa98d5ce5d2edcf541cb
+  SahhaReactNative: 231f728fb0e1626d816344d4c2161b4c46d5b6a4
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Yoga: 5456bb010373068fc92221140921b09d126b116e
 
-PODFILE CHECKSUM: ffe0c3c4c1f21363070f1c97db069c1366401f47
+PODFILE CHECKSUM: 97fa7620f87ea30cf1e3e249a5ff07919a12af9f
 
 COCOAPODS: 1.16.2
