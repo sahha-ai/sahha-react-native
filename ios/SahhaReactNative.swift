@@ -187,72 +187,91 @@ class SahhaReactNative: NSObject {
     }
   }
 
-@objc(getSensorStatus:callback:)
-func getSensorStatus(
-  _ sensors: [String],
-  callback: @escaping RCTResponseSenderBlock
-) {
-  var configSensors: Set<SahhaSensor> = []
-  for sensor in sensors {
-    if let configSensor = SahhaSensor(rawValue: sensor) {
-      configSensors.insert(configSensor)
+  /// Watchdog for enableSensors: the JS callback must always settle, even if the
+  /// native SDK callback never fires (e.g. a HealthKit authorization request that
+  /// never resolves on older SDK versions). Longer than the SDK's own 120 second
+  /// authorization timeout so the SDK's more specific error wins when both apply.
+  private static let enableSensorsWatchdogSeconds: TimeInterval = 150
+
+  /// Maps sensor names from JS to native sensors, logging any names this SDK
+  /// version doesn't recognize instead of silently dropping them.
+  private func mapSensors(_ sensors: [String], method: String) -> Set<SahhaSensor> {
+    var configSensors: Set<SahhaSensor> = []
+    var unrecognizedSensors: [String] = []
+    for sensor in sensors {
+      if let configSensor = SahhaSensor(rawValue: sensor) {
+        configSensors.insert(configSensor)
+      } else {
+        unrecognizedSensors.append(sensor)
+      }
     }
+    if !unrecognizedSensors.isEmpty {
+      let message =
+        "Sahha | \(method) ignoring unrecognized sensors: \(unrecognizedSensors.joined(separator: ", "))"
+      print(message)
+      Sahha.postError(
+        framework: .react_native, message: message, path: "SahhaReactNative",
+        method: method, body: "\(unrecognizedSensors.count) of \(sensors.count) sensors unrecognized")
+    }
+    return configSensors
   }
 
-  Sahha.getSensorStatus(configSensors) { error, sensorStatus in
-    let statusOrdinal: Int
+  /// Maps a sensor status to the TS SahhaSensorStatus enum ordinal: 0..3
+  private static func statusOrdinal(_ sensorStatus: SahhaSensorStatus) -> Int {
     switch sensorStatus {
-    case .pending: statusOrdinal = 0
-    case .unavailable: statusOrdinal = 1
-    case .disabled: statusOrdinal = 2
-    case .enabled: statusOrdinal = 3
-    @unknown default: statusOrdinal = 0
-    }
-
-    callback([error ?? NSNull(), statusOrdinal])
-  }
-}
-
- @objc(enableSensors:callback:)
-func enableSensors(
-  _ sensors: [String],
-  callback: @escaping RCTResponseSenderBlock
-) {
-  var configSensors: Set<SahhaSensor> = []
-  for sensor in sensors {
-    if let configSensor = SahhaSensor(rawValue: sensor) {
-      configSensors.insert(configSensor)
+    case .pending: return 0
+    case .unavailable: return 1
+    case .disabled: return 2
+    case .enabled: return 3
+    // The SDK reports .indeterminate externally as enabled (see
+    // HealthKitManager.getSensorStatus); mirror that if it ever surfaces here.
+    case .indeterminate: return 3
+    @unknown default: return 0
     }
   }
 
-  // 1) Request enable
-  Sahha.enableSensors(configSensors) { error, _ in
-    if let error = error {
-      callback([error, NSNull()])
-      return
+  @objc(getSensorStatus:callback:)
+  func getSensorStatus(
+    _ sensors: [String],
+    callback: @escaping RCTResponseSenderBlock
+  ) {
+    let configSensors = mapSensors(sensors, method: "getSensorStatus")
+
+    Sahha.getSensorStatus(configSensors) { error, sensorStatus in
+      callback([error ?? NSNull(), Self.statusOrdinal(sensorStatus)])
+    }
+  }
+
+  @objc(enableSensors:callback:)
+  func enableSensors(
+    _ sensors: [String],
+    callback: @escaping RCTResponseSenderBlock
+  ) {
+    let configSensors = mapSensors(sensors, method: "enableSensors")
+
+    // React Native response blocks are single-use (a second invocation is fatal),
+    // so every path below settles through a fire-once guard.
+    let settle = SettleOnce(callback)
+
+    DispatchQueue.global().asyncAfter(deadline: .now() + Self.enableSensorsWatchdogSeconds) {
+      let message =
+        "Sahha | enableSensors did not complete within \(Int(Self.enableSensorsWatchdogSeconds)) seconds"
+      guard settle.settle([message, NSNull()]) else { return }
+      Sahha.postError(
+        framework: .react_native, message: message, path: "SahhaReactNative",
+        method: "enableSensors", body: "sensorCount: \(configSensors.count)")
     }
 
-    // 2) Read actual status (source of truth)
-    Sahha.getSensorStatus(configSensors) { statusError, sensorStatus in
-      if let statusError = statusError {
-        callback([statusError, NSNull()])
+    // The SDK's enableSensors callback already reports the post-enable sensor
+    // status — no second getSensorStatus round trip is needed.
+    Sahha.enableSensors(configSensors) { error, sensorStatus in
+      if let error = error {
+        settle.settle([error, NSNull()])
         return
       }
-
-      // 3) Map to TS enum ordinal: 0..3
-      let statusOrdinal: Int
-      switch sensorStatus {
-      case .pending: statusOrdinal = 0
-      case .unavailable: statusOrdinal = 1
-      case .disabled: statusOrdinal = 2
-      case .enabled: statusOrdinal = 3
-      @unknown default: statusOrdinal = 0
-      }
-
-      callback([NSNull(), statusOrdinal])
+      settle.settle([NSNull(), Self.statusOrdinal(sensorStatus)])
     }
   }
-}
 
   @objc(getScores:startDateTime:endDateTime:callback:)
   func getScores(
@@ -413,5 +432,31 @@ func enableSensors(
     } else {
       callback(["Sahha | Invalid \(sensor) sensor for getSamples", NSNull()])
     }
+  }
+}
+
+/// Wraps a single-use React Native response block so it fires exactly once.
+/// A second invocation of an RCTResponseSenderBlock is fatal in React Native,
+/// so racing paths (SDK callback vs watchdog timeout) must both settle through
+/// this guard: whichever loses the race becomes a no-op.
+private final class SettleOnce {
+  private let lock = NSLock()
+  private var callback: RCTResponseSenderBlock?
+
+  init(_ callback: @escaping RCTResponseSenderBlock) {
+    self.callback = callback
+  }
+
+  /// Fires the wrapped callback the first time only. Returns true if this call
+  /// fired it, false if it had already been settled.
+  @discardableResult
+  func settle(_ args: [Any]) -> Bool {
+    lock.lock()
+    let callbackToFire = callback
+    callback = nil
+    lock.unlock()
+    guard let callbackToFire else { return false }
+    callbackToFire(args)
+    return true
   }
 }
