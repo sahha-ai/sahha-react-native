@@ -665,8 +665,20 @@ function AppContent() {
   };
 
   const handleGetBiomarkers = () => {
-    const categories = [SahhaBiomarkerCategory.activity];
-    const types = [SahhaBiomarkerType.steps];
+    const categories = [
+      SahhaBiomarkerCategory.activity,
+      SahhaBiomarkerCategory.body,
+      SahhaBiomarkerCategory.engagement,
+      SahhaBiomarkerCategory.nutrition,
+      SahhaBiomarkerCategory.sleep,
+      SahhaBiomarkerCategory.vitals,
+    ];
+    const types = [
+      SahhaBiomarkerType.steps,
+      SahhaBiomarkerType.activity_medium_intensity_duration,
+      SahhaBiomarkerType.sleep_duration,
+      SahhaBiomarkerType.heart_rate_resting,
+    ];
     const startDateTime = Date.now() - 7 * 24 * 60 * 60 * 1000;
     const endDateTime = Date.now();
     Sahha?.getBiomarkers(
