@@ -308,12 +308,18 @@ export interface Spec extends TurboModule {
     endDateTime: number,
     callback: (error: string, value: string) => void
   ): void;
+  /**
+   * @deprecated Use getBiomarkers to read server-processed biomarkers instead.
+   */
   getStats(
     sensor: SahhaSensor,
     startDateTime: number,
     endDateTime: number,
     callback: (error: string, value: string) => void
   ): void;
+  /**
+   * @deprecated Use getBiomarkers to read server-processed biomarkers instead.
+   */
   getSamples(
     sensor: SahhaSensor,
     startDateTime: number,

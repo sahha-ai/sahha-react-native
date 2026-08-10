@@ -462,6 +462,8 @@ Sahha.getBiomarkers(
 
 ### getStats(...)
 
+> **Deprecated:** Use `getBiomarkers` to read server-processed biomarkers instead.
+
 ```
 getStats(
     sensor: SahhaSensor,
@@ -494,6 +496,8 @@ Sahha.getStats(
 ---
 
 ### getSamples(...)
+
+> **Deprecated:** Use `getBiomarkers` to read server-processed biomarkers instead.
 
 ```
 getSamples(
