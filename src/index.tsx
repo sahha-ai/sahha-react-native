@@ -204,8 +204,8 @@ export enum SahhaScoreType {
 export enum SahhaBiomarkerCategory {
   activity = 'activity',
   body = 'body',
-  characteristic = 'characteristic',
-  reproductive = 'reproductive',
+  engagement = 'engagement',
+  nutrition = 'nutrition',
   sleep = 'sleep',
   vitals = 'vitals',
 }
