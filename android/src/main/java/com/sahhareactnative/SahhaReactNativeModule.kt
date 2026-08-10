@@ -243,10 +243,23 @@ class SahhaReactNativeModule(private val reactContext: ReactApplicationContext) 
     endDateTime: Double,
     callback: Callback,
   ) {
+    // Skip unknown names (e.g. from a stale JS bundle) instead of throwing, matching the iOS bridge.
     val sahhaBiomarkerCategories =
-      categories.toArrayList().map { SahhaBiomarkerCategory.valueOf((it as String).uppercase()) }.toSet()
+      categories.toArrayList().mapNotNull {
+        try {
+          SahhaBiomarkerCategory.valueOf((it as String).uppercase())
+        } catch (e: IllegalArgumentException) {
+          null
+        }
+      }.toSet()
     val sahhaBiomarkerTypes =
-      types.toArrayList().map { SahhaBiomarkerType.valueOf((it as String).uppercase()) }.toSet()
+      types.toArrayList().mapNotNull {
+        try {
+          SahhaBiomarkerType.valueOf((it as String).uppercase())
+        } catch (e: IllegalArgumentException) {
+          null
+        }
+      }.toSet()
     val sahhaStartDateTime: Date
     val sahhaEndDateTime: Date
     var body: String = "startDateTime: $startDateTime | endDateTime: $endDateTime"
