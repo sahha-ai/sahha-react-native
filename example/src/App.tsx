@@ -394,7 +394,11 @@ function SensorQueryScreen({
 
       <View style={styles.paramsContainer}>
         <Text style={styles.inputLabel}>Date range</Text>
-        <DateTimeField label="Start" value={startDate} onChange={setStartDate} />
+        <DateTimeField
+          label="Start"
+          value={startDate}
+          onChange={setStartDate}
+        />
         <DateTimeField label="End" value={endDate} onChange={setEndDate} />
         <View style={styles.presetRow}>
           {DATE_PRESETS.map((preset) => (
@@ -468,9 +472,7 @@ function AppContent() {
   const [isExpanded, setIsExpanded] = useState(false);
   const [screen, setScreen] = useState<'home' | 'stats' | 'samples'>('home');
   const [appId, setAppId] = useState('');
-  const [appSecret, setAppSecret] = useState(
-    ''
-  );
+  const [appSecret, setAppSecret] = useState('');
   const [externalId, setExternalId] = useState('');
 
   // Restore any previously saved credentials on launch. Falls back to the

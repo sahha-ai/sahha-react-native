@@ -3,7 +3,7 @@ import type { TurboModule } from 'react-native';
 
 export enum SahhaEnvironment {
   sandbox = 'sandbox',
-  production = 'production'
+  production = 'production',
 }
 
 export enum SahhaSensor {
