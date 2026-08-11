@@ -371,6 +371,18 @@ Sahha.enableSensors(
 );
 ```
 
+> [!IMPORTANT]
+> `enableSensors` is a long-running call. The first time it runs, the OS presents the
+> health permissions sheet, and the callback does not fire until the user responds —
+> which can legitimately take a minute or more when many sensors are requested. Call it
+> while the app is active (foregrounded) so the sheet can present, and avoid racing the
+> callback against a short client-side timeout. The callback is guaranteed to settle:
+> on iOS the native authorization request times out after 120 seconds, and the React
+> Native bridge adds a 150-second watchdog as a backstop. If you add your own timeout on
+> top, make it longer than 150 seconds, and treat it as a cue to re-check
+> `getSensorStatus(...)` rather than as a failure — the user may simply still be reading
+> the permissions sheet.
+
 ---
 
 ### getScores(...)
