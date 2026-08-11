@@ -91,6 +91,10 @@
   "workspaces": [
     "example"
   ],
+  "resolutions": {
+    "qs": "^6.15.2",
+    "undici": "^6.28.0"
+  },
   "packageManager": "yarn@3.6.1",
   "jest": {
     "preset": "react-native",
