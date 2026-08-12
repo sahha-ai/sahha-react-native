@@ -36,5 +36,25 @@ target 'SahhaReactNativeExample' do
       :mac_catalyst_enabled => false,
       # :ccache_enabled => true
     )
+
+    # Xcode 26 / new clang rejects fmt 11.0.2's consteval format-string checks
+    # ("call to consteval function ... is not a constant expression"). fmt's
+    # base.h sets FMT_USE_CONSTEVAL with no #ifndef guard, so a -D flag is
+    # clobbered — patch the header to force it off. Idempotent and re-applied on
+    # every pod install. Local example-app workaround; not part of the shipped SDK.
+    fmt_base = File.join(__dir__, 'Pods', 'fmt', 'include', 'fmt', 'base.h')
+    if File.exist?(fmt_base)
+      marker = '// sahha: FMT_USE_CONSTEVAL disabled for Xcode 26 compatibility'
+      contents = File.read(fmt_base)
+      unless contents.include?(marker)
+        contents = contents.sub(
+          "#if FMT_USE_CONSTEVAL",
+          "#{marker}\n#undef FMT_USE_CONSTEVAL\n#define FMT_USE_CONSTEVAL 0\n#if FMT_USE_CONSTEVAL"
+        )
+        File.chmod(0644, fmt_base) # pod sources are installed read-only
+        File.write(fmt_base, contents)
+        Pod::UI.puts "[sahha] Patched fmt base.h: FMT_USE_CONSTEVAL=0 (Xcode 26 workaround)".green
+      end
+    end
   end
 end

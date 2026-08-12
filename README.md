@@ -371,6 +371,18 @@ Sahha.enableSensors(
 );
 ```
 
+> [!IMPORTANT]
+> `enableSensors` is a long-running call. The first time it runs, the OS presents the
+> health permissions sheet, and the callback does not fire until the user responds —
+> which can legitimately take a minute or more when many sensors are requested. Call it
+> while the app is active (foregrounded) so the sheet can present, and avoid racing the
+> callback against a short client-side timeout. The callback is guaranteed to settle:
+> on iOS the native authorization request times out after 120 seconds, and the React
+> Native bridge adds a 150-second watchdog as a backstop. If you add your own timeout on
+> top, make it longer than 150 seconds, and treat it as a cue to re-check
+> `getSensorStatus(...)` rather than as a failure — the user may simply still be reading
+> the permissions sheet.
+
 ---
 
 ### getScores(...)
@@ -462,6 +474,8 @@ Sahha.getBiomarkers(
 
 ### getStats(...)
 
+> **Deprecated:** Use `getBiomarkers` to read server-processed biomarkers instead.
+
 ```
 getStats(
     sensor: SahhaSensor,
@@ -494,6 +508,8 @@ Sahha.getStats(
 ---
 
 ### getSamples(...)
+
+> **Deprecated:** Use `getBiomarkers` to read server-processed biomarkers instead.
 
 ```
 getSamples(
@@ -631,8 +647,8 @@ export enum SahhaScoreType {
 export enum SahhaBiomarkerCategory {
     activity = 'activity',
     body = 'body',
-    characteristic = 'characteristic',
-    reproductive = 'reproductive',
+    engagement = 'engagement',
+    nutrition = 'nutrition',
     sleep = 'sleep',
     vitals = 'vitals',
 }
@@ -647,7 +663,7 @@ export enum SahhaBiomarkerType {
     active_hours = 'active_hours',
     active_duration = 'active_duration',
     activity_low_intensity_duration = 'activity_low_intensity_duration',
-    activity_mid_intensity_duration = 'activity_mid_intensity_duration',
+    activity_medium_intensity_duration = 'activity_medium_intensity_duration',
     activity_high_intensity_duration = 'activity_high_intensity_duration',
     activity_sedentary_duration = 'activity_sedentary_duration',
     active_energy_burned = 'active_energy_burned',
@@ -663,13 +679,6 @@ export enum SahhaBiomarkerType {
     age = 'age',
     biological_sex = 'biological_sex',
     date_of_birth = 'date_of_birth',
-    menstrual_cycle_length = 'menstrual_cycle_length',
-    menstrual_cycle_start_date = 'menstrual_cycle_start_date',
-    menstrual_cycle_end_date = 'menstrual_cycle_end_date',
-    menstrual_phase = 'menstrual_phase',
-    menstrual_phase_start_date = 'menstrual_phase_start_date',
-    menstrual_phase_end_date = 'menstrual_phase_end_date',
-    menstrual_phase_length = 'menstrual_phase_length',
     sleep_start_time = 'sleep_start_time',
     sleep_end_time = 'sleep_end_time',
     sleep_duration = 'sleep_duration',
