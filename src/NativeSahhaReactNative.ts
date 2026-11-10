@@ -1,7 +1,9 @@
+// The codegen spec for the native module. It is also the only definition of
+// the public enums and `Spec`, which src/index.tsx re-exports. Codegen reads
+// only files named Native*, so the types the spec uses must live here.
 import { TurboModuleRegistry, type TurboModule } from 'react-native';
 
 export enum SahhaEnvironment {
-  development = 'development',
   sandbox = 'sandbox',
   production = 'production',
 }
@@ -334,4 +336,7 @@ export interface Spec extends TurboModule {
   postSensorData(): void;
 }
 
-export default TurboModuleRegistry.getEnforcing<Spec>('SahhaReactNative');
+// `get` rather than `getEnforcing`, so that importing this file (and so the
+// package) never throws. src/index.tsx reports a missing native module when a
+// method is first called.
+export default TurboModuleRegistry.get<Spec>('SahhaReactNative');

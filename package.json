@@ -35,6 +35,7 @@
     "example": "yarn workspace sahha-react-native-example",
     "test": "jest",
     "typecheck": "tsc",
+    "typecheck:consumer": "tsc -p type-tests",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
     "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build lib",
     "prepare": "bob build",
