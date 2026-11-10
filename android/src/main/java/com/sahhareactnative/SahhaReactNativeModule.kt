@@ -61,7 +61,8 @@ class SahhaReactNativeModule(private val reactContext: ReactApplicationContext) 
       callback.invoke("Sahha.configure() environment parameter is invalid", null)
       return
     }
-    // Notification config
+    // Notification config. Each field the app leaves unset falls back to the SDK's own default,
+    // so the foreground sync notification never shows placeholder text.
     var sahhaNotificationConfiguration = SahhaNotificationConfiguration.DEFAULT
     try {
       settings.getMap("notificationSettings")?.also { nSettings ->
@@ -72,9 +73,9 @@ class SahhaReactNativeModule(private val reactContext: ReactApplicationContext) 
           stringToDrawableResource(
             reactContext,
             icon
-          ) ?: 0,
-          title ?: "title",
-          shortDescription ?: "shortDescription",
+          ) ?: SahhaNotificationConfiguration.DEFAULT.iconResourceId,
+          title ?: SahhaNotificationConfiguration.DEFAULT.title,
+          shortDescription ?: SahhaNotificationConfiguration.DEFAULT.shortDescription,
         )
       }
     } catch (e: IllegalArgumentException) {
@@ -429,9 +430,15 @@ class SahhaReactNativeModule(private val reactContext: ReactApplicationContext) 
   override fun openAppSettings() {
     Sahha.openAppSettings()
   }
+
+  // Resolves a host-app drawable by name to its resource id, or null when no name is given or the
+  // host app ships no such drawable. getIdentifier() returns 0 (not an exception) when nothing
+  // matches, so map that to null and let the caller fall back to the SDK's icon.
   fun stringToDrawableResource(context: Context, iconString: String?): Int? {
+    if (iconString == null) return null
     return try {
-      context.resources.getIdentifier(iconString, "drawable", context.packageName)
+      val resourceId = context.resources.getIdentifier(iconString, "drawable", context.packageName)
+      if (resourceId != 0) resourceId else null
     } catch (e: Exception) {
       null
     }
