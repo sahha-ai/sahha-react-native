@@ -48,7 +48,6 @@ export function ProfileScreen(): React.JSX.Element {
   const theme = useAppTheme();
 
   const [birthDate, setBirthDate] = useState('');
-  const [age, setAge] = useState('');
   const [gender, setGender] = useState('');
 
   const [fetching, setFetching] = useState(false);
@@ -127,21 +126,12 @@ export function ProfileScreen(): React.JSX.Element {
       setHint('Pick a gender before posting.');
       return;
     }
-    const trimmedAge = age.trim();
-    const parsedAge = trimmedAge.length > 0 ? Number(trimmedAge) : null;
-    if (parsedAge !== null && !Number.isFinite(parsedAge)) {
-      setHint('Age must be a number.');
-      return;
-    }
     setHint(null);
 
-    const demographic: Record<string, string | number> = {
+    const demographic = {
       birthDate: birthDate.trim(),
       gender,
     };
-    if (parsedAge !== null) {
-      demographic.age = parsedAge;
-    }
 
     setSaving(true);
     withSdk(
@@ -184,17 +174,6 @@ export function ProfileScreen(): React.JSX.Element {
             keyboardType="numbers-and-punctuation"
             onChangeText={(value) => {
               setBirthDate(value);
-              setHint(null);
-            }}
-          />
-          <LabeledInput
-            theme={theme}
-            label="AGE (OPTIONAL)"
-            placeholder="e.g. 30"
-            value={age}
-            keyboardType="number-pad"
-            onChangeText={(value) => {
-              setAge(value);
               setHint(null);
             }}
           />
