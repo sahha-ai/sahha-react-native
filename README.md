@@ -301,12 +301,14 @@ postDemographic(
   ): void;
 ```
 
+Only `gender` and `birthDate` are sent to Sahha. Other keys, such as `age`, are ignored.
+
 **Example usage**:
 
 ```
 const demographic: Object = {
-      age: 123,
       gender: 'Male',
+      birthDate: '1990-01-01',
 };
 
 Sahha.postDemographic(demographic, (error: string, success: boolean) => {

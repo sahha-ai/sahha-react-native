@@ -141,14 +141,10 @@ class SahhaReactNativeModule(private val reactContext: ReactApplicationContext) 
   }
 
   override fun postDemographic(demographic: ReadableMap, callback: Callback) {
-    val age: Int? =
-      if (demographic.hasKey("age") && !demographic.isNull("age")) demographic.getInt("age") else null
-
     val gender: String? = demographic.getString("gender")
     val birthDate: String? = demographic.getString("birthDate")
 
     val sahhaDemographic = SahhaDemographic(
-      age = age,
       gender = gender,
       birthDate = birthDate
     )
