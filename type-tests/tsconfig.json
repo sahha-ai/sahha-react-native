@@ -1,0 +1,16 @@
+{
+  // Stands in for an app that installs sahha-react-native and compiles with
+  // `strict`. There is no `paths` entry, so the import of 'sahha-react-native'
+  // resolves through package.json "exports" to the built typings in lib/.
+  "compilerOptions": {
+    "strict": true,
+    "noEmit": true,
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "lib": ["esnext"],
+    "types": [],
+    "skipLibCheck": true
+  },
+  "files": ["strict-consumer.ts"]
+}

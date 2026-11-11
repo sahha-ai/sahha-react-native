@@ -46,3 +46,6 @@ jobs:
 
       - name: Build package
         run: yarn prepare
+
+      - name: Typecheck a strict consumer against the built typings
+        run: yarn typecheck:consumer
